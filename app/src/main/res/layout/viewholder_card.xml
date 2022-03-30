@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="16dp"
@@ -22,6 +23,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/pizza1" />
 
     <TextView
@@ -31,14 +33,11 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="title"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:textColor="#373b54"
         app:layout_constraintStart_toEndOf="@+id/picCard"
         app:layout_constraintTop_toTopOf="@+id/picCard" />
 
     <ImageView
-        android:id="@+id/minusCardBtn"
+        android:id="@+id/minusItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -56,18 +55,19 @@
         android:textColor="#373b54"
         android:textStyle="bold"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/minusCardBtn"
-        app:layout_constraintStart_toEndOf="@+id/minusCardBtn"
-        app:layout_constraintTop_toTopOf="@+id/minusCardBtn" />
+        app:layout_constraintBottom_toBottomOf="@+id/minusItem"
+        app:layout_constraintStart_toEndOf="@+id/minusItem"
+        app:layout_constraintTop_toTopOf="@+id/minusItem" />
 
     <ImageView
-        android:id="@+id/plusCardBtn"
+        android:id="@+id/plusItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/minusCardBtn"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/minusItem"
         app:layout_constraintStart_toEndOf="@+id/numberItemTxt"
-        app:layout_constraintTop_toTopOf="@+id/minusCardBtn"
+        app:layout_constraintTop_toTopOf="@+id/minusItem"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/plus" />
 
     <TextView
@@ -78,17 +78,19 @@
         android:text="0"
         android:textColor="#373b54"
         android:textSize="16sp"
+
         app:layout_constraintBottom_toBottomOf="@+id/title2Txt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/title2Txt" />
 
     <TextView
-        android:id="@+id/textView19"
+        android:id="@+id/textView18"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="4dp"
         android:text="$"
-        android:textColor="#ff3d00"
+        android:textColor="#373b54"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/feeEachItem"
         app:layout_constraintEnd_toStartOf="@+id/feeEachItem"
         app:layout_constraintTop_toTopOf="@+id/feeEachItem" />
@@ -99,19 +101,18 @@
         android:layout_height="wrap_content"
         android:text="0"
         android:textColor="#373b54"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/plusCardBtn"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/plusItem"
         app:layout_constraintEnd_toEndOf="@+id/feeEachItem"
-        app:layout_constraintTop_toTopOf="@+id/plusCardBtn" />
+        app:layout_constraintTop_toTopOf="@+id/plusItem" />
 
     <TextView
-        android:id="@+id/textView21"
+        android:id="@+id/textView20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="4dp"
         android:text="$"
-        android:textColor="#ff3d00"
+        android:textColor="#373b54"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/totalEachItem"
         app:layout_constraintEnd_toStartOf="@+id/totalEachItem"

@@ -1,4 +1,4 @@
-package com.example.project.Adapter;
+package com.example.food.Adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +12,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.project.Domain.CategoryDomain;
-import com.example.project.R;
+import com.example.food.Domain.CategoryDomain;
+import com.example.food.R;
 
 import java.util.ArrayList;
 
@@ -90,3 +90,4 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         }
     }
 }
+

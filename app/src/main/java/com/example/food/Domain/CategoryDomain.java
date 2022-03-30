@@ -1,5 +1,4 @@
-package com.example.project.Domain;
-
+package com.example.food.Domain;
 public class CategoryDomain {
     private String title;
     private String pic;
@@ -25,3 +24,4 @@ public class CategoryDomain {
         this.pic = pic;
     }
 }
+
