@@ -9,39 +9,36 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.food.Domain.FoodDomain;
-import com.example.food.Helper.ManagementCart;
+import com.example.food.Domain.ProductDomain;
 import com.example.food.R;
 
 public class ShowDetailActivity extends AppCompatActivity {
 private TextView addToCartBtn,titleTxt,feeTxt,descriptionTxt,numberOrderTxt;
 private ImageView plusBtn,minusBtn,foodPicBtn,backBtn;
-private FoodDomain foodDomain;
+private ProductDomain productDomain;
 private int numberOrder =1;
-private ManagementCart managementCart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_detail);
 
-        managementCart=new ManagementCart(this);
         initView();
         getBundle();
     }
 
     private void getBundle() {
-        foodDomain=(FoodDomain) getIntent().getSerializableExtra("object");
+        productDomain=(ProductDomain) getIntent().getSerializableExtra("object");
 
-        int drawableResourceId=this.getResources().getIdentifier(foodDomain.getPic(),"drawable",this.getPackageName());
+        int drawableResourceId=this.getResources().getIdentifier(productDomain.getImages().get(0).getLink(),"drawable",this.getPackageName());
 
         Glide.with(this)
                 .load(drawableResourceId)
                 .into(foodPicBtn);
 
-        titleTxt.setText(foodDomain.getTitle());
-        feeTxt.setText("$"+foodDomain.getFee());
-        descriptionTxt.setText(foodDomain.getDescription());
+        titleTxt.setText(productDomain.getName());
+        feeTxt.setText("$"+productDomain.getPrice());
+        descriptionTxt.setText(productDomain.getDescription());
         numberOrderTxt.setText(String.valueOf(numberOrder));
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,8 +66,7 @@ private ManagementCart managementCart;
         addToCartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                foodDomain.setNumberInCart(numberOrder);
-                managementCart.insertFood(foodDomain);
+
             }
         });
     }

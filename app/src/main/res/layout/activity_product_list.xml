@@ -43,7 +43,7 @@
 
 
     <GridView
-        android:layout_weight="6"
+        android:layout_weight="9"
         android:id="@+id/gridViewProduct"
         android:layout_width="match_parent"
         android:layout_height="0dp"

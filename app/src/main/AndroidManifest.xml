@@ -15,9 +15,6 @@
             android:name=".Activity.ProductListActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.CardListActivity"
-            android:exported="false" />
-        <activity
             android:name=".Activity.ShowDetailActivity"
             android:exported="false" />
         <activity

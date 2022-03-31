@@ -1,6 +1,7 @@
 package com.example.food.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,17 +12,19 @@ import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
 
-import com.example.food.Domain.GridProduct;
+import com.example.food.Activity.ProductListActivity;
+import com.example.food.Activity.ShowDetailActivity;
+import com.example.food.Domain.ProductDomain;
 import com.example.food.R;
 
 import java.util.List;
 
 public class CustomProductGridAdapter extends BaseAdapter {
-    private List<GridProduct> listData;
+    private List<ProductDomain> listData;
     private LayoutInflater layoutInflater;
     private Context context;
 
-    public CustomProductGridAdapter(Context aContext, List<GridProduct> listData) {
+    public CustomProductGridAdapter(Context aContext, List<ProductDomain> listData) {
         this.context = aContext;
         this.listData = listData;
         layoutInflater = LayoutInflater.from(aContext);
@@ -59,15 +62,23 @@ public class CustomProductGridAdapter extends BaseAdapter {
             holder = (GridViewHolder) convertView.getTag();
         }
 
-        GridProduct gridItem = this.listData.get(position);
+        ProductDomain gridItem = this.listData.get(position);
         holder.name_product.setText(gridItem.getName());
         holder.price_product.setText(gridItem.getPrice()+"");
         holder.calculationUnit_product.setText(gridItem.getCalculationUnit());
 
-        int imageId = this.getMipmapResIdByName(gridItem.getImage());
+        int imageId = this.getMipmapResIdByName(gridItem.getImages().get(0).getLink());
 
         holder.image_product.setImageResource(imageId);
-
+        View finalConvertView = convertView;
+        holder.cardViewProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(finalConvertView.getContext(), ShowDetailActivity.class);
+                intent.putExtra("object", listData.get(position));
+                finalConvertView.getContext().startActivity(intent);
+            }
+        });
         return convertView;
     }
 

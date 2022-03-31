@@ -1,5 +1,6 @@
 package com.example.food.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,22 +9,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.food.Activity.ShowDetailActivity;
-import com.example.food.Domain.FoodDomain;
+import com.example.food.Domain.ProductDomain;
 import com.example.food.R;
 
 import java.util.ArrayList;
 
 public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.ViewHolder> {
-    ArrayList<FoodDomain> foodDomain;
+    ArrayList<ProductDomain> productDomains;
 
-    public PopularAdapter(ArrayList<FoodDomain> foodDomain) {
-        this.foodDomain = foodDomain;
+    public PopularAdapter(ArrayList<ProductDomain> productDomains) {
+        this.productDomains = productDomains;
     }
 
     @NonNull
@@ -35,11 +34,12 @@ public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.title.setText(foodDomain.get(position).getTitle());
-        holder.fee.setText(String.valueOf(foodDomain.get(position).getFee()));
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        holder.title.setText(productDomains.get(position).getName());
+        holder.fee.setText(String.valueOf(productDomains.get(position).getPrice()));
 
-        int drawableResourceId = holder.itemView.getContext().getResources().getIdentifier(foodDomain.get(position).getPic(), "drawable", holder.itemView.getContext().getPackageName());
+        int drawableResourceId = holder.itemView.getContext().getResources().getIdentifier(
+                productDomains.get(position).getImages().get(0).getLink(), "drawable", holder.itemView.getContext().getPackageName());
 
         Glide.with(holder.itemView.getContext())
                 .load(drawableResourceId)
@@ -48,7 +48,7 @@ public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.ViewHold
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(holder.itemView.getContext(), ShowDetailActivity.class);
-                intent.putExtra("object",foodDomain.get(position));
+                intent.putExtra("object",productDomains.get(position));
                 holder.itemView.getContext().startActivity(intent);
             }
         });
@@ -58,7 +58,7 @@ public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return foodDomain.size();
+        return productDomains.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

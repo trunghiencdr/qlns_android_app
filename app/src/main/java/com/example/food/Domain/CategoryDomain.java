@@ -1,27 +1,37 @@
 package com.example.food.Domain;
 public class CategoryDomain {
-    private String title;
-    private String pic;
+    private String id;
+    private String name;
+    private String description;
 
-    public CategoryDomain(String title, String pic) {
-        this.title = title;
-        this.pic = pic;
+    public CategoryDomain(String categoryId, String categoryName, String description) {
+        this.id = categoryId;
+        this.name = categoryName;
+        this.description = description;
     }
 
-    public String getTitle() {
-        return title;
+    public String getId() {
+        return id;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getPic() {
-        return pic;
+    public String getName() {
+        return name;
     }
 
-    public void setPic(String pic) {
-        this.pic = pic;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
 
