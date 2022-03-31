@@ -83,57 +83,57 @@ private RecyclerView recyclerViewCategoryList,recyclerViewPopularList;
         recyclerViewCategoryList=findViewById(R.id.recyclerView);
         recyclerViewCategoryList.setLayoutManager(linearLayoutManager);
 //================
-        RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
-        ArrayList<CategoryDomain> categoryList=new ArrayList<>();
-        String url="http://192.168.1.10:8080/api/v1/Categories";
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                try {
-
-
-                    if (response != null) {
-                        for (int i=0;i<response.length();i++){
-                            categoryList.add(new CategoryDomain(response.getJSONObject(i).getString("id").toString(),response.getJSONObject(i).getString("name").toString()));
-                        }
-                    }
-
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(MainActivity.this,"Something wrong"+error.toString(),Toast.LENGTH_SHORT).show();
-                Log.d("aaa",error.toString());
-            }
-        })
-        {
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                HashMap<String, String> headers = new HashMap<String, String>();
-//                headers.put("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTY0ODYzMTU3NywiZXhwIjoxNjQ4NzE3OTc3fQ.BqBLetK9eKm9a1AGTpJ6h2LpthSx1wcl3GGSxJ80P1Dq71hxFMKMZ6ndd8B-bnnoEXIcM2wOHsZin6nLg8lADw");
-//                return headers;
-//            }
-//
-//            @Override
-//            public byte[] getBody() {
-//                HashMap<String, String> body = new HashMap<String, String>();
-//
-//                return body.toString().getBytes();
-//            }
-        };
-        queue.add(request);
-        //=======================
+//        RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
 //        ArrayList<CategoryDomain> categoryList=new ArrayList<>();
-//        categoryList.add(new CategoryDomain("Pizza","cat_1"));
-//        categoryList.add(new CategoryDomain("Burgur","cat_2"));
-//        categoryList.add(new CategoryDomain("Hotdog","cat_3"));
-//        categoryList.add(new CategoryDomain("Drink","cat_4"));
-//        categoryList.add(new CategoryDomain("Donut","cat_5"));
+//        String url="http://192.168.1.10:8080/api/v1/Categories";
+//        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+//            @Override
+//            public void onResponse(JSONArray response) {
+//                try {
+//
+//
+//                    if (response != null) {
+//                        for (int i=0;i<response.length();i++){
+//                            categoryList.add(new CategoryDomain(response.getJSONObject(i).getString("id").toString(),response.getJSONObject(i).getString("name").toString()));
+//                        }
+//                    }
+//
+//
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Toast.makeText(MainActivity.this,"Something wrong"+error.toString(),Toast.LENGTH_SHORT).show();
+//                Log.d("aaa",error.toString());
+//            }
+//        })
+//        {
+////            @Override
+////            public Map<String, String> getHeaders() throws AuthFailureError {
+////                HashMap<String, String> headers = new HashMap<String, String>();
+////                headers.put("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTY0ODYzMTU3NywiZXhwIjoxNjQ4NzE3OTc3fQ.BqBLetK9eKm9a1AGTpJ6h2LpthSx1wcl3GGSxJ80P1Dq71hxFMKMZ6ndd8B-bnnoEXIcM2wOHsZin6nLg8lADw");
+////                return headers;
+////            }
+////
+////            @Override
+////            public byte[] getBody() {
+////                HashMap<String, String> body = new HashMap<String, String>();
+////
+////                return body.toString().getBytes();
+////            }
+//        };
+//        queue.add(request);
+        //=======================
+        ArrayList<CategoryDomain> categoryList=new ArrayList<>();
+        categoryList.add(new CategoryDomain("Pizza","cat_1"));
+        categoryList.add(new CategoryDomain("Burgur","cat_2"));
+        categoryList.add(new CategoryDomain("Hotdog","cat_3"));
+        categoryList.add(new CategoryDomain("Drink","cat_4"));
+        categoryList.add(new CategoryDomain("Donut","cat_5"));
 
         adapter=new CategoryAdapter(categoryList);
         recyclerViewCategoryList.setAdapter(adapter);

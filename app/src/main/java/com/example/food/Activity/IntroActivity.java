@@ -1,28 +1,29 @@
 package com.example.food.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.os.Handler;
 
 import com.example.food.R;
 
 public class IntroActivity extends AppCompatActivity {
-private ConstraintLayout startBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
 
-        startBtn=findViewById(R.id.startbtn);
-        startBtn.setOnClickListener(new View.OnClickListener() {
+        //getSupportActionBar().hide();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
             @Override
-            public void onClick(View view) {
-                startActivity(new Intent(IntroActivity.this, MainActivity.class));
+            public void run() {
+                Intent intent=new Intent(IntroActivity.this,MainActivity.class);
+                startActivity(intent);
+                finish();
             }
-        });
+        }, 3000);
     }
 }

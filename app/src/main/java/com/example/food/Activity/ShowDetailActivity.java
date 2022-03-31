@@ -2,6 +2,7 @@ package com.example.food.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,7 +15,7 @@ import com.example.food.R;
 
 public class ShowDetailActivity extends AppCompatActivity {
 private TextView addToCartBtn,titleTxt,feeTxt,descriptionTxt,numberOrderTxt;
-private ImageView plusBtn,minusBtn,foodPicBtn;
+private ImageView plusBtn,minusBtn,foodPicBtn,backBtn;
 private FoodDomain foodDomain;
 private int numberOrder =1;
 private ManagementCart managementCart;
@@ -42,7 +43,12 @@ private ManagementCart managementCart;
         feeTxt.setText("$"+foodDomain.getFee());
         descriptionTxt.setText(foodDomain.getDescription());
         numberOrderTxt.setText(String.valueOf(numberOrder));
-
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ShowDetailActivity.this,MainActivity.class));
+            }
+        });
         plusBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,6 +83,7 @@ private ManagementCart managementCart;
         numberOrderTxt=findViewById(R.id.numberOrder);
         plusBtn=findViewById(R.id.plusBtn);
         minusBtn=findViewById(R.id.minusBtn);
+        backBtn=findViewById(R.id.backBtn);
         foodPicBtn=findViewById(R.id.foodPic);
     }
 }
