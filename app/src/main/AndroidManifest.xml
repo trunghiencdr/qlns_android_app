@@ -16,7 +16,7 @@
             android:name=".feature.account.signin.CategoryScreenActivity"
             android:exported="false" />
         <activity
-            android:name=".feature.account.signup.SignupActivity"
+            android:name=".Activity.SignupActivity"
             android:exported="false" />
         <activity
             android:name=".Activity.ProductListActivity"
