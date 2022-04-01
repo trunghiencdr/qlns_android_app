@@ -33,6 +33,15 @@ public class CategoryDomain implements Serializable {
         return description;
     }
 
+    @Override
+    public String toString() {
+        return "CategoryDomain{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
+
     public void setDescription(String description) {
         this.description = description;
     }

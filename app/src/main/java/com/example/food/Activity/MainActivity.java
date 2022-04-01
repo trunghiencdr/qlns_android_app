@@ -6,20 +6,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.RetryPolicy;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.food.Adapter.CategoryAdapter;
 import com.example.food.Adapter.PopularAdapter;
 import com.example.food.Api.ApiService;
@@ -28,10 +20,7 @@ import com.example.food.Domain.ProductDomain;
 import com.example.food.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.json.JSONArray;
-
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,6 +29,8 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
 private RecyclerView.Adapter adapter,adapter2;
 private RecyclerView recyclerViewCategoryList,recyclerViewPopularList;
+
+LinearLayout btnSetting;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +44,10 @@ private RecyclerView recyclerViewCategoryList,recyclerViewPopularList;
     private void bottomNavigation() {
         FloatingActionButton floatingActionButton=findViewById(R.id.cart_btn);
         LinearLayout homeBtn=findViewById(R.id.homeBtn);
+        btnSetting = findViewById(R.id.settingBtn);
+
+        btnSetting.setOnClickListener(view -> startActivity(
+                new Intent(MainActivity.this, SigninActivity.class)));
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
