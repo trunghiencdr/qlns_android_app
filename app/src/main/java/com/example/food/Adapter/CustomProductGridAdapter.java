@@ -9,17 +9,29 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 
+import com.example.food.Activity.MainActivity;
 import com.example.food.Activity.ProductListActivity;
 import com.example.food.Activity.ShowDetailActivity;
+import com.example.food.Api.ApiService;
+import com.example.food.Domain.CartDomain;
+import com.example.food.Domain.CategoryDomain;
 import com.example.food.Domain.ProductDomain;
 import com.example.food.R;
+import com.example.food.model.User;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-public class CustomProductGridAdapter extends BaseAdapter {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class CustomProductGridAdapter extends BaseAdapter implements Serializable {
     private List<ProductDomain> listData;
     private LayoutInflater layoutInflater;
     private Context context;
@@ -77,6 +89,14 @@ public class CustomProductGridAdapter extends BaseAdapter {
                 Intent intent=new Intent(finalConvertView.getContext(), ShowDetailActivity.class);
                 intent.putExtra("object", listData.get(position));
                 finalConvertView.getContext().startActivity(intent);
+            }
+        });
+        holder.addBtn_product.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                User user=new User(1L,"28","28");
+//                CartDomain cartDomain=new CartDomain(user,gridItem,1);
+//                ApiService.apiService.insertCart(cartDomain);
             }
         });
         return convertView;

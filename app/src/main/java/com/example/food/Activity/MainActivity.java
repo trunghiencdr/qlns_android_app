@@ -35,9 +35,14 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
 private RecyclerView.Adapter adapter,adapter2;
 private RecyclerView recyclerViewCategoryList,recyclerViewPopularList;
+
 private User user;
 private TextView txtName;
 LinearLayout btnSetting, btnSupport;
+
+TextView textViewSeeAllCategory,textViewSeeAllProduct;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,19 +51,25 @@ LinearLayout btnSetting, btnSupport;
 
 
 
+
         addControls();
         addEvents();
+
+        setControl();
+        setEvent();
+
         recyclerViewCategory();
         recyclerViewPopular();
         bottomNavigation();
     }
+
 
     @Override
     protected void onStart() {
         super.onStart();
         user = AppUtils.getAccount(getSharedPreferences(AppUtils.ACCOUNT, MODE_PRIVATE));
         if(user!=null)
-            txtName.setText(user.getName());
+            txtName.setText(user.getUsername());
         else txtName.setText("Hello world");
 
     }
@@ -76,8 +87,29 @@ LinearLayout btnSetting, btnSupport;
     private void addControls() {
         txtName = findViewById(R.id.txt_name_main);
         btnSupport = findViewById(R.id.supportBtn);
+    }
 
 
+
+
+    private void setEvent() {
+        textViewSeeAllProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, ProductListActivity.class));
+            }
+        });
+        textViewSeeAllCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, CategoryListActivity.class));
+            }
+        });
+    }
+
+    private void setControl() {
+        textViewSeeAllCategory=findViewById(R.id.textViewSeeAllCategory);
+        textViewSeeAllProduct=findViewById(R.id.textViewSeeAllProduct);
 
     }
 
@@ -92,7 +124,7 @@ LinearLayout btnSetting, btnSupport;
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                startActivity(new Intent(MainActivity.this, CartListActivity.class));
+                startActivity(new Intent(MainActivity.this, CartListActivity.class));
             }
         });
         homeBtn.setOnClickListener(new View.OnClickListener() {
@@ -101,6 +133,7 @@ LinearLayout btnSetting, btnSupport;
 //                startActivity(new Intent(MainActivity.this, CartListActivity.class));
             }
         });
+
     }
 
     private void recyclerViewPopular() {

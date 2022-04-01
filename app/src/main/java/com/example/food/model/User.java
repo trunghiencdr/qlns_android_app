@@ -77,8 +77,13 @@ public class User implements Serializable {
         this.password = password;
     }
 
+
     public User(String username, String name,  String password) {
         this.name = name;
+    }
+
+    public User(Long id,String username, String password) {
+        this.id = id;
         this.username = username;
         this.password = password;
     }
