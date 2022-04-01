@@ -17,9 +17,10 @@ import com.example.food.Activity.ShowDetailActivity;
 import com.example.food.Domain.ProductDomain;
 import com.example.food.R;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class CustomProductGridAdapter extends BaseAdapter {
+public class CustomProductGridAdapter extends BaseAdapter implements Serializable {
     private List<ProductDomain> listData;
     private LayoutInflater layoutInflater;
     private Context context;

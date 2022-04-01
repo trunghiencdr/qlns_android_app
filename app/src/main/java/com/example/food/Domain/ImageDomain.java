@@ -1,6 +1,8 @@
 package com.example.food.Domain;
 
-public class ImageDomain {
+import java.io.Serializable;
+
+public class ImageDomain implements Serializable {
     private  String link;
 
     public String getLink() {

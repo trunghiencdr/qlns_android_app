@@ -16,9 +16,10 @@ import com.example.food.Activity.ShowDetailActivity;
 import com.example.food.Domain.ProductDomain;
 import com.example.food.R;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.ViewHolder> {
+public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.ViewHolder>{
     ArrayList<ProductDomain> productDomains;
 
     public PopularAdapter(ArrayList<ProductDomain> productDomains) {
