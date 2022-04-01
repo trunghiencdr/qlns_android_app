@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.food.Adapter.CategoryAdapter;
@@ -29,16 +30,38 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
 private RecyclerView.Adapter adapter,adapter2;
 private RecyclerView recyclerViewCategoryList,recyclerViewPopularList;
-
+TextView textViewSeeAllCategory,textViewSeeAllProduct;
 LinearLayout btnSetting;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        setControl();
+        setEvent();
         recyclerViewCategory();
         recyclerViewPopular();
         bottomNavigation();
+    }
+
+    private void setEvent() {
+        textViewSeeAllProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, ProductListActivity.class));
+            }
+        });
+        textViewSeeAllCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, CategoryListActivity.class));
+            }
+        });
+    }
+
+    private void setControl() {
+        textViewSeeAllCategory=findViewById(R.id.textViewSeeAllCategory);
+        textViewSeeAllProduct=findViewById(R.id.textViewSeeAllProduct);
     }
 
     private void bottomNavigation() {
@@ -52,7 +75,7 @@ LinearLayout btnSetting;
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                startActivity(new Intent(MainActivity.this, CartListActivity.class));
+                startActivity(new Intent(MainActivity.this, CartListActivity.class));
             }
         });
         homeBtn.setOnClickListener(new View.OnClickListener() {
@@ -61,6 +84,7 @@ LinearLayout btnSetting;
 //                startActivity(new Intent(MainActivity.this, CartListActivity.class));
             }
         });
+
     }
 
     private void recyclerViewPopular() {
