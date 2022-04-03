@@ -93,7 +93,7 @@
                     app:layout_constraintTop_toTopOf="@+id/textView" />
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/txt_name_main"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"

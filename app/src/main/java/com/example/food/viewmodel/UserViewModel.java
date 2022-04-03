@@ -1,14 +1,12 @@
 package com.example.food.viewmodel;
 
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.food.dto.UserDTO;
+import com.example.food.model.RequestSignup;
 import com.example.food.model.User;
 import com.example.food.network.RetroInstance;
 import com.example.food.service.UserService;
-
-import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -19,6 +17,7 @@ public class UserViewModel extends ViewModel {
     private UserService userService;
 
     public UserViewModel(){
+        userService = RetroInstance.getRetrofitClient().create(UserService.class);
     }
 
 //    public MutableLiveData<List<User>> getUserResponseObserver(){
@@ -27,14 +26,30 @@ public class UserViewModel extends ViewModel {
 
 
     public Observable<UserDTO> makeApiCallSignIn(String username, String password){
-        userService = RetroInstance.getRetrofitClient().create(UserService.class);
+
         System.out.println("retrofit:"+userService.toString());
 //        Observable<Optional<Response>> call = api.signin()
        return userService.signin(new User(username, password))
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());
 
     }
+    public Observable<UserDTO> makeApiCallSignUp(String username, String name, String password){
+
+        System.out.println("retrofit:"+userService.toString());
+//        Observable<Optional<Response>> call = api.signin()
+        return userService.signup(new RequestSignup(username, name, password))
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread());
+
+    }
+
+
+//    public Observable<UserDTO> makeApiCallSignUp(String username, String password, String confirmPassword){
+//        return userService.signup(new User(username, confirmPassword))
+//                .
+//    }
+
 
     public void makeAPICallGetUsers(){
         userService = RetroInstance.getRetrofitClient().create(UserService.class);

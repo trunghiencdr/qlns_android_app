@@ -1,8 +1,10 @@
 package com.example.food.model;
 
+import com.example.food.util.ERole;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,7 +15,7 @@ import lombok.Setter;
 @Getter
 @Setter
 
-public class User {
+public class User implements Serializable {
 
     private String token;
     private String type;
@@ -29,8 +31,6 @@ public class User {
     @Expose
     private String email;
 
-    @Expose
-    private String phoneNumber;
 
     @Expose
     private String address;
@@ -48,22 +48,21 @@ public class User {
     private String password;
 
 
-    private Set<String> roles = new HashSet<>();
+    private Set<Role> roles = new HashSet<>();
 
 
     public User() {
     }
 
     public User(String token, String type, Long id, String name
-            , String email, String phoneNumber, String address
+            , String email,String address
             , String rememberToken, Date createdAt, Date updatedAt
-            , String username, String password, Set<String> roles) {
+            , String username, String password, Set<Role> roles) {
         this.token = token;
         this.type = type;
         this.id = id;
         this.name = name;
         this.email = email;
-        this.phoneNumber = phoneNumber;
         this.address = address;
         this.rememberToken = rememberToken;
         this.createdAt = createdAt;
@@ -76,6 +75,11 @@ public class User {
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+
+    public User(String username, String name,  String password) {
+        this.name = name;
     }
 
     public User(Long id,String username, String password) {
@@ -124,13 +128,7 @@ public class User {
         this.email = email;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
 
     public String getAddress() {
         return address;
@@ -180,11 +178,11 @@ public class User {
         this.password = password;
     }
 
-    public Set<String> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<String> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 
@@ -196,7 +194,6 @@ public class User {
                 ", id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
                 ", address='" + address + '\'' +
                 ", rememberToken='" + rememberToken + '\'' +
                 ", createdAt=" + createdAt +

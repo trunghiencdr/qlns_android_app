@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,7 +20,11 @@ import com.example.food.Api.ApiService;
 import com.example.food.Domain.CategoryDomain;
 import com.example.food.Domain.ProductDomain;
 import com.example.food.R;
+import com.example.food.dto.UserDTO;
+import com.example.food.model.User;
+import com.example.food.util.AppUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -30,19 +35,62 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
 private RecyclerView.Adapter adapter,adapter2;
 private RecyclerView recyclerViewCategoryList,recyclerViewPopularList;
+
+private User user;
+private TextView txtName;
+LinearLayout btnSetting, btnSupport;
+
 TextView textViewSeeAllCategory,textViewSeeAllProduct;
-LinearLayout btnSetting;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+
+
+
+        addControls();
+        addEvents();
+
         setControl();
         setEvent();
+
         recyclerViewCategory();
         recyclerViewPopular();
         bottomNavigation();
     }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        user = AppUtils.getAccount(getSharedPreferences(AppUtils.ACCOUNT, MODE_PRIVATE));
+        if(user!=null)
+            txtName.setText(user.getUsername());
+        else txtName.setText("Hello world");
+
+    }
+
+    private void addEvents() {
+        btnSupport.setOnClickListener(view -> {
+            AppUtils.deleteAccount(getSharedPreferences(AppUtils.ACCOUNT, MODE_PRIVATE));
+            getSharedPreferences("username", MODE_PRIVATE).edit().putString("username", user.getUsername()).apply();
+            startActivity(new Intent(MainActivity.this, SigninActivity.class));
+
+
+        });
+    }
+
+    private void addControls() {
+        txtName = findViewById(R.id.txt_name_main);
+        btnSupport = findViewById(R.id.supportBtn);
+    }
+
+
+
 
     private void setEvent() {
         textViewSeeAllProduct.setOnClickListener(new View.OnClickListener() {
@@ -62,6 +110,7 @@ LinearLayout btnSetting;
     private void setControl() {
         textViewSeeAllCategory=findViewById(R.id.textViewSeeAllCategory);
         textViewSeeAllProduct=findViewById(R.id.textViewSeeAllProduct);
+
     }
 
     private void bottomNavigation() {

@@ -15,7 +15,7 @@
 
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/btn_back_sign_up"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -84,7 +84,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:hint="Username"
+                    android:hint="Phone number"
                     android:textColorHint="@color/black"
                     app:boxCornerRadiusBottomEnd="@dimen/edit_text_radius"
                     app:boxCornerRadiusBottomStart="@dimen/edit_text_radius"
@@ -95,11 +95,37 @@
                     app:startIconCheckable="true">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_text_username_sign_up"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="text">
 
                     </com.google.android.material.textfield.TextInputEditText>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Your name"
+                    android:textColorHint="@color/black"
+                    app:boxCornerRadiusBottomEnd="@dimen/edit_text_radius"
+                    app:boxCornerRadiusBottomStart="@dimen/edit_text_radius"
+                    app:boxCornerRadiusTopEnd="@dimen/edit_text_radius"
+                    app:boxCornerRadiusTopStart="@dimen/edit_text_radius"
+                    app:boxStrokeWidth="1dp"
+                    app:hintEnabled="true"
+                    app:startIconCheckable="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_text_name_sign_up"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text">
+
+                    </com.google.android.material.textfield.TextInputEditText>
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -118,6 +144,7 @@
                     app:startIconCheckable="true">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_text_password_sign_up"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="text">
@@ -125,7 +152,6 @@
                     </com.google.android.material.textfield.TextInputEditText>
 
                 </com.google.android.material.textfield.TextInputLayout>
-
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
@@ -142,6 +168,7 @@
                     app:startIconCheckable="true">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_text_confirm_password_sign_up"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="text">
@@ -149,10 +176,8 @@
                     </com.google.android.material.textfield.TextInputEditText>
 
                 </com.google.android.material.textfield.TextInputLayout>
-
-
                 <Button
-                    android:id="@+id/button"
+                    android:id="@+id/btn_confirm_sign_up"
                     style="@style/ButtonNormal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

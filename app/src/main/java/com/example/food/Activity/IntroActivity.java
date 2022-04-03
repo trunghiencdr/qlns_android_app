@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.example.food.R;
+import com.example.food.model.User;
+import com.example.food.util.AppUtils;
 
 public class IntroActivity extends AppCompatActivity {
 
@@ -20,8 +22,12 @@ public class IntroActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent=new Intent(IntroActivity.this,SigninActivity.class);
-                startActivity(intent);
+                User user = AppUtils.getAccount(getSharedPreferences(AppUtils.ACCOUNT, MODE_PRIVATE));
+                if(user==null){
+                    startActivity(new Intent(IntroActivity.this, SigninActivity.class));
+                }else{
+                    startActivity(new Intent(IntroActivity.this, MainActivity.class));
+                }
                 finish();
             }
         }, 3000);
