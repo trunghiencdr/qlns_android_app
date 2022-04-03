@@ -37,12 +37,14 @@ public class CartListActivity extends AppCompatActivity {
         recycleViewCart.setLayoutManager(linearLayoutManager);
 
         final ArrayList<CartDomain>[] cartDomainList = new ArrayList[]{new ArrayList<>()};
-        ApiService.apiService.getListCartDomainFollowUserId(22).enqueue(new Callback<ArrayList<CartDomain>>() {
+        ApiService.apiService.getListCartDomainFollowUserId(22).
+                enqueue(new Callback<ArrayList<CartDomain>>() {
             @Override
             public void onResponse(Call<ArrayList<CartDomain>> call, Response<ArrayList<CartDomain>> response) {
                 try {
                     if (response != null) {
                         cartDomainList[0] =response.body();
+                        Log.d("cart",response.body().toString());
                         ArrayList<ProductDomain> productDomains= new ArrayList<>();
                         for (int i=0;i<cartDomainList[0].size();i++){
                             productDomains.add(cartDomainList[0].get(i).getProductDomain());
@@ -61,8 +63,6 @@ public class CartListActivity extends AppCompatActivity {
 
             }
         });
-
-
 
 
     }

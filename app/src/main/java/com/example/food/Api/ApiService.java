@@ -13,11 +13,13 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface ApiService {
 
@@ -38,7 +40,7 @@ public interface ApiService {
     Call<ArrayList<ProductDomain>> getListProductDomain();
 
     @GET("api/v1/Cart/user/{id}")
-    Call<ArrayList<CartDomain>> getListCartDomainFollowUserId(int id);
+    Call<ArrayList<CartDomain>> getListCartDomainFollowUserId(@Path(value = "id",encoded = true) int id);
 
     @POST("api/v1/Carts/insert")
     public Observable<CartDomain> insertCart(@Body CartDomain cartDomain);
