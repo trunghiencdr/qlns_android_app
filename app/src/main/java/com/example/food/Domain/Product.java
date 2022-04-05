@@ -3,7 +3,7 @@ package com.example.food.Domain;
 import java.io.Serializable;
 import java.util.List;
 
-public class ProductDomain implements Serializable {
+public class Product implements Serializable {
     private Long productId;
     private Long categoryId;
     private String name;
@@ -18,9 +18,9 @@ public class ProductDomain implements Serializable {
     private int id;
     private String url;
     private int year;
-    private List<ImageDomain> images;
+    private List<Image> images;
 
-    public ProductDomain(Long productId, Long categoryId, String name, float price, String calculationUnit, int total, String description, String slug, boolean display, float rate, float discount, int id, String url, int year, List<ImageDomain> images) {
+    public Product(Long productId, Long categoryId, String name, float price, String calculationUnit, int total, String description, String slug, boolean display, float rate, float discount, int id, String url, int year, List<Image> images) {
         this.productId = productId;
         this.categoryId = categoryId;
         this.name = name;
@@ -150,11 +150,11 @@ public class ProductDomain implements Serializable {
         this.year = year;
     }
 
-    public List<ImageDomain> getImages() {
+    public List<Image> getImages() {
         return images;
     }
 
-    public void setImages(List<ImageDomain> images) {
+    public void setImages(List<Image> images) {
         this.images = images;
     }
 }

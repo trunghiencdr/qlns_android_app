@@ -2,22 +2,22 @@ package com.example.food.Domain;
 
 import java.io.Serializable;
 
-public class CategoryDomain implements Serializable {
-    private String id;
+public class Category implements Serializable {
+    private int id;
     private String name;
     private String description;
 
-    public CategoryDomain(String categoryId, String categoryName, String description) {
+    public Category(int categoryId, String categoryName, String description) {
         this.id = categoryId;
         this.name = categoryName;
         this.description = description;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -35,7 +35,7 @@ public class CategoryDomain implements Serializable {
 
     @Override
     public String toString() {
-        return "CategoryDomain{" +
+        return "Category{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +

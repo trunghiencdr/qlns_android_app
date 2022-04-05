@@ -13,17 +13,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.food.Activity.ShowDetailActivity;
-import com.example.food.Domain.ProductDomain;
+import com.example.food.Domain.Product;
 import com.example.food.R;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.ViewHolder>{
-    ArrayList<ProductDomain> productDomains;
+    ArrayList<Product> products;
 
-    public PopularAdapter(ArrayList<ProductDomain> productDomains) {
-        this.productDomains = productDomains;
+    public PopularAdapter(ArrayList<Product> products) {
+        this.products = products;
     }
 
     @NonNull
@@ -36,11 +35,11 @@ public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        holder.title.setText(productDomains.get(position).getName());
-        holder.fee.setText(String.valueOf(productDomains.get(position).getPrice()));
+        holder.title.setText(products.get(position).getName());
+        holder.fee.setText(String.valueOf(products.get(position).getPrice()));
 
         int drawableResourceId = holder.itemView.getContext().getResources().getIdentifier(
-                productDomains.get(position).getImages().get(0).getLink(), "drawable", holder.itemView.getContext().getPackageName());
+                products.get(position).getImages().get(0).getLink(), "drawable", holder.itemView.getContext().getPackageName());
 
         Glide.with(holder.itemView.getContext())
                 .load(drawableResourceId)
@@ -49,7 +48,7 @@ public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.ViewHold
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(holder.itemView.getContext(), ShowDetailActivity.class);
-                intent.putExtra("object",productDomains.get(position));
+                intent.putExtra("object", products.get(position));
                 holder.itemView.getContext().startActivity(intent);
             }
         });
@@ -59,7 +58,7 @@ public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return productDomains.size();
+        return products.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

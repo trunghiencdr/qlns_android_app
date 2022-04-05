@@ -5,7 +5,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,21 +15,17 @@ import android.widget.Toast;
 
 import com.example.food.Adapter.CategoryAdapter;
 import com.example.food.Adapter.PopularAdapter;
-import com.example.food.Api.ApiService;
-import com.example.food.Domain.CategoryDomain;
-import com.example.food.Domain.ProductDomain;
+import com.example.food.Api.Api;
+import com.example.food.Domain.Category;
+import com.example.food.Domain.Product;
+import com.example.food.Listener.CategoryResponseListener;
+import com.example.food.Listener.ProductResponseListener;
 import com.example.food.R;
-import com.example.food.dto.UserDTO;
 import com.example.food.model.User;
 import com.example.food.util.AppUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 private RecyclerView.Adapter adapter,adapter2;
@@ -41,7 +36,7 @@ private TextView txtName;
 LinearLayout btnSetting, btnSupport;
 
 TextView textViewSeeAllCategory,textViewSeeAllProduct;
-
+Api api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,107 +135,44 @@ TextView textViewSeeAllCategory,textViewSeeAllProduct;
         LinearLayoutManager linearLayoutManager= new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
         recyclerViewPopularList=findViewById(R.id.recyclerView2);
         recyclerViewPopularList.setLayoutManager(linearLayoutManager);
-
-        final ArrayList<ProductDomain>[] productDomainList = new ArrayList[]{new ArrayList<>()};
-        ApiService.apiService.getListProductDomain().enqueue(new Callback<ArrayList<ProductDomain>>() {
-            @Override
-            public void onResponse(Call<ArrayList<ProductDomain>> call, Response<ArrayList<ProductDomain>> response) {
-                try {
-                    if (response != null) {
-                        productDomainList[0] =response.body();
-                        adapter2 = new PopularAdapter(productDomainList[0]);
-                        recyclerViewPopularList.setAdapter(adapter2);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                Toast.makeText(MainActivity.this,"Call api success"+productDomainList[0].get(4).getImages().get(0).getLink(),Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<ProductDomain>> call, Throwable t) {
-                Toast.makeText(MainActivity.this,"Call api error"+t.toString(),Toast.LENGTH_SHORT).show();
-                Log.d("zzz",t.toString());
-            }
-        });
-
-
-
+        api = new Api(MainActivity.this);
+        api.getProducts(productResponseListener);
     }
 
     private void recyclerViewCategory() {
         LinearLayoutManager linearLayoutManager= new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
         recyclerViewCategoryList=findViewById(R.id.recyclerView);
         recyclerViewCategoryList.setLayoutManager(linearLayoutManager);
-        ArrayList<CategoryDomain> categoryList=getListCategory();
-
+        api = new Api(MainActivity.this);
+        api.getCategories(categoryResponseListener);
 
 
     }
-    private ArrayList<CategoryDomain> getListCategory(){
-        //================
-//        RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
-        final ArrayList<CategoryDomain>[] categoryList = new ArrayList[]{new ArrayList<>()};
-//        String url="http://192.168.1.10:8080/api/v1/Categories";
-//
-//        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-//            @Override
-//            public void onResponse(JSONArray response) {
-//                try {
-//                    if (response != null) {
-//                        //Log.d("aaa","1");
-//                        for (int i = 0; i < response.length(); i++) {
-//                            categoryList.add(new CategoryDomain(response.getJSONObject(i).getString("id").toString(), response.getJSONObject(i).getString("name").toString()));
-//                        }
-//
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Toast.makeText(MainActivity.this,"Something wrong"+error.toString(),Toast.LENGTH_SHORT).show();
-//                Log.d("aaa",error.toString());
-//            }
-//        });
+    private final CategoryResponseListener categoryResponseListener = new CategoryResponseListener() {
+        @Override
+        public void didFetch(ArrayList<Category> response, String message) {
+            adapter=new CategoryAdapter(response);
+            recyclerViewCategoryList.setAdapter(adapter);
+        }
 
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                HashMap<String, String> headers = new HashMap<String, String>();
-//                headers.put("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTY0ODYzMTU3NywiZXhwIjoxNjQ4NzE3OTc3fQ.BqBLetK9eKm9a1AGTpJ6h2LpthSx1wcl3GGSxJ80P1Dq71hxFMKMZ6ndd8B-bnnoEXIcM2wOHsZin6nLg8lADw");
-//                return headers;
-//            }
-//
-//            @Override
-//            public byte[] getBody() {
-//                HashMap<String, String> body = new HashMap<String, String>();
-//
-//                return body.toString().getBytes();
-//            }
+        @Override
+        public void didError(String message) {
+            Log.d("api", message);
+            Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+        }
+    };
 
-//        queue.add(request);
-        ApiService.apiService.getListCategoryDomain().enqueue(new Callback<ArrayList<CategoryDomain>>() {
-            @Override
-            public void onResponse(Call<ArrayList<CategoryDomain>> call, Response<ArrayList<CategoryDomain>> response) {
-                try {
-                    if (response != null) {
-                        categoryList[0] =response.body();
-                        adapter=new CategoryAdapter(categoryList[0]);
-                        recyclerViewCategoryList.setAdapter(adapter);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                Toast.makeText(MainActivity.this,"Call api success"+categoryList[0].size()+categoryList[0].get(0).getName(),Toast.LENGTH_SHORT).show();
-            }
+    private final ProductResponseListener productResponseListener = new ProductResponseListener(){
+        @Override
+        public void didFetch(ArrayList<Product> response, String message) {
+            adapter2 = new PopularAdapter(response);
+            recyclerViewPopularList.setAdapter(adapter2);
+        }
 
-            @Override
-            public void onFailure(Call<ArrayList<CategoryDomain>> call, Throwable t) {
-                Toast.makeText(MainActivity.this,"Call api error",Toast.LENGTH_SHORT).show();
-            }
-        });
-        return categoryList[0];
-    }
+        @Override
+        public void didError(String message) {
+            Toast.makeText(MainActivity.this,"Call api error"+message.toString(),Toast.LENGTH_SHORT).show();
+            Log.d("zzz",message.toString());
+        }
+    } ;
 }
