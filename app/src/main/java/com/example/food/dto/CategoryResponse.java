@@ -1,17 +1,18 @@
 package com.example.food.dto;
 
-import com.example.food.Domain.CategoryDomain;
+
+import com.example.food.Domain.Category;
 import com.example.food.util.ResponseMessage;
 
 import java.util.List;
 
 public class CategoryResponse extends ResponseMessage {
-    private CategoryDomain data;
+    private Category data;
 
     public CategoryResponse() {
     }
 
-    public CategoryResponse(String status, String message, CategoryDomain data) {
+    public CategoryResponse(String status, String message, Category data) {
         this.status = status;
         this.message = message;
         this.data = data;
@@ -33,11 +34,11 @@ public class CategoryResponse extends ResponseMessage {
         this.message = message;
     }
 
-    public CategoryDomain getData() {
+    public Category getData() {
         return data;
     }
 
-    public void setData(CategoryDomain data) {
+    public void setData(Category data) {
         this.data = data;
     }
 }

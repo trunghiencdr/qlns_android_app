@@ -2,11 +2,11 @@ package com.example.food.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.food.Adapter.CategoryAdapter;
 import com.example.food.Adapter.CustomCategoryGridAdapter;
-import com.example.food.Adapter.CustomProductGridAdapter;
-import com.example.food.Api.ApiService;
-import com.example.food.Domain.CategoryDomain;
-import com.example.food.Domain.ProductDomain;
+import com.example.food.Api.Api;
+import com.example.food.Domain.Category;
+import com.example.food.Listener.CategoryResponseListener;
 import com.example.food.R;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,39 +22,33 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class CategoryListActivity extends AppCompatActivity {
-
+    GridView gridView;
+    Api api;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_list);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        List<CategoryDomain> listCategoryDomain = getListData();
+        setControl();
 
-
+        api = new Api(CategoryListActivity.this);
+        api.getCategories(categoryResponseListener);
     }
-    private List<CategoryDomain> getListData() {
-        final ArrayList<CategoryDomain>[] categoryDomainList = new ArrayList[]{new ArrayList<>()};
-        ApiService.apiService.getListCategoryDomain().enqueue(new Callback<ArrayList<CategoryDomain>>() {
-            @Override
-            public void onResponse(Call<ArrayList<CategoryDomain>> call, Response<ArrayList<CategoryDomain>> response) {
-                try {
-                    if (response != null) {
-                        categoryDomainList[0] =response.body();
-                        final GridView gridView = findViewById(R.id.gridViewCategory);
-                        gridView.setAdapter(new CustomCategoryGridAdapter(CategoryListActivity.this, categoryDomainList[0]));
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                //Toast.makeText(ProductListActivity.this,"Call api success"+productDomainList[0].get(4).getImages().get(0).getLink(),Toast.LENGTH_SHORT).show();
-            }
 
-            @Override
-            public void onFailure(Call<ArrayList<CategoryDomain>> call, Throwable t) {
-                Toast.makeText(CategoryListActivity.this,"Call api error"+t.toString(),Toast.LENGTH_SHORT).show();
-                Log.d("zzz",t.toString());
-            }
-        });
-        return categoryDomainList[0];
+    private void setControl() {
+        gridView= findViewById(R.id.gridViewCategory);
     }
+
+    private final CategoryResponseListener categoryResponseListener = new CategoryResponseListener() {
+        @Override
+        public void didFetch(ArrayList<Category> response, String message) {
+            gridView.setAdapter(new CustomCategoryGridAdapter(CategoryListActivity.this, response));
+        }
+
+        @Override
+        public void didError(String message) {
+            Log.d("api", message);
+            Toast.makeText(CategoryListActivity.this, message, Toast.LENGTH_LONG).show();
+        }
+    };
 }

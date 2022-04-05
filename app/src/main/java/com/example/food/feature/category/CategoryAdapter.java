@@ -14,16 +14,16 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.food.Domain.CategoryDomain;
+import com.example.food.Domain.Category;
 import com.example.food.R;
 import com.example.food.feature.home.HomeScreenFragmentDirections;
 import com.example.food.feature.home.HomeViewModel;
 import com.example.food.feature.product.ProductScreenFragmentArgs;
 
-public class CategoryAdapter extends ListAdapter<CategoryDomain, CategoryAdapter.CategoryViewHolder>{
+public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.CategoryViewHolder>{
     private HomeViewModel homeViewModel;
 
-    public CategoryAdapter(HomeViewModel homeViewModel, @NonNull DiffUtil.ItemCallback<CategoryDomain> diffCallback) {
+    public CategoryAdapter(HomeViewModel homeViewModel, @NonNull DiffUtil.ItemCallback<Category> diffCallback) {
         super(diffCallback);
         this.homeViewModel = homeViewModel;
     }
@@ -48,7 +48,7 @@ public class CategoryAdapter extends ListAdapter<CategoryDomain, CategoryAdapter
         HomeViewModel homeViewModel;
         TextView txt_category_name;
         ConstraintLayout mainLayoutCat;
-        CategoryDomain categoryDomain;
+        Category Category;
 
 
         public CategoryViewHolder(@NonNull View itemView, HomeViewModel homeViewModel) {
@@ -61,8 +61,8 @@ public class CategoryAdapter extends ListAdapter<CategoryDomain, CategoryAdapter
         }
 
 
-        public void bind(CategoryDomain item) {
-            categoryDomain = item;
+        public void bind(Category item) {
+            Category = item;
             txt_category_name.setText(item.getName());
 
         }
@@ -71,8 +71,8 @@ public class CategoryAdapter extends ListAdapter<CategoryDomain, CategoryAdapter
         public void onClick(View view) {
             if(view.getId()==R.id.mainLayoutCat){
                 Bundle bundle = new Bundle();
-                bundle.putInt("categoryId", categoryDomain.getId());
-              HomeScreenFragmentDirections.ActionHomeScreenFragmentToProductScreenFragment action = HomeScreenFragmentDirections.actionHomeScreenFragmentToProductScreenFragment().setCategoryId(categoryDomain.getId());
+                bundle.putInt("categoryId", Category.getId());
+              HomeScreenFragmentDirections.ActionHomeScreenFragmentToProductScreenFragment action = HomeScreenFragmentDirections.actionHomeScreenFragmentToProductScreenFragment().setCategoryId(Category.getId());
 
                 Navigation.findNavController(view).navigate(action);
 //                NavDirections action = HomeScreenFragmentDirections.actionHomeScreenFragmentToProductScreenFragment();
@@ -83,17 +83,17 @@ public class CategoryAdapter extends ListAdapter<CategoryDomain, CategoryAdapter
         }
     }
 
-   public static class CategoryDiff extends DiffUtil.ItemCallback<CategoryDomain>{
+   public static class CategoryDiff extends DiffUtil.ItemCallback<Category>{
 
 
        @Override
-       public boolean areItemsTheSame(@NonNull CategoryDomain oldItem, @NonNull CategoryDomain newItem) {
+       public boolean areItemsTheSame(@NonNull Category oldItem, @NonNull Category newItem) {
            return oldItem.getId() == newItem.getId();
        }
 
 
        @Override
-       public boolean areContentsTheSame(@NonNull CategoryDomain oldItem, @NonNull CategoryDomain newItem) {
+       public boolean areContentsTheSame(@NonNull Category oldItem, @NonNull Category newItem) {
            return oldItem.getName().equals(newItem.getDescription()) &&
                    oldItem.getDescription().equals(newItem.getDescription()) &&
                    oldItem.getProducts().equals(newItem.getProducts());

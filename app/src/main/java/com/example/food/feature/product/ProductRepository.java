@@ -1,7 +1,7 @@
 package com.example.food.feature.product;
 
 import com.example.food.Domain.Product;
-import com.example.food.Domain.ProductDomain;
+import com.example.food.Domain.Product;
 
 import java.util.List;
 

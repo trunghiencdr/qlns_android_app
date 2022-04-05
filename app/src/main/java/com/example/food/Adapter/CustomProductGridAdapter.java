@@ -14,29 +14,28 @@ import android.widget.Toast;
 import androidx.cardview.widget.CardView;
 
 import com.example.food.Activity.MainActivity;
-import com.example.food.Activity.ProductListActivity;
 import com.example.food.Activity.ShowDetailActivity;
-import com.example.food.Api.ApiService;
-import com.example.food.Domain.CartDomain;
-import com.example.food.Domain.CategoryDomain;
-import com.example.food.Domain.ProductDomain;
+import com.example.food.Api.Api;
+import com.example.food.Domain.Cart;
+import com.example.food.Domain.Product;
+import com.example.food.Domain.Response.CartResponse;
+import com.example.food.Listener.InsertCartResponseListener;
+import com.example.food.Listener.ProductResponseListener;
 import com.example.food.R;
+import com.example.food.dto.CartDTO;
 import com.example.food.model.User;
+import com.example.food.util.AppUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class CustomProductGridAdapter extends BaseAdapter implements Serializable {
-    private List<ProductDomain> listData;
+    private List<Product> listData;
     private LayoutInflater layoutInflater;
     private Context context;
-
-    public CustomProductGridAdapter(Context aContext, List<ProductDomain> listData) {
+    Api api;
+    public CustomProductGridAdapter(Context aContext, List<Product> listData) {
         this.context = aContext;
         this.listData = listData;
         layoutInflater = LayoutInflater.from(aContext);
@@ -74,14 +73,18 @@ public class CustomProductGridAdapter extends BaseAdapter implements Serializabl
             holder = (GridViewHolder) convertView.getTag();
         }
 
-        ProductDomain gridItem = this.listData.get(position);
+        Product gridItem = this.listData.get(position);
         holder.name_product.setText(gridItem.getName());
         holder.price_product.setText(gridItem.getPrice()+"");
         holder.calculationUnit_product.setText(gridItem.getCalculationUnit());
 
-        int imageId = this.getMipmapResIdByName(gridItem.getImages().get(0).getLink());
-
-        holder.image_product.setImageResource(imageId);
+//        int imageId =0;
+//        if(gridItem.getImages()!=null){
+//            this.getMipmapResIdByName(gridItem.getImages().get(0).getLink());
+//        }
+//
+//
+//        holder.image_product.setImageResource(imageId);
         View finalConvertView = convertView;
         holder.cardViewProduct.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,9 +97,11 @@ public class CustomProductGridAdapter extends BaseAdapter implements Serializabl
         holder.addBtn_product.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                User user=new User(1L,"28","28");
-//                CartDomain cartDomain=new CartDomain(user,gridItem,1);
-//                ApiService.apiService.insertCart(cartDomain);
+                User user = AppUtils.getAccount(context.getSharedPreferences(AppUtils.ACCOUNT, Context.MODE_PRIVATE));
+                Cart cart=new Cart(user,gridItem,1);
+                CartDTO cartDTO=new CartDTO(Integer.parseInt(cart.getUser().getId()+""),Integer.parseInt(cart.getProductDomain().getProductId()+""),cart.getQuantity());
+                api = new Api(context);
+                api.insertCart(insertCartResponseListener,cartDTO);
             }
         });
         return convertView;
@@ -110,6 +115,32 @@ public class CustomProductGridAdapter extends BaseAdapter implements Serializabl
         Log.i("CustomGridView", "Res Name: " + resName + "==> Res ID = " + resID);
         return resID;
     }
+    private final InsertCartResponseListener insertCartResponseListener=new InsertCartResponseListener() {
+        @Override
+        public void didFetch(CartResponse response, String message) {
+            Toast.makeText(context,"Call api success"+message.toString(),Toast.LENGTH_SHORT).show();
+            Log.d("success",message.toString());
+        }
+
+        @Override
+        public void didError(String message) {
+            Toast.makeText(context,"Call api error"+message.toString(),Toast.LENGTH_SHORT).show();
+            Log.d("zzz",message.toString());
+        }
+    };
+//            = new ProductResponseListener(){
+//        @Override
+//        public void didFetch(ArrayList<Product> response, String message) {
+//            adapter2 = new PopularAdapter(response);
+//            recyclerViewPopularList.setAdapter(adapter2);
+//        }
+//
+//        @Override
+//        public void didError(String message) {
+//            Toast.makeText(MainActivity.this,"Call api error"+message.toString(),Toast.LENGTH_SHORT).show();
+//            Log.d("zzz",message.toString());
+//        }
+//    } ;
 }
 
 class GridViewHolder {

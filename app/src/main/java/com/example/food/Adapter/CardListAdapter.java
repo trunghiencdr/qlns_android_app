@@ -1,7 +1,5 @@
 package com.example.food.Adapter;
 
-import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,18 +10,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.food.Domain.ProductDomain;
+import com.example.food.Domain.Product;
 import com.example.food.Interface.ChangNumberItemsListener;
 import com.example.food.R;
 
 import java.util.ArrayList;
 
 public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHolder> {
-    ArrayList<ProductDomain> productDomains;
+    ArrayList<Product> products;
     private ChangNumberItemsListener changNumberItemsListener;
 
-    public CardListAdapter(ArrayList<ProductDomain> productDomains) {
-        this.productDomains = productDomains;
+    public CardListAdapter(ArrayList<Product> products) {
+        this.products = products;
     }
 
     @NonNull
@@ -36,12 +34,12 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.title.setText(productDomains.get(position).getName());
-        holder.feeEachItem.setText(String.valueOf(productDomains.get(position).getPrice()));
-        holder.totalEachItem.setText(String.valueOf(Math.round(productDomains.get(position).getPrice()*100.0)/100.0));
+        holder.title.setText(products.get(position).getName());
+        holder.feeEachItem.setText(String.valueOf(products.get(position).getPrice()));
+        holder.totalEachItem.setText(String.valueOf(Math.round(products.get(position).getPrice()*100.0)/100.0));
         holder.num.setText(String.valueOf(1));
 
-        int drawableResourceId = holder.itemView.getContext().getResources().getIdentifier(productDomains.get(position).getImages().get(0).getLink(), "drawable", holder.itemView.getContext().getPackageName());
+        int drawableResourceId = holder.itemView.getContext().getResources().getIdentifier(products.get(position).getImages().get(0).getLink(), "drawable", holder.itemView.getContext().getPackageName());
 
         Glide.with(holder.itemView.getContext())
                 .load(drawableResourceId)
@@ -65,7 +63,7 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return productDomains.size();
+        return products.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

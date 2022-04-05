@@ -9,13 +9,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.food.Domain.ProductDomain;
+import com.example.food.Domain.Product;
 import com.example.food.R;
 
 public class ShowDetailActivity extends AppCompatActivity {
 private TextView addToCartBtn,titleTxt,feeTxt,descriptionTxt,numberOrderTxt;
 private ImageView plusBtn,minusBtn,foodPicBtn,backBtn;
-private ProductDomain productDomain;
+private Product product;
 private int numberOrder =1;
 
     @Override
@@ -28,17 +28,17 @@ private int numberOrder =1;
     }
 
     private void getBundle() {
-        productDomain=(ProductDomain) getIntent().getSerializableExtra("object");
+        product =(Product) getIntent().getSerializableExtra("object");
 
-        int drawableResourceId=this.getResources().getIdentifier(productDomain.getImages().get(0).getLink(),"drawable",this.getPackageName());
+        int drawableResourceId=this.getResources().getIdentifier(product.getImages().get(0).getLink(),"drawable",this.getPackageName());
 
         Glide.with(this)
                 .load(drawableResourceId)
                 .into(foodPicBtn);
 
-        titleTxt.setText(productDomain.getName());
-        feeTxt.setText("$"+productDomain.getPrice());
-        descriptionTxt.setText(productDomain.getDescription());
+        titleTxt.setText(product.getName());
+        feeTxt.setText("$"+ product.getPrice());
+        descriptionTxt.setText(product.getDescription());
         numberOrderTxt.setText(String.valueOf(numberOrder));
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override

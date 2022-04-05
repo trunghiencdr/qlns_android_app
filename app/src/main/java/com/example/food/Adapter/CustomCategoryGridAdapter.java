@@ -7,26 +7,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import com.example.food.Activity.ShowDetailActivity;
-import com.example.food.Domain.CategoryDomain;
-import com.example.food.Domain.ProductDomain;
+import com.example.food.Domain.Category;
 import com.example.food.R;
 
 import java.io.Serializable;
 import java.util.List;
 
 public class CustomCategoryGridAdapter extends BaseAdapter implements Serializable {
-    private List<CategoryDomain> listData;
+    private List<Category> listData;
     private LayoutInflater layoutInflater;
     private Context context;
 
-    public CustomCategoryGridAdapter(Context aContext, List<CategoryDomain> listData) {
+    public CustomCategoryGridAdapter(Context aContext, List<Category> listData) {
         this.context = aContext;
         this.listData = listData;
         layoutInflater = LayoutInflater.from(aContext);
@@ -59,8 +57,31 @@ public class CustomCategoryGridAdapter extends BaseAdapter implements Serializab
         } else {
             holder = (GridViewCategoryHolder) convertView.getTag();
         }
+        switch (position) {
+            case 0: {
+                holder.mainLayout.setBackground(ContextCompat.getDrawable(holder.mainLayout.getContext(), R.drawable.category_background1));
+                break;
+            }
+            case 1: {
+                holder.mainLayout.setBackground(ContextCompat.getDrawable(holder.mainLayout.getContext(), R.drawable.category_background2));
+                break;
+            }
+            case 2: {
+                holder.mainLayout.setBackground(ContextCompat.getDrawable(holder.mainLayout.getContext(), R.drawable.category_background3));
+                break;
+            }
+            case 3: {
+                holder.mainLayout.setBackground(ContextCompat.getDrawable(holder.mainLayout.getContext(), R.drawable.category_background4));
+                break;
+            }
+            case 4: {
+                holder.mainLayout.setBackground(ContextCompat.getDrawable(holder.mainLayout.getContext(), R.drawable.category_background5));
+                break;
+            }
+        }
 
-        CategoryDomain gridItem = this.listData.get(position);
+
+        Category gridItem = this.listData.get(position);
         holder.categoryName.setText(gridItem.getName());
 
 //        int imageId = this.getMipmapResIdByName(gridItem.getImages().get(0).getLink());

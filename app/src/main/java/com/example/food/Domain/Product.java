@@ -1,15 +1,13 @@
 package com.example.food.Domain;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Base64;
 
-import java.sql.Blob;
-import java.sql.SQLException;
+import java.io.Serializable;
 import java.util.List;
 
-public class Product {
-    private long productId;
+public class Product implements Serializable {
+    private Long productId;
+    private Long categoryId;
+
     private String name;
     private float price;
     private String calculationUnit;
@@ -22,23 +20,15 @@ public class Product {
     private int id;
     private String url;
     private int year;
+
     private Image image;
-    private List<ImageDomain> images;
-    public Product() {
-    }
 
-    public List<ImageDomain> getImages() {
-        return images;
-    }
+    private List<Image> images;
 
-    public void setImages(List<ImageDomain> images) {
-        this.images = images;
-    }
-
-    public Product(long productId, String name, float price, String calculationUnit,
-                   int total, String description, String slug, boolean display, float rate,
-                   float discount, int id, String url, int year, Image image, List<ImageDomain> iamges) {
+    public Product(Long productId, Long categoryId, String name, float price, String calculationUnit, int total, String description, String slug, boolean display, float rate, float discount, int id, String url, int year,Image image, List<Image> images) {
         this.productId = productId;
+        this.categoryId = categoryId;
+
         this.name = name;
         this.price = price;
         this.calculationUnit = calculationUnit;
@@ -52,6 +42,7 @@ public class Product {
         this.url = url;
         this.year = year;
         this.image = image;
+        this.images = images;
     }
 
     public Image getImage() {
@@ -74,13 +65,31 @@ public class Product {
 //        return bitmap;
 //    }
 
-    public long getProductId() {
-        return productId;
-    }
+
 
     public void setProductId(long productId) {
         this.productId = productId;
     }
+
+
+
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+
 
     public String getName() {
         return name;
@@ -177,4 +186,13 @@ public class Product {
     public void setYear(int year) {
         this.year = year;
     }
+
+    public List<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
+
 }

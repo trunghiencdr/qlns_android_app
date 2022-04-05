@@ -1,6 +1,7 @@
 package com.example.food.feature.home;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +15,14 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.food.Activity.MainActivity;
+import com.example.food.Activity.SigninActivity;
 import com.example.food.R;
 import com.example.food.databinding.FragmentHomeSceenBinding;
 import com.example.food.feature.category.CategoryAdapter;
 import com.example.food.feature.product.ProductAdapter;
+import com.example.food.model.User;
+import com.example.food.util.AppUtils;
 import com.example.food.util.ItemMargin;
 
 public class HomeScreenFragment extends Fragment {
@@ -26,6 +31,7 @@ public class HomeScreenFragment extends Fragment {
     private CategoryAdapter adapterCate;
     private ProductAdapter productAdapter;
     private RecyclerView rvCate, rvPopular, rvDiscount;
+    private User user;
 
     @Nullable
     @Override
@@ -69,9 +75,18 @@ public class HomeScreenFragment extends Fragment {
     }
 
     private void setEvents() {
+        binding.supportBtn.setOnClickListener(view -> {
+            AppUtils.deleteAccount(requireContext().getSharedPreferences(AppUtils.ACCOUNT, requireContext().MODE_PRIVATE));
+            requireContext().getSharedPreferences("username", requireContext().MODE_PRIVATE).edit().putString("username", user.getUsername()).apply();
+            startActivity(new Intent(requireContext(), SigninActivity.class));
+
+
+        });
+
     }
 
     private void setControls() {
+        user = AppUtils.getAccount(requireContext().getSharedPreferences(AppUtils.ACCOUNT, 0));
         rvCate = binding.recyclerViewCategoriesHomeScreen;
         rvPopular = binding.recyclerViewPopularHomeScreen;
         rvDiscount = binding.recyclerViewDiscountHomeScreen;

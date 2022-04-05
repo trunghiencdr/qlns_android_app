@@ -4,14 +4,14 @@ import com.example.food.model.User;
 
 import java.io.Serializable;
 
-public class CartDomain implements Serializable {
+public class Cart implements Serializable {
     private User user;
-    private ProductDomain productDomain;
+    private Product product;
     private int quantity;
 
-    public CartDomain(User user, ProductDomain productDomain, int quantity) {
+    public Cart(User user, Product product, int quantity) {
         this.user = user;
-        this.productDomain = productDomain;
+        this.product = product;
         this.quantity = quantity;
     }
 
@@ -23,12 +23,12 @@ public class CartDomain implements Serializable {
         this.user = user;
     }
 
-    public ProductDomain getProductDomain() {
-        return productDomain;
+    public Product getProductDomain() {
+        return product;
     }
 
-    public void setProductDomain(ProductDomain productDomain) {
-        this.productDomain = productDomain;
+    public void setProductDomain(Product product) {
+        this.product = product;
     }
 
     public int getQuantity() {

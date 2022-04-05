@@ -1,6 +1,9 @@
 package com.example.food.Domain;
 
-public class Image {
+
+import java.io.Serializable;
+
+public class Image implements Serializable {
     private int id;
 //    private String data;
     private String name;
@@ -26,6 +29,7 @@ public class Image {
 //        this.link = link;
 //    }
 
+
     public String getLink() {
         return link;
     }
@@ -33,6 +37,7 @@ public class Image {
     public void setLink(String link) {
         this.link = link;
     }
+
 
     public int getId() {
         return id;
@@ -65,4 +70,5 @@ public class Image {
     public void setType(String type) {
         this.type = type;
     }
+
 }

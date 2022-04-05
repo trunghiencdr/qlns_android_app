@@ -61,6 +61,7 @@ public class SignupActivity extends AppCompatActivity {
                             user = userDTO.getUser();
                             Toast.makeText(this, "Sign up successfully!", Toast.LENGTH_SHORT).show();
                             AppUtils.saveAccount(getSharedPreferences(AppUtils.ACCOUNT, MODE_PRIVATE), user);
+                            getSharedPreferences("username", 0).edit().putString("username", user.getUsername()).apply();
                             startActivity(new Intent(this, SigninActivity.class));
                         }else{
                             Toast.makeText(this, userDTO.getMessage(), Toast.LENGTH_SHORT).show();
