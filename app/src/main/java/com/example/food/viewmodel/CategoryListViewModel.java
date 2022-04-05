@@ -5,12 +5,15 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.food.Domain.CategoryDomain;
-import com.example.food.network.CategoryAPIService;
+import com.example.food.dto.CategoryResponse;
+import com.example.food.feature.category.CategoryService;
 import com.example.food.network.RetroInstance;
 
 import java.util.List;
 
-import lombok.NoArgsConstructor;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -18,17 +21,19 @@ import retrofit2.Response;
 public class CategoryListViewModel extends ViewModel {
 
     private MutableLiveData<List<CategoryDomain>> categories;
+    private CategoryService api;
+    private CategoryDomain categoryDomain;
 
     public CategoryListViewModel(){
-        categories = new MutableLiveData<>();
+        api = RetroInstance.getRetrofitClient().create(CategoryService.class);
     }
 
     public MutableLiveData<List<CategoryDomain>> getCategoriesObserver(){
         return categories;
     }
 
-    public void makeApiCall(){
-        CategoryAPIService api = RetroInstance.getRetrofitClient().create(CategoryAPIService.class);
+    public MutableLiveData<List<CategoryDomain>> makeApiCall(){
+
         Call<List<CategoryDomain>> call = api.getCategoryDomains();
         call.enqueue(new Callback<List<CategoryDomain>>() {
             @Override
@@ -48,5 +53,12 @@ public class CategoryListViewModel extends ViewModel {
                 categories.postValue(null);
             }
         });
+        return categories;
+    }
+
+    public Observable<Response<CategoryResponse>> callGetCategory(int id){
+        return api.getCategoryById(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }

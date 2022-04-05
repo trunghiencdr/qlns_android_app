@@ -1,6 +1,7 @@
 package com.example.food.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,6 +24,7 @@ import com.example.food.R;
 import com.example.food.dto.UserDTO;
 import com.example.food.model.User;
 import com.example.food.util.AppUtils;
+import com.example.food.viewmodel.CategoryListViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 
@@ -110,7 +112,6 @@ TextView textViewSeeAllCategory,textViewSeeAllProduct;
     private void setControl() {
         textViewSeeAllCategory=findViewById(R.id.textViewSeeAllCategory);
         textViewSeeAllProduct=findViewById(R.id.textViewSeeAllProduct);
-
     }
 
     private void bottomNavigation() {
@@ -173,7 +174,6 @@ TextView textViewSeeAllCategory,textViewSeeAllProduct;
         recyclerViewCategoryList=findViewById(R.id.recyclerView);
         recyclerViewCategoryList.setLayoutManager(linearLayoutManager);
         ArrayList<CategoryDomain> categoryList=getListCategory();
-
 
 
     }

@@ -3,7 +3,7 @@ package com.example.food.Domain;
 import java.io.Serializable;
 
 public class ImageDomain implements Serializable {
-    private  String link;
+    private String link;
 
     public String getLink() {
         return link;

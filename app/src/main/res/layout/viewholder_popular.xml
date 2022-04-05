@@ -4,13 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-
-    android:background="@drawable/card_background"
+    android:background="@drawable/category_background4"
     android:elevation="3dp">
 
     <ImageView
-        android:id="@+id/pic"
+        android:id="@+id/image_product_item"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="16dp"
@@ -18,11 +16,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintTop_toBottomOf="@+id/txt_item_product_name"
         app:srcCompat="@drawable/pizza2" />
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/txt_item_product_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -39,7 +37,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/fee"
+        android:id="@+id/txt_item_fee_product"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="0.0"
@@ -50,7 +48,7 @@
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pic" />
+        app:layout_constraintTop_toBottomOf="@+id/image_product_item" />
 
     <TextView
         android:id="@+id/textView10"
@@ -58,12 +56,12 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="3dp"
         android:text="$"
-        app:layout_constraintBottom_toBottomOf="@+id/fee"
-        app:layout_constraintEnd_toStartOf="@+id/fee"
-        app:layout_constraintTop_toBottomOf="@+id/pic" />
+        app:layout_constraintBottom_toBottomOf="@+id/txt_item_fee_product"
+        app:layout_constraintEnd_toStartOf="@+id/txt_item_fee_product"
+        app:layout_constraintTop_toBottomOf="@+id/image_product_item" />
 
     <TextView
-        android:id="@+id/addBtn"
+        android:id="@+id/btn_item_add_product"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -78,5 +76,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fee" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_item_fee_product" />
 </androidx.constraintlayout.widget.ConstraintLayout>

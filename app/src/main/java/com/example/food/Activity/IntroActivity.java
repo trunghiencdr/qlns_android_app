@@ -26,7 +26,9 @@ public class IntroActivity extends AppCompatActivity {
                 if(user==null){
                     startActivity(new Intent(IntroActivity.this, SigninActivity.class));
                 }else{
-                    startActivity(new Intent(IntroActivity.this, MainActivity.class));
+                    if(user.getUsername().equalsIgnoreCase("tnthien"))
+                    startActivity(new Intent(IntroActivity.this, HomeActivity.class));
+                    else startActivity(new Intent(IntroActivity.this, MainActivity.class));
                 }
                 finish();
             }

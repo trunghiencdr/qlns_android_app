@@ -16,7 +16,6 @@ import com.example.food.Activity.ShowDetailActivity;
 import com.example.food.Domain.ProductDomain;
 import com.example.food.R;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.ViewHolder>{
@@ -68,10 +67,10 @@ public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.ViewHold
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            title = itemView.findViewById(R.id.title);
-            fee = itemView.findViewById(R.id.fee);
-            addBtn = itemView.findViewById(R.id.addBtn);
-            pic = itemView.findViewById(R.id.pic);
+            title = itemView.findViewById(R.id.txt_item_product_name);
+            fee = itemView.findViewById(R.id.txt_item_fee_product);
+            addBtn = itemView.findViewById(R.id.btn_item_add_product);
+            pic = itemView.findViewById(R.id.image_product_item);
         }
     }
 }

@@ -61,6 +61,9 @@ public class SigninActivity extends AppCompatActivity {
             user = userDTO.getUser();
             if(userDTO.getStatus().equalsIgnoreCase("Ok")){
                 AppUtils.saveAccount(getSharedPreferences(AppUtils.ACCOUNT, MODE_PRIVATE), user);
+                if(user.getUsername().equalsIgnoreCase("tnthien"))
+                startActivity(new Intent(SigninActivity.this, HomeActivity.class));
+                else
                 startActivity(new Intent(SigninActivity.this, MainActivity.class));
                 Toast.makeText(this, "Sign in successfully!", Toast.LENGTH_SHORT).show();
             }else{
@@ -70,7 +73,7 @@ public class SigninActivity extends AppCompatActivity {
             throwable.printStackTrace();
 
         }, ()-> {
-            startActivity(new Intent(SigninActivity.this, MainActivity.class));
+            startActivity(new Intent(SigninActivity.this, HomeActivity.class));
             Toast.makeText(this, "Sign in successfully!", Toast.LENGTH_SHORT).show();
 
         });

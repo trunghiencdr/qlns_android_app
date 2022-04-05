@@ -1,23 +1,26 @@
 package com.example.food.Domain;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class CategoryDomain implements Serializable {
-    private String id;
+    private int id;
     private String name;
     private String description;
+    private List<Product> products;
 
-    public CategoryDomain(String categoryId, String categoryName, String description) {
+    public CategoryDomain(int categoryId, String categoryName, String description, List<Product> products) {
         this.id = categoryId;
         this.name = categoryName;
         this.description = description;
+        this.products = products;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -31,6 +34,14 @@ public class CategoryDomain implements Serializable {
 
     public String getDescription() {
         return description;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 
     @Override

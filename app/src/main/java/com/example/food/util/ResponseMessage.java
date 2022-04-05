@@ -21,7 +21,7 @@ public class ResponseMessage {
     @Expose
     protected String status;
 
-    @SerializedName("status")
+    @SerializedName("message")
     @Expose
     protected String message;
 

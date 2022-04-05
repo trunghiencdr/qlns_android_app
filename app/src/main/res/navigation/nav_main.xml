@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/homeScreenFragment">
+    <fragment
+        android:id="@+id/homeScreenFragment"
+        android:name="com.example.food.feature.home.HomeScreenFragment"
+        android:label="HomeScreenFragment" >
+        <action
+            android:id="@+id/action_homeScreenFragment_to_productScreenFragment"
+            app:destination="@id/productScreenFragment" />
+
+        <argument
+            android:name="categoryId"
+            app:argType="integer"
+            android:defaultValue="1"
+            >
+
+        </argument>
+    </fragment>
+    <fragment
+        android:id="@+id/productScreenFragment"
+        android:name="com.example.food.feature.product.ProductScreenFragment"
+        android:label="ProductScreenFragment" >
+        <action
+            android:id="@+id/action_productScreenFragment_to_homeScreenFragment"
+            app:destination="@id/homeScreenFragment" />
+
+        <argument
+            android:name="categoryId"
+            app:argType="integer"
+            android:defaultValue="0"
+
+            >
+    </argument>
+    </fragment>
+</navigation>

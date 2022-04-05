@@ -13,6 +13,9 @@
         android:theme="@style/Theme.Food"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Activity.HomeActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.CategoryListActivity"
             android:exported="false" />
         <activity
