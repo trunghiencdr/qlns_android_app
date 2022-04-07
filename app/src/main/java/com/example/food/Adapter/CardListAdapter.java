@@ -10,18 +10,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.food.Domain.Cart;
 import com.example.food.Domain.Product;
 import com.example.food.Interface.ChangNumberItemsListener;
 import com.example.food.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHolder> {
-    ArrayList<Product> products;
+    ArrayList<Cart> carts;
+
     private ChangNumberItemsListener changNumberItemsListener;
 
-    public CardListAdapter(ArrayList<Product> products) {
-        this.products = products;
+    public CardListAdapter(ArrayList<Cart> carts) {
+        this.carts = carts;
     }
 
     @NonNull
@@ -34,16 +37,11 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.title.setText(products.get(position).getName());
-        holder.feeEachItem.setText(String.valueOf(products.get(position).getPrice()));
-        holder.totalEachItem.setText(String.valueOf(Math.round(products.get(position).getPrice()*100.0)/100.0));
-        holder.num.setText(String.valueOf(1));
-
-        int drawableResourceId = holder.itemView.getContext().getResources().getIdentifier(products.get(position).getImages().get(0).getLink(), "drawable", holder.itemView.getContext().getPackageName());
-
-        Glide.with(holder.itemView.getContext())
-                .load(drawableResourceId)
-                .into(holder.pic);
+        holder.title.setText(carts.get(position).getProductDomain().getName());
+        holder.feeEachItem.setText(String.valueOf(carts.get(position).getProductDomain().getPrice()));
+        holder.totalEachItem.setText(String.valueOf(Math.round(carts.get(position).getProductDomain().getPrice()*carts.get(position).getQuantity()*100.0)/100.0));
+        Picasso.get().load(carts.get(position).getProductDomain().getImage().getLink()).into(holder.pic);
+        holder.num.setText(String.valueOf(carts.get(position).getQuantity()));
 
         holder.plusItem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,7 +61,7 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return products.size();
+        return carts.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

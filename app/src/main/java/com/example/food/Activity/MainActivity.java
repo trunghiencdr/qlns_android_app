@@ -1,7 +1,6 @@
 package com.example.food.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.food.Adapter.CategoryAdapter;
 import com.example.food.Adapter.PopularAdapter;
 import com.example.food.Api.Api;
 import com.example.food.Domain.Category;
@@ -24,7 +22,6 @@ import com.example.food.Listener.ProductResponseListener;
 import com.example.food.R;
 import com.example.food.model.User;
 import com.example.food.util.AppUtils;
-import com.example.food.viewmodel.CategoryListViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -151,8 +148,8 @@ Api api;
     private final CategoryResponseListener categoryResponseListener = new CategoryResponseListener() {
         @Override
         public void didFetch(ArrayList<Category> response, String message) {
-            adapter=new CategoryAdapter(response);
-            recyclerViewCategoryList.setAdapter(adapter);
+//            adapter=new CategoryAdapter(response);
+//            recyclerViewCategoryList.setAdapter(adapter);
         }
 
         @Override

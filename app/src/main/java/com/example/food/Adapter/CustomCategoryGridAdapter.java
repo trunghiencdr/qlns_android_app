@@ -49,7 +49,7 @@ public class CustomCategoryGridAdapter extends BaseAdapter implements Serializab
     public View getView(int position, View convertView, ViewGroup parent) {
         GridViewCategoryHolder holder;
         if (convertView == null) {
-            convertView = layoutInflater.inflate(R.layout.viewholder_cat, null);
+            convertView = layoutInflater.inflate(R.layout.item_category, null);
             holder = new GridViewCategoryHolder();
             holder.categoryName = convertView.findViewById(R.id.categoryName);
             holder.mainLayout = convertView.findViewById(R.id.mainLayoutCat);

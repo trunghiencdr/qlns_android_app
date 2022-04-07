@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +16,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.food.Activity.CartListActivity;
+import com.example.food.Activity.CategoryListActivity;
 import com.example.food.Activity.MainActivity;
 import com.example.food.Activity.SigninActivity;
 import com.example.food.R;
@@ -24,6 +27,7 @@ import com.example.food.feature.product.ProductAdapter;
 import com.example.food.model.User;
 import com.example.food.util.AppUtils;
 import com.example.food.util.ItemMargin;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class HomeScreenFragment extends Fragment {
     private FragmentHomeSceenBinding binding;
@@ -32,6 +36,8 @@ public class HomeScreenFragment extends Fragment {
     private ProductAdapter productAdapter;
     private RecyclerView rvCate, rvPopular, rvDiscount;
     private User user;
+    private TextView btnSeeAllCategoriesHomeScreen;
+    private FloatingActionButton cartBtn;
 
     @Nullable
     @Override
@@ -82,6 +88,12 @@ public class HomeScreenFragment extends Fragment {
 
 
         });
+        binding.btnSeeAllCategoriesHomeScreen.setOnClickListener(view -> {
+            startActivity(new Intent(getContext(), CategoryListActivity.class));
+        });
+        binding.cartBtn.setOnClickListener(view -> {
+            startActivity(new Intent(getContext(), CartListActivity.class));
+        });
 
     }
 
@@ -90,6 +102,8 @@ public class HomeScreenFragment extends Fragment {
         rvCate = binding.recyclerViewCategoriesHomeScreen;
         rvPopular = binding.recyclerViewPopularHomeScreen;
         rvDiscount = binding.recyclerViewDiscountHomeScreen;
+        btnSeeAllCategoriesHomeScreen = binding.btnSeeAllCategoriesHomeScreen;
+        cartBtn =binding.cartBtn;
 
         adapterCate = new CategoryAdapter(homeViewModel, new CategoryAdapter.CategoryDiff());
          rvCate.addItemDecoration(

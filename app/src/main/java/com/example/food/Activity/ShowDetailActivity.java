@@ -1,41 +1,137 @@
 package com.example.food.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.food.Adapter.CustomProductGridAdapter;
+import com.example.food.Api.Api;
+import com.example.food.Domain.Cart;
 import com.example.food.Domain.Product;
+import com.example.food.Domain.Response.CartResponse;
+import com.example.food.Listener.InsertCartResponseListener;
+import com.example.food.Listener.ProductResponseListener;
 import com.example.food.R;
+import com.example.food.dto.CartDTO;
+import com.example.food.feature.category.CategoryAdapter;
+import com.example.food.feature.home.HomeViewModel;
+import com.example.food.feature.product.ProductAdapter;
+import com.example.food.model.User;
+import com.example.food.util.AppUtils;
+import com.example.food.util.ItemMargin;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 public class ShowDetailActivity extends AppCompatActivity {
 private TextView addToCartBtn,titleTxt,feeTxt,descriptionTxt,numberOrderTxt;
 private ImageView plusBtn,minusBtn,foodPicBtn,backBtn;
 private Product product;
 private int numberOrder =1;
-
+private RecyclerView recyclerViewProductRelated;
+private HomeViewModel homeViewModel;
+private ProductAdapter productAdapter;
+private Api api;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_detail);
-
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         initView();
         getBundle();
+        setUpTabHost();
+        setEvent();
+
+    }
+
+    private void setEvent() {
+        addToCartBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                User user = AppUtils.getAccount(getSharedPreferences(AppUtils.ACCOUNT, Context.MODE_PRIVATE));
+                Cart cart=new Cart(user,product,numberOrder);
+                CartDTO cartDTO=new CartDTO(Integer.parseInt(cart.getUser().getId()+""),Integer.parseInt(cart.getProductDomain().getProductId()+""),cart.getQuantity());
+                api = new Api(ShowDetailActivity.this);
+                api.insertCart(insertCartResponseListener,cartDTO);
+            }
+        });
+    }
+    private final InsertCartResponseListener insertCartResponseListener=new InsertCartResponseListener() {
+        @Override
+        public void didFetch(CartResponse response, String message) {
+            Toast.makeText(ShowDetailActivity.this, "Call api success"+message.toString(),Toast.LENGTH_SHORT).show();
+            Log.d("success",message.toString());
+        }
+
+        @Override
+        public void didError(String message) {
+            Toast.makeText(ShowDetailActivity.this,"Call api error"+message.toString(),Toast.LENGTH_SHORT).show();
+            Log.d("zzz",message.toString());
+        }
+    };
+
+    @SuppressLint("CheckResult")
+    private void loadProducts() {
+        System.out.println("aaaaaaaaaaaaa"+product.getCategory().getId());
+        homeViewModel.getProductsByCategoryId(Integer.parseInt(product.getCategory().getId()+"")).subscribe(
+                response -> {
+                    if(response.code()==200){
+                        System.out.println("size of products:" +response.body().size());
+
+
+                        productAdapter.submitList(response.body());
+                    }
+                }
+                , throwable -> {
+                    System.out.println("throw get products:" + throwable.getMessage());
+                }
+        );
+    }
+
+    private void setUpTabHost() {
+        // initiating the tabhost
+        TabHost tabhost = (TabHost) findViewById(R.id.tabHost);
+
+        // setting up the tab host
+        tabhost.setup();
+
+        // Code for adding Tab 1 to the tabhost
+        TabHost.TabSpec spec = tabhost.newTabSpec("Tab One");
+        spec.setContent(R.id.tab1);
+
+        // setting the name of the tab 1 as "Tab One"
+        spec.setIndicator("Liên quan");
+
+        // adding the tab to tabhost
+        tabhost.addTab(spec);
+
+        // Code for adding Tab 2 to the tabhost
+        spec = tabhost.newTabSpec("Tab Two");
+        spec.setContent(R.id.tab2);
+
+        // setting the name of the tab 1 as "Tab Two"
+        spec.setIndicator("Đánh giá");
+        tabhost.addTab(spec);
     }
 
     private void getBundle() {
         product =(Product) getIntent().getSerializableExtra("object");
-
-        int drawableResourceId=this.getResources().getIdentifier(product.getImages().get(0).getLink(),"drawable",this.getPackageName());
-
-        Glide.with(this)
-                .load(drawableResourceId)
-                .into(foodPicBtn);
-
+        Picasso.get().load(product.getImage().getLink()).into(foodPicBtn);
+        System.out.println(product.getImage().getLink());
         titleTxt.setText(product.getName());
         feeTxt.setText("$"+ product.getPrice());
         descriptionTxt.setText(product.getDescription());
@@ -67,8 +163,11 @@ private int numberOrder =1;
             @Override
             public void onClick(View view) {
 
+
+
             }
         });
+        loadProducts();
     }
 
     private void initView() {
@@ -81,5 +180,14 @@ private int numberOrder =1;
         minusBtn=findViewById(R.id.minusBtn);
         backBtn=findViewById(R.id.backBtn);
         foodPicBtn=findViewById(R.id.foodPic);
+        recyclerViewProductRelated=findViewById(R.id.recyclerViewProductRelated);
+
+        productAdapter = new ProductAdapter(homeViewModel, new ProductAdapter.ProductDiff(), R.layout.item_product_vertical);
+        recyclerViewProductRelated.addItemDecoration(
+                new ItemMargin(10, 0, 30, 10));
+        recyclerViewProductRelated.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewProductRelated.setAdapter(productAdapter);
+
+
     }
 }
