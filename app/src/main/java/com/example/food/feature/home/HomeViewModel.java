@@ -4,7 +4,8 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.food.Domain.Category;
 import com.example.food.Domain.Product;
-import com.example.food.dto.CategoryResponse;
+import com.example.food.feature.category.CategoryDTO;
+import com.example.food.feature.category.CategoryResponse;
 import com.example.food.feature.category.CategoryRepository;
 import com.example.food.feature.product.ProductRepository;
 import com.example.food.network.RetroInstance;
@@ -28,7 +29,7 @@ public class HomeViewModel extends ViewModel {
 
     }
 
-    public Observable<Response<List<Category>>> getCategories(){
+    public Observable<Response<List<CategoryDTO>>> getCategories(){
       return   categoryRepository.getCategories()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -42,6 +43,12 @@ public class HomeViewModel extends ViewModel {
 
     public Observable<Response<CategoryResponse>> getCategoryById(int id){
         return categoryRepository.getCategoryById(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<Response<List<Product>>> getProductsByCategoryId(int id){
+        return productRepository.getProductsByCategoryId(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

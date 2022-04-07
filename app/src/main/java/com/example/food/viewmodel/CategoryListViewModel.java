@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 
 
-import com.example.food.dto.CategoryResponse;
+import com.example.food.feature.category.CategoryResponse;
 import com.example.food.feature.category.CategoryRepository;
 
 import com.example.food.Domain.Category;

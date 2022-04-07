@@ -23,6 +23,17 @@
         <item name="android:paddingEnd">25dp</item>
         <item name="android:paddingStart">25dp</item>
     </style>
+<!--    custom textview button-->
+    <style name="TextViewButton" parent="Widget.AppCompat.TextView">
+        <item name="android:background">@drawable/background_textview_button</item>
+        <item name="android:textColor">@color/textview_button_textcolor</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:paddingStart">25sp</item>
+        <item name="android:paddingEnd">25sp</item>
+        <item name="android:textAlignment">center</item>
+
+    </style>
 
     <style name="ButtonWarning" parent="Widget.MaterialComponents.Button">
         <item name="backgroundTint">@color/secondary_orange</item>

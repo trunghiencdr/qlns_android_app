@@ -93,6 +93,7 @@
                 android:layout_height="wrap_content">
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:background="@color/background_ryclerview"
                     android:id="@+id/recyclerView_products_by_category"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">

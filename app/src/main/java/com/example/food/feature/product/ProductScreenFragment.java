@@ -1,5 +1,6 @@
 package com.example.food.feature.product;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,12 +34,13 @@ public class ProductScreenFragment extends Fragment {
 
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         rvProduct = binding.recyclerViewProductsByCategory;
-        rvProduct.addItemDecoration(new ItemMargin(10,10,10,10));
+        rvProduct.addItemDecoration(new ItemMargin(0,0,0,0));
         rvProduct.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
 
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
@@ -52,11 +54,11 @@ public class ProductScreenFragment extends Fragment {
         if(getArguments() != null) {
             // The getPrivacyPolicyLink() method will be created automatically.
             int categoryId = ProductScreenFragmentArgs.fromBundle(getArguments()).getCategoryId();
-            homeViewModel.getCategoryById(categoryId)
+            homeViewModel.getProductsByCategoryId(categoryId)
             .subscribe(categoryResponseResponse -> {
                 if(categoryResponseResponse.code()==200){
-                    System.out.println("get category thanh cong");
-                    productAdapter.submitList(categoryResponseResponse.body().getData().getProducts());
+                    System.out.println("get product by category thanh cong");
+                    productAdapter.submitList(categoryResponseResponse.body());
                 }
             }, throwable -> {
                 System.out.println("throw get category:" + throwable.getMessage());

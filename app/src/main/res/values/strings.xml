@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Food</string>
+    <string-array name="color_category">
+        <item> #fef4e5</item>
+        <item> #f9e4e4</item>
+        <item> #ebfee5</item>
+        <item> #e5f1fe</item>
+        <item> #fef4e5</item>
+    </string-array>
+
+    <array name="category_background">
+        <item>@drawable/category_background1</item>
+        <item>@drawable/category_background2</item>
+        <item>@drawable/category_background3</item>
+        <item>@drawable/category_background4</item>
+        <item>@drawable/category_background5</item>
+    </array>
 </resources>

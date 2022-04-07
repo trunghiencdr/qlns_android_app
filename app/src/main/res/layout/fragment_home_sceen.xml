@@ -126,6 +126,7 @@
 
 
                     <androidx.recyclerview.widget.RecyclerView
+                        android:background="@color/background_ryclerview"
                         android:padding="10dp"
                         android:id="@+id/recyclerView_discount_home_screen"
                         android:layout_width="match_parent"
@@ -137,6 +138,7 @@
 
                     </androidx.recyclerview.widget.RecyclerView>
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:background="@color/background_ryclerview"
                         android:padding="10dp"
                         android:id="@+id/titile_category"
                         android:layout_width="match_parent"
@@ -159,39 +161,27 @@
                         </TextView>
 
 
-                        <com.google.android.material.card.MaterialCardView
+                        <TextView
+                            style="@style/TextViewButton"
+                            android:id="@+id/btn_see_all_categories_home_screen"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:cardCornerRadius="100dp"
+                            android:text="See all >>"
                             app:layout_constraintBottom_toBottomOf="@+id/textViewCategory"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/textViewCategory">
+                            app:layout_constraintTop_toTopOf="parent">
 
-                            <TextView
-                                android:textSize="18sp"
-                                android:paddingEnd="25dp"
-                                android:textStyle="bold"
-                                android:paddingStart="25dp"
-                                android:background="@color/color_primary_variant_lighter"
-                                android:id="@+id/btn_see_all_categories_home_screen"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/color_primary_variant_darker"
-                                android:text="See all >>"
-                                >
-
-                            </TextView>
-                        </com.google.android.material.card.MaterialCardView>
+                        </TextView>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
                     <androidx.recyclerview.widget.RecyclerView
+                        android:background="@color/background_ryclerview"
                         android:padding="10dp"
                         android:id="@+id/recyclerView_categories_home_screen"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
                         android:orientation="horizontal"
                         app:layout_constraintEnd_toEndOf="@+id/constraint_main"
                         app:layout_constraintHorizontal_bias="1.0"
@@ -199,6 +189,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/textViewCategory"></androidx.recyclerview.widget.RecyclerView>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:background="@color/background_ryclerview"
                         android:padding="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -218,39 +209,31 @@
                         </TextView>
 
 
-                        <com.google.android.material.card.MaterialCardView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:cardCornerRadius="100dp"
-                            app:layout_constraintBottom_toBottomOf="@+id/textViewPopular"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/textViewPopular">
+
 
                             <TextView
-                                android:textSize="18sp"
-                                android:paddingEnd="25dp"
-                                android:textStyle="bold"
-                                android:paddingStart="25dp"
-                                android:background="@color/color_primary_variant_lighter"
+                                style="@style/TextViewButton"
                                 android:id="@+id/btn_see_all_popular_home_screen"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/color_primary_variant_darker"
                                 android:text="See all >>"
+                                app:layout_constraintBottom_toBottomOf="@+id/textViewPopular"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/textViewPopular"
                                 >
 
                             </TextView>
-                        </com.google.android.material.card.MaterialCardView>
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
                     <androidx.recyclerview.widget.RecyclerView
+                        android:background="@color/background_ryclerview"
                         android:padding="10dp"
                         android:id="@+id/recyclerView_popular_home_screen"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
                         app:layout_constraintBottom_toBottomOf="@+id/constraint_main"
                         app:layout_constraintEnd_toEndOf="@+id/constraint_main"
                         app:layout_constraintStart_toStartOf="@+id/constraint_main"
@@ -278,7 +261,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:backgroundTint="#f6f6f6"
+                android:backgroundTint="@color/background_ryclerview"
                 app:fabCradleMargin="8dp">
 
                 <LinearLayout
