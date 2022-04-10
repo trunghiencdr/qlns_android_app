@@ -5,11 +5,14 @@ import android.util.Log;
 
 import com.example.food.Domain.Cart;
 import com.example.food.Domain.Category;
+import com.example.food.Domain.Order;
 import com.example.food.Domain.Product;
 import com.example.food.Domain.Response.CartResponse;
+import com.example.food.Domain.Response.OrderResponse;
 import com.example.food.Listener.CartResponseListener;
 import com.example.food.Listener.CategoryResponseListener;
 import com.example.food.Listener.InsertCartResponseListener;
+import com.example.food.Listener.InsertOrderResponseListener;
 import com.example.food.Listener.ProductResponseListener;
 import com.example.food.dto.CartDTO;
 
@@ -139,6 +142,25 @@ public class Api {
         });
     }
 
+    public void insertOrder(InsertOrderResponseListener listener, Order order){
+        CallInsertOrder callInsertOrder=retrofit.create(CallInsertOrder.class);
+        Call<OrderResponse> call =callInsertOrder.insertOrder(order);
+        call.enqueue(new Callback<OrderResponse>() {
+            @Override
+            public void onResponse(Call<OrderResponse> call, Response<OrderResponse> response) {
+                if (!response.isSuccessful()) {
+                    listener.didError(response.message());
+                    return;
+                }
+                listener.didFetch(response.body(), response.message());
+            }
+
+            @Override
+            public void onFailure(Call<OrderResponse> call, Throwable t) {
+                listener.didError(t.getMessage());
+            }
+        });
+    }
 
     private interface CallAllCategory{
         @GET("api/v1/Categories")
@@ -164,5 +186,12 @@ public class Api {
         @POST("api/v1/Carts/insert")
         Call<CartResponse> insertCart(@Body CartDTO cartDTO);
     }
+
+    private interface CallInsertOrder {
+        @POST("api/v1/Orders/insert")
+        Call<OrderResponse> insertOrder(@Body Order oder);
+    }
+
+
 
 }

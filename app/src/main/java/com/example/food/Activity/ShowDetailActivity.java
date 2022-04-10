@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.food.Adapter.CustomProductGridAdapter;
+import com.example.food.Adapter.ExpandableTextViewAdapter;
 import com.example.food.Api.Api;
 import com.example.food.Domain.Cart;
 import com.example.food.Domain.Product;
@@ -36,16 +38,22 @@ import com.example.food.util.ItemMargin;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class ShowDetailActivity extends AppCompatActivity {
-private TextView addToCartBtn,titleTxt,feeTxt,descriptionTxt,numberOrderTxt;
-private ImageView plusBtn,minusBtn,foodPicBtn,backBtn;
-private Product product;
-private int numberOrder =1;
-private RecyclerView recyclerViewProductRelated;
-private HomeViewModel homeViewModel;
-private ProductAdapter productAdapter;
-private Api api;
+    private TextView addToCartBtn,titleTxt,feeTxt,descriptionTxt,numberOrderTxt;
+    private ImageView plusBtn,minusBtn,foodPicBtn,backBtn;
+    private Product product;
+    private int numberOrder =1;
+    private RecyclerView recyclerViewProductRelated;
+    private HomeViewModel homeViewModel;
+    private ProductAdapter productAdapter;
+    private Api api;
+    private ExpandableListView descriptionExpandListView;
+    ExpandableTextViewAdapter adapter;
+    List<String> listDataHeader;
+    HashMap<String, List<String>> listDataChild;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +75,23 @@ private Api api;
                 CartDTO cartDTO=new CartDTO(Integer.parseInt(cart.getUser().getId()+""),Integer.parseInt(cart.getProductDomain().getProductId()+""),cart.getQuantity());
                 api = new Api(ShowDetailActivity.this);
                 api.insertCart(insertCartResponseListener,cartDTO);
+            }
+        });
+        descriptionExpandListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                int height = 0;
+                for (int i = 0; i < adapter.getChildrenCount(groupPosition); i++) {
+                    height += descriptionExpandListView.getChildAt(i).getMeasuredHeight();
+                    height += descriptionExpandListView.getDividerHeight();
+                }
+                descriptionExpandListView.getLayoutParams().height = (height+6)*5;
+            }
+        });
+        descriptionExpandListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+            @Override
+            public void onGroupCollapse(int i) {
+                descriptionExpandListView.getLayoutParams().height = 90;
             }
         });
     }
@@ -134,7 +159,7 @@ private Api api;
         System.out.println(product.getImage().getLink());
         titleTxt.setText(product.getName());
         feeTxt.setText("$"+ product.getPrice());
-        descriptionTxt.setText(product.getDescription());
+        //descriptionTxt.setText(product.getDescription());
         numberOrderTxt.setText(String.valueOf(numberOrder));
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,6 +192,20 @@ private Api api;
 
             }
         });
+        /////////////////////////////////
+        listDataHeader = new ArrayList<String>();
+        listDataChild = new HashMap<String, List<String>>();
+
+        // Adding child data
+        listDataHeader.add("Description");
+
+        // Adding child data
+        List<String> top250 = new ArrayList<String>();
+        top250.add(product.getDescription());
+
+        listDataChild.put(listDataHeader.get(0), top250); // Header, Child data
+        adapter=new ExpandableTextViewAdapter(ShowDetailActivity.this,listDataHeader, listDataChild);
+        descriptionExpandListView.setAdapter(adapter);
         loadProducts();
     }
 
@@ -174,13 +213,14 @@ private Api api;
         addToCartBtn=findViewById(R.id.addToCartBtn);
         titleTxt=findViewById(R.id.titleTxt);
         feeTxt=findViewById(R.id.priceTxt);
-        descriptionTxt=findViewById(R.id.descriptionTxt);
+        //descriptionTxt=findViewById(R.id.descriptionTxt);
         numberOrderTxt=findViewById(R.id.numberOrder);
         plusBtn=findViewById(R.id.plusBtn);
         minusBtn=findViewById(R.id.minusBtn);
         backBtn=findViewById(R.id.backBtn);
         foodPicBtn=findViewById(R.id.foodPic);
         recyclerViewProductRelated=findViewById(R.id.recyclerViewProductRelated);
+        descriptionExpandListView=findViewById(R.id.descriptionExpandListView);
 
         productAdapter = new ProductAdapter(homeViewModel, new ProductAdapter.ProductDiff(), R.layout.item_product_vertical);
         recyclerViewProductRelated.addItemDecoration(
