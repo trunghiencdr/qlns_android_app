@@ -8,13 +8,18 @@ import com.example.food.Domain.Category;
 import com.example.food.Domain.Order;
 import com.example.food.Domain.Product;
 import com.example.food.Domain.Response.CartResponse;
+import com.example.food.Domain.Response.OrderDetailResponse;
 import com.example.food.Domain.Response.OrderResponse;
 import com.example.food.Listener.CartResponseListener;
 import com.example.food.Listener.CategoryResponseListener;
+import com.example.food.Listener.DeleteCartResponseListener;
 import com.example.food.Listener.InsertCartResponseListener;
+import com.example.food.Listener.InsertOrderDetailResponseListener;
 import com.example.food.Listener.InsertOrderResponseListener;
 import com.example.food.Listener.ProductResponseListener;
 import com.example.food.dto.CartDTO;
+import com.example.food.dto.OrderDetailDTO;
+import com.example.food.dto.OrdersDTO;
 
 import java.util.ArrayList;
 
@@ -24,8 +29,10 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public class Api {
@@ -142,9 +149,69 @@ public class Api {
         });
     }
 
-    public void insertOrder(InsertOrderResponseListener listener, Order order){
+    public void updateCart(InsertCartResponseListener listener,CartDTO cartDTO){
+        CallUpdateCart callUpdateCart=retrofit.create(CallUpdateCart.class);
+        Call<CartResponse> call =callUpdateCart.updateCart(cartDTO);
+        call.enqueue(new Callback<CartResponse>() {
+            @Override
+            public void onResponse(Call<CartResponse> call, Response<CartResponse> response) {
+                if (!response.isSuccessful()) {
+                    listener.didError(response.message());
+                    return;
+                }
+                listener.didFetch(response.body(), response.message());
+            }
+
+            @Override
+            public void onFailure(Call<CartResponse> call, Throwable t) {
+                listener.didError(t.getMessage());
+            }
+        });
+    }
+
+    public void deleteCartByUserId(DeleteCartResponseListener listener, int userId){
+        CallDeleteCartByUserId callDeleteCartByUserId=retrofit.create(CallDeleteCartByUserId.class);
+        Call<String> call =callDeleteCartByUserId.deleteCartByUserId(userId);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (!response.isSuccessful()) {
+                    listener.didError(response.message());
+                    return;
+                }
+                listener.didFetch(response.body(), response.message());
+            }
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                listener.didError(t.getMessage());
+            }
+        });
+
+    }
+
+    public void deleteCartByUserIdAndProductId(DeleteCartResponseListener listener, int userId,int productId){
+        CallDeleteCartByUserIdAndProductId callDeleteCartByUserIdAndProductId=retrofit.create(CallDeleteCartByUserIdAndProductId.class);
+        Call<String> call =callDeleteCartByUserIdAndProductId.deleteCartByUserId(userId,productId);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (!response.isSuccessful()) {
+                    listener.didError(response.message());
+                    return;
+                }
+                listener.didFetch(response.body(), response.message());
+            }
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                listener.didError(t.getMessage());
+            }
+        });
+
+    }
+
+    public void insertOrder(InsertOrderResponseListener listener, OrdersDTO ordersDTO){
         CallInsertOrder callInsertOrder=retrofit.create(CallInsertOrder.class);
-        Call<OrderResponse> call =callInsertOrder.insertOrder(order);
+        Call<OrderResponse> call =callInsertOrder.insertOrder(ordersDTO);
         call.enqueue(new Callback<OrderResponse>() {
             @Override
             public void onResponse(Call<OrderResponse> call, Response<OrderResponse> response) {
@@ -157,6 +224,26 @@ public class Api {
 
             @Override
             public void onFailure(Call<OrderResponse> call, Throwable t) {
+                listener.didError(t.getMessage());
+            }
+        });
+    }
+
+    public void insertOrderDetails(InsertOrderDetailResponseListener listener, OrderDetailDTO orderDetailDTO){
+        CallInsertOrderDetail callInsertOrderDetail=retrofit.create(CallInsertOrderDetail.class);
+        Call<OrderDetailResponse> call =callInsertOrderDetail.insertOrderDetails(orderDetailDTO);
+        call.enqueue(new Callback<OrderDetailResponse>() {
+            @Override
+            public void onResponse(Call<OrderDetailResponse> call, Response<OrderDetailResponse> response) {
+                if (!response.isSuccessful()) {
+                    listener.didError(response.message());
+                    return;
+                }
+                listener.didFetch(response.body(), response.message());
+            }
+
+            @Override
+            public void onFailure(Call<OrderDetailResponse> call, Throwable t) {
                 listener.didError(t.getMessage());
             }
         });
@@ -187,10 +274,32 @@ public class Api {
         Call<CartResponse> insertCart(@Body CartDTO cartDTO);
     }
 
+    private interface  CallUpdateCart{
+        @PUT("api/v1/Carts")
+        Call<CartResponse> updateCart(@Body CartDTO cartDTO);
+    }
+
+    private interface CallDeleteCartByUserId{
+        @DELETE("api/v1/Carts/user/{id}")
+        Call<String> deleteCartByUserId(@Path(value = "id") int id);
+    }
+
+    private interface CallDeleteCartByUserIdAndProductId{
+        @DELETE("api/v1/Carts/user/{userId}/product/{productId}")
+        Call<String> deleteCartByUserId(@Path(value = "userId") int id,
+                                        @Path(value = "productId") int productId);
+    }
+
     private interface CallInsertOrder {
         @POST("api/v1/Orders/insert")
-        Call<OrderResponse> insertOrder(@Body Order oder);
+        Call<OrderResponse> insertOrder(@Body OrdersDTO ordersDTO);
     }
+
+    private interface CallInsertOrderDetail {
+        @POST("api/v1/OrderDetails/insert")
+        Call<OrderDetailResponse> insertOrderDetails(@Body OrderDetailDTO orderDetailDTO);
+    }
+
 
 
 

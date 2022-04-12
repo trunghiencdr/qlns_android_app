@@ -94,6 +94,12 @@ public class ShowDetailActivity extends AppCompatActivity {
                 descriptionExpandListView.getLayoutParams().height = 90;
             }
         });
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
     }
     private final InsertCartResponseListener insertCartResponseListener=new InsertCartResponseListener() {
         @Override
