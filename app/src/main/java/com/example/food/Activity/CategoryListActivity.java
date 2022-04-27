@@ -1,28 +1,27 @@
 package com.example.food.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.food.Adapter.CategoryAdapter;
-import com.example.food.Adapter.CustomCategoryGridAdapter;
+
 import com.example.food.Api.Api;
 import com.example.food.Domain.Category;
 import com.example.food.Listener.CategoryResponseListener;
 import com.example.food.R;
+import com.example.food.feature.category.CategoryAdapter;
+import com.example.food.feature.home.HomeViewModel;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
-import android.widget.GridView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class CategoryListActivity extends AppCompatActivity {
-    GridView gridView;
+    RecyclerView recyclerViewCategory;
     Api api;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +35,16 @@ public class CategoryListActivity extends AppCompatActivity {
     }
 
     private void setControl() {
-        gridView= findViewById(R.id.gridViewCategory);
+        recyclerViewCategory= findViewById(R.id.recyclerViewCategory);
     }
 
     private final CategoryResponseListener categoryResponseListener = new CategoryResponseListener() {
         @Override
         public void didFetch(ArrayList<Category> response, String message) {
-            gridView.setAdapter(new CustomCategoryGridAdapter(CategoryListActivity.this, response));
+            //gridView.setAdapter(new CustomCategoryGridAdapter(CategoryListActivity.this, response));
+//            CategoryAdapter adapter=new CategoryAdapter();
+//            recyclerViewCategory.setLayoutManager(new GridLayoutManager(CategoryListActivity.this, 2, LinearLayoutManager.HORIZONTAL, false));
+//            recyclerViewCategory.setAdapter(adapter);
         }
 
         @Override

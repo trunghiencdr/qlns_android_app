@@ -128,19 +128,6 @@ public class CustomProductGridAdapter extends BaseAdapter implements Serializabl
             Log.d("zzz",message.toString());
         }
     };
-//            = new ProductResponseListener(){
-//        @Override
-//        public void didFetch(ArrayList<Product> response, String message) {
-//            adapter2 = new PopularAdapter(response);
-//            recyclerViewPopularList.setAdapter(adapter2);
-//        }
-//
-//        @Override
-//        public void didError(String message) {
-//            Toast.makeText(MainActivity.this,"Call api error"+message.toString(),Toast.LENGTH_SHORT).show();
-//            Log.d("zzz",message.toString());
-//        }
-//    } ;
 }
 
 class GridViewHolder {

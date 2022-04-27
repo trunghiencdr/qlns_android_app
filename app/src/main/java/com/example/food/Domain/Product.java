@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Product implements Serializable {
     private Long productId;
-    private Long categoryId;
+    private Category category;
 
     private String name;
     private float price;
@@ -25,10 +25,10 @@ public class Product implements Serializable {
 
     private List<Image> images;
 
-    public Product(Long productId, Long categoryId, String name, float price, String calculationUnit, int total, String description, String slug, boolean display, float rate, float discount, int id, String url, int year,Image image, List<Image> images) {
-        this.productId = productId;
-        this.categoryId = categoryId;
 
+    public Product(Long productId, Category category, String name, float price, String calculationUnit, int total, String description, String slug, boolean display, float rate, float discount, int id, String url, int year, Image image, List<Image> images) {
+        this.productId = productId;
+        this.category = category;
         this.name = name;
         this.price = price;
         this.calculationUnit = calculationUnit;
@@ -66,14 +66,6 @@ public class Product implements Serializable {
 //    }
 
 
-
-    public void setProductId(long productId) {
-        this.productId = productId;
-    }
-
-
-
-
     public Long getProductId() {
         return productId;
     }
@@ -82,14 +74,13 @@ public class Product implements Serializable {
         this.productId = productId;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(Category category) {
+        this.category = category;
     }
-
 
     public String getName() {
         return name;
@@ -195,4 +186,25 @@ public class Product implements Serializable {
         this.images = images;
     }
 
+    @Override
+    public String toString() {
+        return "Product{" +
+                "productId=" + productId +
+                ", categoryId=" + category.getId() +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", calculationUnit='" + calculationUnit + '\'' +
+                ", total=" + total +
+                ", description='" + description + '\'' +
+                ", slug='" + slug + '\'' +
+                ", display=" + display +
+                ", rate=" + rate +
+                ", discount=" + discount +
+                ", id=" + id +
+                ", url='" + url + '\'' +
+                ", year=" + year +
+                ", image=" + image +
+                ", images=" + images +
+                '}';
+    }
 }

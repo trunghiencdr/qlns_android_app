@@ -14,7 +14,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:animateLayoutChanges="true">
             <ImageView
                 android:id="@+id/backBtn"
                 android:layout_width="wrap_content"
@@ -89,18 +90,79 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/descriptionTxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Description"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:layout_margin="16dp"
-                android:textColor="#686767"
+<!--            <TextView-->
+<!--                android:id="@+id/descriptionTxt"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:text="Description"-->
+<!--                android:textStyle="bold"-->
+<!--                android:textSize="20sp"-->
+<!--                android:layout_margin="16dp"-->
+<!--                android:textColor="#686767"-->
 
-                />
+<!--                />-->
+            <ExpandableListView
+
+                android:id="@+id/descriptionExpandListView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </ExpandableListView>
+
+            <TabHost
+                android:id="@+id/tabHost"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TabWidget
+                        android:id="@android:id/tabs"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <FrameLayout
+                        android:id="@android:id/tabcontent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:id="@+id/tab1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recyclerViewProductRelated"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="100dp"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/tab2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="100dp"/>
+                        </LinearLayout>
+
+                    </FrameLayout>
+                </LinearLayout>
+            </TabHost>
+
         </LinearLayout>
     </ScrollView>
 

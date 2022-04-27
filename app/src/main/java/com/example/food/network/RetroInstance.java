@@ -19,6 +19,7 @@ public class RetroInstance {
 
     public static String BASE_URL = "http://192.168.1.2:8080/api/";
 
+
     private static Retrofit retrofit;
     private static final long CACHE_SIZE = 10 * 1024 * 1024;
     private static final int READ_TIMEOUT = 5000;

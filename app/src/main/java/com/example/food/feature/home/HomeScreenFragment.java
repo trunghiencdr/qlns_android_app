@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import android.widget.ListView;
 
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -18,6 +20,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.food.Activity.CartListActivity;
+import com.example.food.Activity.CategoryListActivity;
 import com.example.food.Activity.MainActivity;
 import com.example.food.Activity.SigninActivity;
 import com.example.food.R;
@@ -29,6 +33,7 @@ import com.example.food.feature.product.ProductAdapter;
 import com.example.food.model.User;
 import com.example.food.util.AppUtils;
 import com.example.food.util.ItemMargin;
+
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -40,6 +45,9 @@ import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import retrofit2.Response;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+
 public class HomeScreenFragment extends Fragment {
     private FragmentHomeSceenBinding binding;
     private HomeViewModel homeViewModel;
@@ -49,7 +57,12 @@ public class HomeScreenFragment extends Fragment {
     private RecyclerView rvCate, rvPopular, rvDiscount;
     private SliderView slideDiscount;
     private User user;
+
     private List<Discount> discounts;
+
+    private TextView btnSeeAllCategoriesHomeScreen;
+    private FloatingActionButton cartBtn;
+
 
     @Nullable
     @Override
@@ -119,12 +132,21 @@ public class HomeScreenFragment extends Fragment {
 
 
         });
+
         binding.imageUserHomeScreen.setOnClickListener(view -> {
             Navigation.findNavController(view).navigate(R.id.action_homeScreenFragment_to_profileScreenFragment);
         });
         binding.settingBtn.setOnClickListener(view -> {
-            NavDirections action = HomeScreenFragmentDirections.actionHomeScreenFragmentToProfileScreenFragment();
-            Navigation.findNavController(view).navigate(action);
+                    NavDirections action = HomeScreenFragmentDirections.actionHomeScreenFragmentToProfileScreenFragment();
+                    Navigation.findNavController(view).navigate(action);
+                });
+
+        binding.btnSeeAllCategoriesHomeScreen.setOnClickListener(view -> {
+            startActivity(new Intent(getContext(), CategoryListActivity.class));
+        });
+        binding.cartBtn.setOnClickListener(view -> {
+            startActivity(new Intent(getContext(), CartListActivity.class));
+
         });
 
     }
@@ -134,6 +156,7 @@ public class HomeScreenFragment extends Fragment {
         rvCate = binding.recyclerViewCategoriesHomeScreen;
         rvPopular = binding.recyclerViewPopularHomeScreen;
         rvDiscount = binding.recyclerViewDiscountHomeScreen;
+
         slideDiscount = binding.slideDiscountHomeScreen;
 
         discounts = new ArrayList<>();
@@ -142,6 +165,10 @@ public class HomeScreenFragment extends Fragment {
         slideDiscount.setIndicatorAnimation(IndicatorAnimationType.WORM);
         slideDiscount.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
 
+
+
+        btnSeeAllCategoriesHomeScreen = binding.btnSeeAllCategoriesHomeScreen;
+        cartBtn =binding.cartBtn;
 
 
         adapterCate = new CategoryAdapter(homeViewModel, new CategoryAdapter.CategoryDiff());
