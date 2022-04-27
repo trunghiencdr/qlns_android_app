@@ -6,11 +6,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,18 +23,33 @@ import com.example.food.Activity.SigninActivity;
 import com.example.food.R;
 import com.example.food.databinding.FragmentHomeSceenBinding;
 import com.example.food.feature.category.CategoryAdapter;
+import com.example.food.feature.discount.Discount;
+import com.example.food.feature.discount.DiscountAdapter;
 import com.example.food.feature.product.ProductAdapter;
 import com.example.food.model.User;
 import com.example.food.util.AppUtils;
 import com.example.food.util.ItemMargin;
+import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
+import com.smarteist.autoimageslider.SliderAnimations;
+import com.smarteist.autoimageslider.SliderView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
+import retrofit2.Response;
 
 public class HomeScreenFragment extends Fragment {
     private FragmentHomeSceenBinding binding;
     private HomeViewModel homeViewModel;
     private CategoryAdapter adapterCate;
     private ProductAdapter productAdapter;
+    private DiscountAdapter discountAdapter;
     private RecyclerView rvCate, rvPopular, rvDiscount;
+    private SliderView slideDiscount;
     private User user;
+    private List<Discount> discounts;
 
     @Nullable
     @Override
@@ -40,8 +58,6 @@ public class HomeScreenFragment extends Fragment {
             , @Nullable Bundle savedInstanceState) {
         binding = FragmentHomeSceenBinding.inflate(inflater);
         return binding.getRoot();
-
-
     }
 
     @Override
@@ -52,9 +68,32 @@ public class HomeScreenFragment extends Fragment {
 
 
         setControls();
+        loadDiscount();
         loadCategories();
         loadProducts();
         setEvents();
+    }
+
+    @SuppressLint("CheckResult")
+    private void loadDiscount(){
+        homeViewModel.getDiscounts()
+                .subscribe(
+                        response ->{
+                            if(response.code()==200){
+                                discounts = response.body();
+
+                                discountAdapter.setDiscounts(discounts);
+                                int duration = discounts.size()*200;
+                                slideDiscount.setSliderAnimationDuration(duration);
+                                slideDiscount.setIndicatorAnimationDuration(duration);
+                                slideDiscount.setScrollTimeInSec(4);
+                                slideDiscount.startAutoCycle();
+                            }
+                        }
+                , throwable -> {
+                            System.out.println("Load discount failed:" + throwable.getLocalizedMessage());
+                        }
+                        );
     }
 
     @SuppressLint("CheckResult")
@@ -63,8 +102,6 @@ public class HomeScreenFragment extends Fragment {
                 response -> {
                     if(response.code()==200){
                         System.out.println("size of products:" +response.body().size());
-
-
                         productAdapter.submitList(response.body());
                     }
                 }
@@ -82,6 +119,13 @@ public class HomeScreenFragment extends Fragment {
 
 
         });
+        binding.imageUserHomeScreen.setOnClickListener(view -> {
+            Navigation.findNavController(view).navigate(R.id.action_homeScreenFragment_to_profileScreenFragment);
+        });
+        binding.settingBtn.setOnClickListener(view -> {
+            NavDirections action = HomeScreenFragmentDirections.actionHomeScreenFragmentToProfileScreenFragment();
+            Navigation.findNavController(view).navigate(action);
+        });
 
     }
 
@@ -90,6 +134,15 @@ public class HomeScreenFragment extends Fragment {
         rvCate = binding.recyclerViewCategoriesHomeScreen;
         rvPopular = binding.recyclerViewPopularHomeScreen;
         rvDiscount = binding.recyclerViewDiscountHomeScreen;
+        slideDiscount = binding.slideDiscountHomeScreen;
+
+        discounts = new ArrayList<>();
+        discountAdapter = new DiscountAdapter(discounts);
+        slideDiscount.setSliderAdapter(discountAdapter);
+        slideDiscount.setIndicatorAnimation(IndicatorAnimationType.WORM);
+        slideDiscount.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
+
+
 
         adapterCate = new CategoryAdapter(homeViewModel, new CategoryAdapter.CategoryDiff());
          rvCate.addItemDecoration(

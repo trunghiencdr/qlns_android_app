@@ -2,7 +2,14 @@
 buildscript {
     repositories {
         google()
-        mavenCentral()
+        mavenCentral(
+        )
+        maven{
+            url "https://jitback.io"
+        }
+
+
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.1.2'

@@ -1,6 +1,7 @@
 package com.example.food.util;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -55,5 +56,25 @@ public class AppUtils {
         list.add(Drawable.createFromXml(resources, resources.getXml(R.drawable.category_background5)));
 
         return list.get(new Random().nextInt(listBackgroundCategory.size()));
+    }
+
+    public static User getAccount2(Context context){
+        String account = context.getSharedPreferences(ACCOUNT, 0).getString(ACCOUNT, "");
+        if(account.equalsIgnoreCase("")) return null;
+        return new Gson().fromJson(account, User.class);
+    }
+
+    public static void saveAccount2(Context context, User user){
+        SharedPreferences.Editor editor = context.getSharedPreferences(ACCOUNT, 0).edit();
+        editor.putString(ACCOUNT, new Gson().toJson(user));
+        editor.apply();
+    }
+
+
+
+    public static void deleteAccount2(Context context){
+        SharedPreferences.Editor editor = context.getSharedPreferences(ACCOUNT, 0).edit();
+        editor.remove(ACCOUNT);
+        editor.commit();
     }
 }

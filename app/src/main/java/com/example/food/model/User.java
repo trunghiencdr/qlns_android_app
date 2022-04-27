@@ -22,7 +22,7 @@ public class User implements Serializable {
 
     @SerializedName("id") // anhs xa
     @Expose
-    private Long id;
+    private int id;
 
 
     @Expose
@@ -54,7 +54,7 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(String token, String type, Long id, String name
+    public User(String token, String type, int id, String name
             , String email,String address
             , String rememberToken, Date createdAt, Date updatedAt
             , String username, String password, Set<Role> roles) {
@@ -82,7 +82,7 @@ public class User implements Serializable {
         this.name = name;
     }
 
-    public User(Long id,String username, String password) {
+    public User(int id,String username, String password) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -104,11 +104,11 @@ public class User implements Serializable {
         this.type = type;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

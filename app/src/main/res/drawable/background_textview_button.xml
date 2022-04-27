@@ -5,7 +5,7 @@
             <corners android:radius="20dp"></corners>
 
 
-            <solid android:color="@color/textview_button_background">
+            <solid android:color="@color/royal_blue">
 
             </solid>
 

@@ -7,6 +7,8 @@ import com.example.food.Domain.Product;
 import com.example.food.feature.category.CategoryDTO;
 import com.example.food.feature.category.CategoryResponse;
 import com.example.food.feature.category.CategoryRepository;
+import com.example.food.feature.discount.Discount;
+import com.example.food.feature.discount.DiscountRepository;
 import com.example.food.feature.product.ProductRepository;
 import com.example.food.network.RetroInstance;
 
@@ -21,11 +23,13 @@ public class HomeViewModel extends ViewModel {
 
     private CategoryRepository categoryRepository;
     private ProductRepository productRepository;
+    private DiscountRepository discountRepository;
 
 
     public HomeViewModel(){
         categoryRepository = RetroInstance.getRetrofitClient().create(CategoryRepository.class);
         productRepository = RetroInstance.getRetrofitClient().create(ProductRepository.class);
+        discountRepository = RetroInstance.getRetrofitClient().create(DiscountRepository.class);
 
     }
 
@@ -49,6 +53,12 @@ public class HomeViewModel extends ViewModel {
 
     public Observable<Response<List<Product>>> getProductsByCategoryId(int id){
         return productRepository.getProductsByCategoryId(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<Response<List<Discount>>> getDiscounts(){
+        return discountRepository.getDiscounts()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

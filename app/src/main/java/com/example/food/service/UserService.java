@@ -15,19 +15,11 @@ import retrofit2.http.POST;
 
 public interface UserService {
 
-    @Headers( {
-            "Accept-Encoding: gzip,deflate",
-            "Content-Type: Application/Json;charset=UTF-8",
-            "Accept: Application/Json",
-            "User-Agent: Retrofit 2.9.0"
-    } )
-    @POST("auth/signin")
-    public Observable<UserDTO> signin(@Body User user);
+//    @Headers( {
+//            "Accept-Encoding: gzip,deflate",
+//            "Content-Type: Application/Json;charset=UTF-8",
+//            "Accept: Application/Json",
+//            "User-Agent: Retrofit 2.9.0"
+//    } )
 
-    @POST("auth/signup")
-    public Observable<UserDTO> signup(@Body RequestSignup user);
-
-
-    @GET("auth/Users")
-    public Observable<ResponseMessage> getUsers();
 }
