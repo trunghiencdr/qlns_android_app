@@ -25,7 +25,9 @@ import com.example.food.Api.Api;
 import com.example.food.Domain.Cart;
 import com.example.food.Domain.Product;
 import com.example.food.Domain.Response.CartResponse;
+import com.example.food.Domain.Response.ProductResponse;
 import com.example.food.Listener.InsertCartResponseListener;
+import com.example.food.Listener.OneProductResponseListener;
 import com.example.food.Listener.ProductResponseListener;
 import com.example.food.R;
 import com.example.food.dto.CartDTO;
@@ -59,6 +61,7 @@ public class ShowDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_detail);
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        api = new Api(ShowDetailActivity.this);
         initView();
         getBundle();
         setUpTabHost();
@@ -73,7 +76,6 @@ public class ShowDetailActivity extends AppCompatActivity {
                 User user = AppUtils.getAccount(getSharedPreferences(AppUtils.ACCOUNT, Context.MODE_PRIVATE));
                 Cart cart=new Cart(user,product,numberOrder);
                 CartDTO cartDTO=new CartDTO(Integer.parseInt(cart.getUser().getId()+""),Integer.parseInt(cart.getProductDomain().getProductId()+""),cart.getQuantity());
-                api = new Api(ShowDetailActivity.this);
                 api.insertCart(insertCartResponseListener,cartDTO);
             }
         });
@@ -114,11 +116,46 @@ public class ShowDetailActivity extends AppCompatActivity {
             Log.d("zzz",message.toString());
         }
     };
+    private final OneProductResponseListener oneProductResponseListener=new OneProductResponseListener() {
+        @Override
+        public void didFetch(ProductResponse response, String message) {
+            product=response.getData();
+            Picasso.get().load(product.getImage().getLink()).into(foodPicBtn);
+            System.out.println(product.getImage().getLink());
+            titleTxt.setText(product.getName());
+            feeTxt.setText("$"+ product.getPrice());
+            //descriptionTxt.setText(product.getDescription());
+            numberOrderTxt.setText(String.valueOf(numberOrder));
+            /////////////////////////////////
+            listDataHeader = new ArrayList<String>();
+            listDataChild = new HashMap<String, List<String>>();
+
+            // Adding child data
+            listDataHeader.add("Description");
+
+            // Adding child data
+            List<String> top250 = new ArrayList<String>();
+            top250.add(product.getDescription());
+
+            listDataChild.put(listDataHeader.get(0), top250); // Header, Child data
+            adapter=new ExpandableTextViewAdapter(ShowDetailActivity.this,listDataHeader, listDataChild);
+            descriptionExpandListView.setAdapter(adapter);
+            loadProducts(product.getCategory().getId());
+            Toast.makeText(ShowDetailActivity.this, "Call api one product success"+message.toString(),Toast.LENGTH_SHORT).show();
+            Log.d("success",message.toString());
+        }
+
+        @Override
+        public void didError(String message) {
+            Toast.makeText(ShowDetailActivity.this,"Call api one product error"+message.toString(),Toast.LENGTH_SHORT).show();
+            Log.d("zzz",message.toString());
+        }
+    };
 
     @SuppressLint("CheckResult")
-    private void loadProducts() {
-        System.out.println("aaaaaaaaaaaaa"+product.getCategory().getId());
-        homeViewModel.getProductsByCategoryId(Integer.parseInt(product.getCategory().getId()+"")).subscribe(
+    private void loadProducts(int id) {
+
+        homeViewModel.getProductsByCategoryId(id).subscribe(
                 response -> {
                     if(response.code()==200){
                         System.out.println("size of products:" +response.body().size());
@@ -160,13 +197,9 @@ public class ShowDetailActivity extends AppCompatActivity {
     }
 
     private void getBundle() {
-        product =(Product) getIntent().getSerializableExtra("object");
-        Picasso.get().load(product.getImage().getLink()).into(foodPicBtn);
-        System.out.println(product.getImage().getLink());
-        titleTxt.setText(product.getName());
-        feeTxt.setText("$"+ product.getPrice());
-        //descriptionTxt.setText(product.getDescription());
-        numberOrderTxt.setText(String.valueOf(numberOrder));
+        int productId= Integer.parseInt( getIntent().getSerializableExtra("object")+"");
+        api.getProductDomain(oneProductResponseListener,productId);
+
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -198,21 +231,7 @@ public class ShowDetailActivity extends AppCompatActivity {
 
             }
         });
-        /////////////////////////////////
-        listDataHeader = new ArrayList<String>();
-        listDataChild = new HashMap<String, List<String>>();
 
-        // Adding child data
-        listDataHeader.add("Description");
-
-        // Adding child data
-        List<String> top250 = new ArrayList<String>();
-        top250.add(product.getDescription());
-
-        listDataChild.put(listDataHeader.get(0), top250); // Header, Child data
-        adapter=new ExpandableTextViewAdapter(ShowDetailActivity.this,listDataHeader, listDataChild);
-        descriptionExpandListView.setAdapter(adapter);
-        loadProducts();
     }
 
     private void initView() {

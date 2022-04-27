@@ -28,8 +28,9 @@
         <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/layout/viewholder_card.xml" value="0.25416666666666665" />
         <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/layout/viewholder_cat.xml" value="0.1" />
         <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/layout/viewholder_popular.xml" value="0.25416666666666665" />
+        <entry key="..\:/Tailieu/Phat trien phan mem huong dich vu/QLNS_ANDROID_APP/qlns_android_app/app/src/main/res/drawable/category_background1.xml" value="0.2175" />
         <entry key="..\:/Tailieu/Phat trien phan mem huong dich vu/QLNS_ANDROID_APP/qlns_android_app/app/src/main/res/layout/activity_card_list.xml" value="0.16486486486486487" />
-        <entry key="..\:/Tailieu/Phat trien phan mem huong dich vu/QLNS_ANDROID_APP/qlns_android_app/app/src/main/res/layout/activity_cart_list.xml" value="0.2" />
+        <entry key="..\:/Tailieu/Phat trien phan mem huong dich vu/QLNS_ANDROID_APP/qlns_android_app/app/src/main/res/layout/activity_cart_list.xml" value="0.264" />
         <entry key="..\:/Tailieu/Phat trien phan mem huong dich vu/QLNS_ANDROID_APP/qlns_android_app/app/src/main/res/layout/activity_category_list.xml" value="0.16486486486486487" />
         <entry key="..\:/Tailieu/Phat trien phan mem huong dich vu/QLNS_ANDROID_APP/qlns_android_app/app/src/main/res/layout/activity_category_screen.xml" value="0.16486486486486487" />
         <entry key="..\:/Tailieu/Phat trien phan mem huong dich vu/QLNS_ANDROID_APP/qlns_android_app/app/src/main/res/layout/activity_home.xml" value="0.16486486486486487" />
@@ -37,10 +38,11 @@
         <entry key="..\:/Tailieu/Phat trien phan mem huong dich vu/QLNS_ANDROID_APP/qlns_android_app/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Tailieu/Phat trien phan mem huong dich vu/QLNS_ANDROID_APP/qlns_android_app/app/src/main/res/layout/activity_product_list.xml" value="0.144" />
         <entry key="..\:/Tailieu/Phat trien phan mem huong dich vu/QLNS_ANDROID_APP/qlns_android_app/app/src/main/res/layout/activity_show_detail.xml" value="0.264" />
+        <entry key="..\:/Tailieu/Phat trien phan mem huong dich vu/QLNS_ANDROID_APP/qlns_android_app/app/src/main/res/layout/activity_signin.xml" value="0.12158054711246201" />
         <entry key="..\:/Tailieu/Phat trien phan mem huong dich vu/QLNS_ANDROID_APP/qlns_android_app/app/src/main/res/layout/description_answer.xml" value="0.16486486486486487" />
         <entry key="..\:/Tailieu/Phat trien phan mem huong dich vu/QLNS_ANDROID_APP/qlns_android_app/app/src/main/res/layout/discription_answer.xml" value="0.1625" />
         <entry key="..\:/Tailieu/Phat trien phan mem huong dich vu/QLNS_ANDROID_APP/qlns_android_app/app/src/main/res/layout/discription_title.xml" value="0.1625" />
-        <entry key="..\:/Tailieu/Phat trien phan mem huong dich vu/QLNS_ANDROID_APP/qlns_android_app/app/src/main/res/layout/fragment_home_sceen.xml" value="0.16486486486486487" />
+        <entry key="..\:/Tailieu/Phat trien phan mem huong dich vu/QLNS_ANDROID_APP/qlns_android_app/app/src/main/res/layout/fragment_home_sceen.xml" value="0.264" />
         <entry key="..\:/Tailieu/Phat trien phan mem huong dich vu/QLNS_ANDROID_APP/qlns_android_app/app/src/main/res/layout/item_category.xml" value="0.16486486486486487" />
         <entry key="..\:/Tailieu/Phat trien phan mem huong dich vu/QLNS_ANDROID_APP/qlns_android_app/app/src/main/res/layout/item_product_horizental.xml" value="0.16486486486486487" />
         <entry key="..\:/Tailieu/Phat trien phan mem huong dich vu/QLNS_ANDROID_APP/qlns_android_app/app/src/main/res/layout/item_product_vertical.xml" value="0.16486486486486487" />

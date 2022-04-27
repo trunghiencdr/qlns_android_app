@@ -99,7 +99,7 @@ public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ProductV
                 @Override
                 public void onClick(View view) {
                     Intent intent=new Intent(itemView.getContext(), ShowDetailActivity.class);
-                    intent.putExtra("object", item);
+                    intent.putExtra("object", item.getProductId());
                     itemView.getContext().startActivity(intent);
                 }
             });

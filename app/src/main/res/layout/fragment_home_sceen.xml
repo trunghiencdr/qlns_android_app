@@ -126,17 +126,18 @@
 
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:background="@color/background_ryclerview"
-                        android:padding="10dp"
                         android:id="@+id/recyclerView_discount_home_screen"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/background_ryclerview"
                         android:orientation="horizontal"
+                        android:padding="10dp"
                         app:layout_constraintEnd_toEndOf="@+id/constraint_main"
                         app:layout_constraintStart_toStartOf="@+id/constraint_main"
                         app:layout_constraintTop_toTopOf="@id/constraint_main">
 
                     </androidx.recyclerview.widget.RecyclerView>
+
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:background="@color/background_ryclerview"
                         android:padding="10dp"

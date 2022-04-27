@@ -8,16 +8,21 @@ import com.example.food.Domain.Category;
 import com.example.food.Domain.Order;
 import com.example.food.Domain.Product;
 import com.example.food.Domain.Response.CartResponse;
+import com.example.food.Domain.Response.DiscountResponse;
 import com.example.food.Domain.Response.OrderDetailResponse;
 import com.example.food.Domain.Response.OrderResponse;
+import com.example.food.Domain.Response.ProductResponse;
 import com.example.food.Listener.CartResponseListener;
 import com.example.food.Listener.CategoryResponseListener;
 import com.example.food.Listener.DeleteCartResponseListener;
+import com.example.food.Listener.DiscountResponseListener;
 import com.example.food.Listener.InsertCartResponseListener;
 import com.example.food.Listener.InsertOrderDetailResponseListener;
 import com.example.food.Listener.InsertOrderResponseListener;
+import com.example.food.Listener.OneProductResponseListener;
 import com.example.food.Listener.ProductResponseListener;
 import com.example.food.dto.CartDTO;
+import com.example.food.dto.DiscountDTO;
 import com.example.food.dto.OrderDetailDTO;
 import com.example.food.dto.OrdersDTO;
 
@@ -43,7 +48,7 @@ public class Api {
     }
 
     Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("http://192.168.1.10:8080/")
+            .baseUrl("http://192.168.1.2:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
@@ -82,6 +87,26 @@ public class Api {
 
             @Override
             public void onFailure(Call<ArrayList<Product>> call, Throwable t) {
+                listener.didError(t.getMessage());
+            }
+        });
+    }
+
+    public void getProductDomain(OneProductResponseListener listener, int id){
+        CallProductFollowId callProductFollowId =retrofit.create(CallProductFollowId.class);
+        Call<ProductResponse> call = callProductFollowId.getProductDomain(id);
+        call.enqueue(new Callback<ProductResponse>() {
+            @Override
+            public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
+                if (!response.isSuccessful()) {
+                    listener.didError(response.message());
+                    return;
+                }
+                listener.didFetch(response.body(), response.message());
+            }
+
+            @Override
+            public void onFailure(Call<ProductResponse> call, Throwable t) {
                 listener.didError(t.getMessage());
             }
         });
@@ -249,6 +274,26 @@ public class Api {
         });
     }
 
+    public void getDiscountById(DiscountResponseListener listener, String id){
+        CallDiscountById callDiscount =retrofit.create(CallDiscountById.class);
+        Call<DiscountResponse> call = callDiscount.getDiscountById(id);
+        call.enqueue(new Callback<DiscountResponse>() {
+            @Override
+            public void onResponse(Call<DiscountResponse> call, Response<DiscountResponse> response) {
+                if (!response.isSuccessful()) {
+                    listener.didError(response.message());
+                    return;
+                }
+                listener.didFetch(response.body(), response.message());
+            }
+
+            @Override
+            public void onFailure(Call<DiscountResponse> call, Throwable t) {
+                listener.didError(t.getMessage());
+            }
+        });
+    }
+
     private interface CallAllCategory{
         @GET("api/v1/Categories")
         Call<ArrayList<Category>> getListCategoryDomain();
@@ -257,6 +302,11 @@ public class Api {
     private interface CallAllProduct{
         @GET("api/v1/Products")
         Call<ArrayList<Product>> getListProductDomain();
+    }
+
+    private interface CallProductFollowId{
+        @GET("api/v1/Products/{id}")
+        Call<ProductResponse> getProductDomain(@Path(value = "id") int id);
     }
 
     private  interface  CallListCartDomainFollowUserId{
@@ -300,6 +350,10 @@ public class Api {
         Call<OrderDetailResponse> insertOrderDetails(@Body OrderDetailDTO orderDetailDTO);
     }
 
+    private interface CallDiscountById{
+        @GET("api/v1/Discounts/{id}")
+        Call<DiscountResponse> getDiscountById(@Path(value = "id") String id);
+    }
 
 
 
