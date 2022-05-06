@@ -13,12 +13,16 @@ import com.google.gson.Gson;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
 public class AppUtils {
+
+    public static String[] ROLES={"ROLE_USER", "ROLE_ADMIN"};
 
     public static final List<Integer> listBackgroundCategory=
            Arrays.asList(R.drawable.category_background1,
@@ -76,5 +80,9 @@ public class AppUtils {
         SharedPreferences.Editor editor = context.getSharedPreferences(ACCOUNT, 0).edit();
         editor.remove(ACCOUNT);
         editor.commit();
+    }
+
+    public static String formatDate(Date date, String pattern){
+        return new SimpleDateFormat(pattern).format(date);
     }
 }

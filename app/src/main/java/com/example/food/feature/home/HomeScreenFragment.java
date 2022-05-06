@@ -7,9 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.ImageView;
-import android.widget.ListView;
-
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,12 +23,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.food.Activity.CartListActivity;
 import com.example.food.Activity.CategoryListActivity;
-import com.example.food.Activity.MainActivity;
 import com.example.food.Activity.SigninActivity;
+import com.example.food.Domain.Discount;
 import com.example.food.R;
 import com.example.food.databinding.FragmentHomeSceenBinding;
 import com.example.food.feature.category.CategoryAdapter;
-import com.example.food.feature.discount.Discount;
 import com.example.food.feature.discount.DiscountAdapter;
 import com.example.food.feature.product.ProductAdapter;
 import com.example.food.model.User;
@@ -39,7 +35,6 @@ import com.example.food.util.AppUtils;
 import com.example.food.util.ItemMargin;
 
 import com.example.food.viewmodel.UserViewModel;
-import com.makeramen.roundedimageview.RoundedImageView;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -48,14 +43,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import io.reactivex.disposables.Disposable;
-import retrofit2.Response;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.squareup.picasso.Picasso;
 
 
-public class HomeScreenFragment extends Fragment {
+public class HomeScreenFragment extends Fragment implements DiscountAdapter.ClickItem {
     private FragmentHomeSceenBinding binding;
     private HomeViewModel homeViewModel;
     private CategoryAdapter adapterCate;
@@ -183,7 +175,7 @@ public class HomeScreenFragment extends Fragment {
         });
 
         discounts = new ArrayList<>();
-        discountAdapter = new DiscountAdapter(discounts);
+        discountAdapter = new DiscountAdapter(discounts,this);
         slideDiscount.setSliderAdapter(discountAdapter);
         slideDiscount.setIndicatorAnimation(IndicatorAnimationType.WORM);
         slideDiscount.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
@@ -253,5 +245,25 @@ public class HomeScreenFragment extends Fragment {
                 }
         );
 
+    }
+
+    @Override
+    public void showDiscountDetails(String id) {
+
+        NavDirections action = HomeScreenFragmentDirections
+                .actionHomeScreenFragmentToDiscountDetailsFragment()
+                .setDiscountId(id);
+        Navigation.findNavController(requireView()).navigate(action);
+    }
+
+    @Override
+    public void showDiscountDetails(Discount discount) {
+        NavDirections action = HomeScreenFragmentDirections
+                .actionHomeScreenFragmentToDiscountDetailsFragment()
+                ;
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("discount", discount);
+        this.setArguments(bundle);
+        Navigation.findNavController(requireView()).navigate(R.id.action_homeScreenFragment_to_discountDetailsFragment,bundle);
     }
 }

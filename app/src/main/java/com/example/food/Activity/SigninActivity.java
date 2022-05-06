@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import com.example.food.R;
 import com.example.food.dto.UserDTO;
+import com.example.food.feature.adminhome.AdminActivity;
+import com.example.food.feature.adminhome.HomeAdminFragment;
 import com.example.food.model.User;
 import com.example.food.util.AppUtils;
 import com.example.food.viewmodel.UserViewModel;
@@ -63,11 +65,19 @@ public class SigninActivity extends AppCompatActivity {
             user = userDTO.getUser();
             if(userDTO.getStatus().equalsIgnoreCase("Ok")){
                 AppUtils.saveAccount(getSharedPreferences(AppUtils.ACCOUNT, MODE_PRIVATE), user);
-                if(user.getUsername().equalsIgnoreCase("tnthien"))
-                startActivity(new Intent(SigninActivity.this, HomeActivity.class));
-                else
-                startActivity(new Intent(SigninActivity.this, MainActivity.class));
-                Toast.makeText(this, "Sign in successfully!", Toast.LENGTH_SHORT).show();
+//                if(user.getUsername().equalsIgnoreCase("tnthien"))
+//                startActivity(new Intent(SigninActivity.this, HomeActivity.class));
+//                else
+//                startActivity(new Intent(SigninActivity.this, MainActivity.class));
+//                Toast.makeText(this, "Sign in successfully!", Toast.LENGTH_SHORT).show();
+                // check role
+                if(user.getRoles().size()>=0){
+                    if(user.getRoles().stream().filter(role -> role.getName().equals(AppUtils.ROLES[1])).findFirst().isPresent()){
+                        startActivity(new Intent(this, AdminActivity.class));
+                    }else{
+                        startActivity(new Intent(SigninActivity.this, HomeActivity.class));
+                    }
+                }
             }else{
                 Toast.makeText(this, "Sign in failed because " + userDTO.getMessage(), Toast.LENGTH_SHORT).show();
             }

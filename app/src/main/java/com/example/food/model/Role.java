@@ -8,35 +8,31 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class Role {
-    private String role;
-    private ERole name;
+    private int id;
+    private String name;
 
-//    public Role() {
-//    }
-//
-//    public Role(String role, ERole name) {
-//        this.role = role;
-//        this.name = name;
-//    }
-//
-//    public String getRole() {
-//        return role;
-//    }
-//
-//    public void setRole(String role) {
-//        this.role = role;
-//    }
-//
-//    public ERole getName() {
-//        return name;
-//    }
-//
-//    public void setName(ERole name) {
-//        this.name = name;
-//    }
+    public Role() {
+    }
+
+    public Role(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

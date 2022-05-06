@@ -2,12 +2,11 @@ package com.example.food.feature.home;
 
 import androidx.lifecycle.ViewModel;
 
-import com.example.food.Domain.Category;
+import com.example.food.Domain.Discount;
 import com.example.food.Domain.Product;
 import com.example.food.feature.category.CategoryDTO;
 import com.example.food.feature.category.CategoryResponse;
 import com.example.food.feature.category.CategoryRepository;
-import com.example.food.feature.discount.Discount;
 import com.example.food.feature.discount.DiscountRepository;
 import com.example.food.feature.product.ProductRepository;
 import com.example.food.network.RetroInstance;
