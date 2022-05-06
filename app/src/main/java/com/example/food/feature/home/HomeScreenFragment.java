@@ -7,12 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
@@ -20,6 +22,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.food.Activity.CartListActivity;
 import com.example.food.Activity.CategoryListActivity;
 import com.example.food.Activity.MainActivity;
@@ -34,6 +38,8 @@ import com.example.food.model.User;
 import com.example.food.util.AppUtils;
 import com.example.food.util.ItemMargin;
 
+import com.example.food.viewmodel.UserViewModel;
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -41,11 +47,12 @@ import com.smarteist.autoimageslider.SliderView;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Observer;
+import de.hdodenhof.circleimageview.CircleImageView;
 import io.reactivex.disposables.Disposable;
 import retrofit2.Response;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.squareup.picasso.Picasso;
 
 
 public class HomeScreenFragment extends Fragment {
@@ -57,6 +64,9 @@ public class HomeScreenFragment extends Fragment {
     private RecyclerView rvCate, rvPopular, rvDiscount;
     private SliderView slideDiscount;
     private User user;
+    private TextView txtName;
+    private CircleImageView imgAvt;
+    private UserViewModel userViewModel;
 
     private List<Discount> discounts;
 
@@ -78,7 +88,7 @@ public class HomeScreenFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         setControls();
         loadDiscount();
@@ -129,6 +139,7 @@ public class HomeScreenFragment extends Fragment {
             AppUtils.deleteAccount(requireContext().getSharedPreferences(AppUtils.ACCOUNT, requireContext().MODE_PRIVATE));
             requireContext().getSharedPreferences("username", requireContext().MODE_PRIVATE).edit().putString("username", user.getUsername()).apply();
             startActivity(new Intent(requireContext(), SigninActivity.class));
+//            NavDirections action = HomeScreenFragmentDirections.
 
 
         });
@@ -156,8 +167,20 @@ public class HomeScreenFragment extends Fragment {
         rvCate = binding.recyclerViewCategoriesHomeScreen;
         rvPopular = binding.recyclerViewPopularHomeScreen;
         rvDiscount = binding.recyclerViewDiscountHomeScreen;
+        txtName = binding.txtNameUserHomeScreen;
+        imgAvt = binding.imageUserHomeScreen;
 
         slideDiscount = binding.slideDiscountHomeScreen;
+
+
+        // load information user
+        userViewModel.getUser(user.getId());
+        userViewModel.getuserMultable().observe(requireActivity(), new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                loadInfoUser(user);
+            }
+        });
 
         discounts = new ArrayList<>();
         discountAdapter = new DiscountAdapter(discounts);
@@ -191,6 +214,27 @@ public class HomeScreenFragment extends Fragment {
         rvDiscount.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
         rvDiscount.setAdapter(productAdapter);
 
+    }
+
+    private void loadInfoUser(User user) {
+        if(!user.getUsername().equals("") && user.getUsername()!=null){
+            txtName.setText("Hi " + user.getUsername());
+        }
+
+        if(!user.getImageUser().getLink().equals("") && user.getImageUser().getLink()!=null){
+//            Picasso.get()
+//                    .load(user.getImageUser().getLink())
+//                    .into(imgAvt);
+
+            RequestOptions options = new RequestOptions()
+                    .centerCrop()
+                    .placeholder(R.mipmap.ic_launcher_round)
+                    .error(R.mipmap.ic_launcher_round);
+
+
+
+            Glide.with(this).load(user.getImageUser().getLink()).apply(options).into(imgAvt);
+        }
     }
 
     @SuppressLint("CheckResult")

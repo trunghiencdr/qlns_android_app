@@ -20,8 +20,6 @@
             tools:context=".feature.home.HomeScreenFragment">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-
-                android:padding="10dp"
                 android:id="@+id/constraint_toolbar_home"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -34,21 +32,20 @@
                     android:id="@+id/materialCardView"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
                     android:strokeColor="@color/primary_color"
-                    app:cardCornerRadius="50dp"
-
+                    app:cardCornerRadius="24dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:strokeWidth="1dp">
-                    <com.makeramen.roundedimageview.RoundedImageView
+                    app:strokeWidth="2dp">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/image_user_home_screen"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/profile"
-                        app:riv_corner_radius="50dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_launcher_background"
                         tools:layout_editor_absoluteX="272dp"
                         tools:layout_editor_absoluteY="23dp" />
 
@@ -68,24 +65,13 @@
                     app:layout_constraintEnd_toStartOf="@+id/materialCardView"
                     app:layout_constraintTop_toTopOf="@+id/materialCardView" />
 
-                <TextView
-                    android:id="@+id/textView4"
-                    android:textStyle="bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Order  Eat"
-                    android:textColor="#000000"
-                    android:textSize="20sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
                 <EditText
+                    android:layout_marginTop="5dp"
                     android:id="@+id/edit_text_search_home_screen"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_marginBottom="16dp"
                     android:background="@drawable/search_back"
                     android:drawableStart="@drawable/search"
@@ -99,7 +85,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView4" />
+                    app:layout_constraintTop_toBottomOf="@+id/materialCardView" />
 
 
 
@@ -144,6 +130,7 @@
                     </com.smarteist.autoimageslider.SliderView>
 
                     <androidx.recyclerview.widget.RecyclerView
+                        android:visibility="gone"
                         android:id="@+id/recyclerView_discount_home_screen"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

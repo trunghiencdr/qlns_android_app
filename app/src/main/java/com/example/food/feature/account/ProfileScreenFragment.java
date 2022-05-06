@@ -4,14 +4,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.food.R;
 import com.example.food.databinding.FragmentProfileScreenBinding;
 import com.example.food.model.User;
@@ -19,6 +23,7 @@ import com.example.food.util.AppUtils;
 import com.example.food.viewmodel.UserViewModel;
 import com.squareup.picasso.Picasso;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import io.reactivex.disposables.CompositeDisposable;
 
 public class ProfileScreenFragment extends Fragment {
@@ -28,6 +33,8 @@ public class ProfileScreenFragment extends Fragment {
     private boolean checkUser = false;
     private UserViewModel userViewModel;
     private CompositeDisposable disposable;
+    private TextView txtName, txtUsername;
+    private CircleImageView imgAvt;
 
     @Nullable
     @Override
@@ -40,8 +47,9 @@ public class ProfileScreenFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        loadUser();
+
         setControls();
+        loadUser();
         setEvents();
         onChangeUser();
 
@@ -52,6 +60,11 @@ public class ProfileScreenFragment extends Fragment {
     }
 
     private void setEvents() {
+        binding.btnBackProfile.setOnClickListener(view -> {
+            NavDirections action = ProfileScreenFragmentDirections.actionProfileScreenFragmentToHomeScreenFragment();
+            Navigation.findNavController(view).navigate(action);
+        });
+
         binding.btnEditProfileScreen.setOnClickListener(view -> {
             NavDirections action = ProfileScreenFragmentDirections.actionProfileScreenFragmentToEditProfileFragment();
             Navigation.findNavController(view).navigate(action);
@@ -70,6 +83,9 @@ public class ProfileScreenFragment extends Fragment {
 
     private void setControls() {
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        txtName = binding.txtNameProfileScreen;
+        txtUsername = binding.txtUserNameProfileScreen;
+        imgAvt = binding.imgAvtProfileScreen;
     }
 
     private void loadUser() {
@@ -84,12 +100,46 @@ public class ProfileScreenFragment extends Fragment {
         }else{
             checkUser = true;
             int userId = user.getId();
-            disposable.add(userViewModel.getUser(userId));
+            userViewModel.getUser(userId);
+            userViewModel.getuserMultable().observe(requireActivity(), new Observer<User>() {
+                @Override
+                public void onChanged(User user) {
+                    loadInfoUser(user);
+                }
+            });
 
 //            Picasso.get().load(user)binding.imgAvtProfileScreen
 
 
 
         }
+    }
+
+    private void loadInfoUser(User user) {
+        String name = user.getName();
+        String username = user.getUsername();
+        String linkImageAvt = user.getImageUser().getLink();
+        if(name!=null && !name.equals("")){
+            txtName.setText(name);
+        }
+
+        if(username!=null && !username.equals("")){
+            txtUsername.setText("uid: " + username);
+        }
+
+        if(linkImageAvt!=null && !linkImageAvt.equals("")){
+//            Picasso.get()
+//                    .load(linkImageAvt)
+//                    .into(imgAvt);
+            RequestOptions options = new RequestOptions()
+                    .centerCrop()
+                    .placeholder(R.mipmap.ic_launcher_round)
+                    .error(R.mipmap.ic_launcher_round);
+
+
+
+            Glide.with(this).load(linkImageAvt).apply(options).into(imgAvt);
+        }
+
     }
 }

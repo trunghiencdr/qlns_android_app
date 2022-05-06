@@ -7,6 +7,7 @@ import com.example.food.model.User;
 import com.example.food.util.ResponseMessage;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Response;
@@ -30,6 +31,12 @@ public interface UserRepository {
             @Part("user") RequestBody userRequestForUpdate,
             @Part MultipartBody.Part file
             );
+    @Multipart
+    @PUT("v1/Users/updateNotImage/{id}")
+    Observable<Response<User>> updateUserNotImage(
+            @Path("id") int id,
+            @Part("user") RequestBody userRequestForUpdate
+    );
 
     @POST("auth/signin")
     Observable<UserDTO> signin(@Body User user);
@@ -41,8 +48,8 @@ public interface UserRepository {
     @GET("auth/Users")
     Observable<ResponseMessage> getUsers();
 
-    @GET("auth/Users/id/{id}")
-    Observable<Response<UserDTO>> getUserById(int id);
+    @GET("v1/Users/id/{id}")
+    Single<Response<UserDTO>> getUserById(@Path("id") int id);
 
 
 }

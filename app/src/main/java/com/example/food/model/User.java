@@ -1,5 +1,6 @@
 package com.example.food.model;
 
+import com.example.food.Domain.Image;
 import com.example.food.util.ERole;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -50,6 +51,8 @@ public class User implements Serializable {
 
     private Set<Role> roles = new HashSet<>();
 
+    private Image imageUser;
+
 
     public User() {
     }
@@ -57,7 +60,8 @@ public class User implements Serializable {
     public User(String token, String type, int id, String name
             , String email,String address
             , String rememberToken, Date createdAt, Date updatedAt
-            , String username, String password, Set<Role> roles) {
+            , String username, String password, Set<Role> roles,
+                Image image) {
         this.token = token;
         this.type = type;
         this.id = id;
@@ -70,6 +74,7 @@ public class User implements Serializable {
         this.username = username;
         this.password = password;
         this.roles = roles;
+        this.imageUser = image;
     }
 
     public User(String username, String password) {
@@ -77,8 +82,15 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    public Image getImageUser() {
+        return imageUser;
+    }
 
-    public User(String username, String name,  String password) {
+    public void setImageUser(Image imageUser) {
+        this.imageUser = imageUser;
+    }
+
+    public User(String username, String name, String password) {
         this.name = name;
     }
 

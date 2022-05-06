@@ -44,8 +44,10 @@ public class SigninActivity extends AppCompatActivity {
     private void initData(){
 
         String username = getSharedPreferences("username", MODE_PRIVATE).getString("username", "hello");
+        if(username!=null){
+            txtUsername.setText(username);
+        }
 
-        txtUsername.setText(username);
     }
 
     private void addEvents() {
