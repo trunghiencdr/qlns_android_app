@@ -59,7 +59,7 @@ public class CartListActivity extends AppCompatActivity {
         recycleViewCart.setLayoutManager(linearLayoutManager);
         api = new Api(CartListActivity.this);
         User user = AppUtils.getAccount(getSharedPreferences(AppUtils.ACCOUNT, Context.MODE_PRIVATE));
-        api.getCartsByUserId(cartResponseListener,user.getId());
+        api.getCartsByUserId(cartResponseListener,Integer.parseInt(user.getId()+""));
 
         setEvent();
 
