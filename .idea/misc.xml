@@ -3,15 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/drawable-hdpi/bg_bottom_nav.xml" value="0.1" />
         <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/drawable/background_textview_button.xml" value="0.185" />
         <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/drawable/category_background1.xml" value="0.1" />
         <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/drawable/category_background2.xml" value="0.1" />
         <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/drawable/category_background3.xml" value="0.1" />
         <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/drawable/category_background4.xml" value="0.1" />
         <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/drawable/category_background5.xml" value="0.1" />
-        <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/drawable/organ_button_background.xml" value="0.2535" />
-        <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/layout/activity_admin.xml" value="0.1" />
         <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/layout/activity_cart_list.xml" value="0.25416666666666665" />
         <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/layout/activity_category_list.xml" value="0.25416666666666665" />
         <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/layout/activity_category_screen.xml" value="0.1" />
@@ -23,13 +20,14 @@
         <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/layout/activity_signin.xml" value="0.264" />
         <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/layout/activity_signup.xml" value="0.25416666666666665" />
         <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/layout/activity_user_screen.xml" value="0.2" />
-        <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/layout/fragment_cart.xml" value="0.17617753623188406" />
         <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/layout/fragment_change_password_screen.xml" value="0.25416666666666665" />
         <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/layout/fragment_confirm_otp_screen.xml" value="0.25416666666666665" />
-        <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/layout/fragment_discount_details.xml" value="0.25416666666666665" />
         <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/layout/fragment_edit_profile_screen.xml" value="0.264" />
         <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/layout/fragment_forgot_password_screen.xml" value="0.25416666666666665" />
+<<<<<<< HEAD
         <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/layout/fragment_home_admin.xml" value="0.2" />
+=======
+>>>>>>> 44fe7b630d4886650620f2bfbdf867633435a8a8
         <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/layout/fragment_home_sceen.xml" value="0.264" />
         <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/layout/fragment_product_list_by_category.xml" value="0.264" />
         <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/layout/fragment_profile_screen.xml" value="0.264" />
@@ -44,11 +42,12 @@
         <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/layout/viewholder_card.xml" value="0.25416666666666665" />
         <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/layout/viewholder_cat.xml" value="0.1" />
         <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/layout/viewholder_popular.xml" value="0.25416666666666665" />
-<<<<<<< HEAD
         <entry key="..\:/TaiLieuD/Phat trien phan mem huong dich vu/QLNS_ANDROID_APP/qlns_android_app/app/src/main/res/layout/activity_cart_list.xml" value="0.25" />
-=======
-        <entry key="..\:/DH-CNTT/NAM 4 KI 2/qlns_app/qlns_android_app/app/src/main/res/menu/menu_toolbar.xml" value="0.1" />
->>>>>>> 07ebf34fdc65dfcd54374cf3eeab0f8902efff6f
+        <entry key="..\:/TaiLieuD/Phat trien phan mem huong dich vu/QLNS_ANDROID_APP/qlns_android_app/app/src/main/res/layout/activity_signin.xml" value="0.25" />
+        <entry key="..\:/TaiLieuD/Phat trien phan mem huong dich vu/QLNS_ANDROID_APP/qlns_android_app/app/src/main/res/layout/activity_signup.xml" value="0.25" />
+        <entry key="..\:/TaiLieuD/Phat trien phan mem huong dich vu/QLNS_ANDROID_APP/qlns_android_app/app/src/main/res/layout/fragment_change_password_screen.xml" value="0.25" />
+        <entry key="..\:/TaiLieuD/Phat trien phan mem huong dich vu/QLNS_ANDROID_APP/qlns_android_app/app/src/main/res/layout/fragment_confirm_otp_screen.xml" value="0.25" />
+        <entry key="..\:/TaiLieuD/Phat trien phan mem huong dich vu/QLNS_ANDROID_APP/qlns_android_app/app/src/main/res/layout/fragment_discount_details.xml" value="0.25" />
         <entry key="..\:/Tailieu/Phat trien phan mem huong dich vu/QLNS_ANDROID_APP/qlns_android_app/app/src/main/res/drawable/category_background1.xml" value="0.2175" />
         <entry key="..\:/Tailieu/Phat trien phan mem huong dich vu/QLNS_ANDROID_APP/qlns_android_app/app/src/main/res/layout/activity_card_list.xml" value="0.16486486486486487" />
         <entry key="..\:/Tailieu/Phat trien phan mem huong dich vu/QLNS_ANDROID_APP/qlns_android_app/app/src/main/res/layout/activity_cart_list.xml" value="0.264" />

@@ -7,8 +7,10 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.food.R;
@@ -24,6 +26,7 @@ import com.google.gson.Gson;
 public class SigninActivity extends AppCompatActivity {
 
     TextInputEditText txtUsername, txtPassword;
+    TextView tv_forgot_password;
     Button btnSignin, btnSignup;
     private UserViewModel userViewModel;
     private User user;
@@ -57,6 +60,12 @@ public class SigninActivity extends AppCompatActivity {
             singinProcess(txtUsername.getText().toString(), txtPassword.getText().toString());
         });
         btnSignup.setOnClickListener(view -> startActivity(new Intent(this, SignupActivity.class)));
+        tv_forgot_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     @SuppressLint("CheckResult")
@@ -96,6 +105,7 @@ public class SigninActivity extends AppCompatActivity {
         txtPassword = findViewById(R.id.edit_text_password_sign_in);
         btnSignin = findViewById(R.id.btn_sign_in);
         btnSignup = findViewById(R.id.btn_sign_up);
+        tv_forgot_password=findViewById(R.id.tv_forgot_password);
 //        cbRemember = findViewById(R.id.checkbox_remember_password);
     }
 }

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ import com.example.food.model.User;
 import com.example.food.util.AppUtils;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.sql.SQLOutput;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,9 +49,10 @@ public class CartListActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapterCart;
     Api api;
     TextView ItemTotalFeeTxt,DeliveryFeeTxt,AllTxt,btnCheckOut,txtValueDiscount;
+    Button btn_add_discount;
     ArrayList<Cart> carts=new ArrayList<>();
     TextInputEditText edit_discount;
-    DiscountDTO discountDTO;
+    DiscountDTO discountDTO=new DiscountDTO();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,23 +80,24 @@ public class CartListActivity extends AppCompatActivity {
                 User user = AppUtils.getAccount(getSharedPreferences(AppUtils.ACCOUNT, Context.MODE_PRIVATE));
 //                Order order = new Order(0,user,null,null,"Chua duyet");
                 OrdersDTO ordersDTO =new OrdersDTO(user.getId(),date,discountDTO.getId(),"chua duyet");
+                System.out.println(ordersDTO.toString());
                 api.insertOrder(insertOrderResponseListener,ordersDTO);
                 api.deleteCartByUserId(deleteCartResponseListener,Integer.parseInt(user.getId()+""));
+
             }
         });
 
-        edit_discount.setOnKeyListener(new View.OnKeyListener() {
+        btn_add_discount.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+            public void onClick(View view) {
                 String idDiscount =edit_discount.getText().toString().trim();
                 api.getDiscountById(discountResponseListener,idDiscount);
-
-                return false;
             }
         });
     }
 
     private void setControl() {
+        btn_add_discount=findViewById(R.id.btn_add_discount);
         edit_discount=findViewById(R.id.edit_discount);
         recycleViewCart=findViewById(R.id.recycleViewCart);
         ItemTotalFeeTxt=findViewById(R.id.ItemTotalFeeTxt);
@@ -127,10 +131,14 @@ public class CartListActivity extends AppCompatActivity {
                                                                     ,Integer.parseInt(carts.get(i).getProductDomain().getProductId()+"")
                                                                     ,carts.get(i).getQuantity()
                                                                     ,carts.get(i).getProductDomain().getPrice()
-                                                                    ,0);
+                                                                    ,discountDTO.getPercent());
                 api.insertOrderDetails(insertOrderDetailResponseListener,orderDetailDTO);
+                if(i==carts.size()-1){
+                    finish();
+                }
 
             }
+
         }
 
         @Override

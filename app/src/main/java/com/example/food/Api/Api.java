@@ -49,9 +49,9 @@ public class Api {
 
     Retrofit retrofit = new Retrofit.Builder()
 
-            .baseUrl("http://10.0.2.2:8080/")
+//            .baseUrl("http://10.0.2.2:8080/")
 
-//            .baseUrl("http://192.168.1.11:8080/")
+            .baseUrl("http://192.168.1.11:8080/")
 
             .addConverterFactory(GsonConverterFactory.create())
             .build();
@@ -204,7 +204,7 @@ public class Api {
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                if (!response.isSuccessful()) {
+                if (response.code()!=200) {
                     listener.didError(response.message());
                     return;
                 }
