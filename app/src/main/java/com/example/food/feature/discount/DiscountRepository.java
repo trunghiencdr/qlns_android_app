@@ -1,6 +1,8 @@
 package com.example.food.feature.discount;
 
 
+import com.example.food.Domain.Discount;
+
 import java.util.List;
 
 import io.reactivex.Observable;

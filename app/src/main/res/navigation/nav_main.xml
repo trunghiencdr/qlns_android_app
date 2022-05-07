@@ -19,9 +19,22 @@
             >
 
         </argument>
+
+        <argument
+            android:name="discountId"
+            app:argType="string"
+            android:defaultValue=""
+            >
+
+        </argument>
+
+
         <action
             android:id="@+id/action_homeScreenFragment_to_profileScreenFragment"
             app:destination="@id/profileScreenFragment" />
+        <action
+            android:id="@+id/action_homeScreenFragment_to_discountDetailsFragment"
+            app:destination="@id/discountDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/productScreenFragment"
@@ -87,4 +100,21 @@
         android:id="@+id/confirmOPTFragment"
         android:name="com.example.food.feature.account.ConfirmOPTFragment"
         android:label="ConfirmOPTFragment" />
+    <fragment
+        android:id="@+id/discountDetailsFragment"
+        android:name="com.example.food.feature.discountdetails.DiscountDetailsFragment"
+        android:label="DiscountDetailsFragment" >
+        <argument
+            android:name="discountId"
+            app:argType="string"
+            android:defaultValue=""
+            >
+
+        </argument>
+
+
+        <action
+            android:id="@+id/action_discountDetailsFragment_to_homeScreenFragment"
+            app:destination="@id/homeScreenFragment" />
+    </fragment>
 </navigation>

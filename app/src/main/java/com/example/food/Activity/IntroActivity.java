@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.example.food.R;
+import com.example.food.feature.adminhome.AdminActivity;
 import com.example.food.model.User;
 import com.example.food.util.AppUtils;
 
@@ -26,9 +27,13 @@ public class IntroActivity extends AppCompatActivity {
                 if(user==null){
                     startActivity(new Intent(IntroActivity.this, SigninActivity.class));
                 }else{
-                    if(user.getUsername().equalsIgnoreCase("tnthien"))
-                    startActivity(new Intent(IntroActivity.this, HomeActivity.class));
-                    else startActivity(new Intent(IntroActivity.this, MainActivity.class));
+                    if(user.getRoles().size()>=0){
+                        if(user.getRoles().stream().filter(role -> role.getName().equals(AppUtils.ROLES[1])).findFirst().isPresent()){
+                            startActivity(new Intent(IntroActivity.this, AdminActivity.class));
+                        }else{
+                            startActivity(new Intent(IntroActivity.this, HomeActivity.class));
+                        }
+                    }
                 }
                 finish();
             }

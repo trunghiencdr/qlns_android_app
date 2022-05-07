@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import androidx.recyclerview.widget.ListAdapter;
 
 import com.bumptech.glide.Glide;
+import com.example.food.Domain.Discount;
 import com.example.food.R;
 import com.smarteist.autoimageslider.SliderViewAdapter;
 import com.squareup.picasso.Picasso;
@@ -17,10 +18,17 @@ import java.util.List;
 public class DiscountAdapter extends SliderViewAdapter<DiscountAdapter.DiscountViewHolder> {
 
     List<Discount> discounts;
+    ClickItem clickItem;
 
+    public static interface ClickItem{
+        void showDiscountDetails(String id);
+        void showDiscountDetails(Discount discount);
 
-    public DiscountAdapter(List<Discount> discounts){
+    }
+
+    public DiscountAdapter(List<Discount> discounts, ClickItem clickItem){
         this.discounts = discounts;
+        this.clickItem = clickItem;
     }
     @Override
     public DiscountAdapter.DiscountViewHolder onCreateViewHolder(ViewGroup parent) {
@@ -46,6 +54,10 @@ public class DiscountAdapter extends SliderViewAdapter<DiscountAdapter.DiscountV
                 .load(discounts.get(position).getImageDiscount().getLink())
                 .fitCenter()
                 .into(viewHolder.imgDiscount);
+
+        viewHolder.imgDiscount.setOnClickListener(view -> {
+            clickItem.showDiscountDetails(discounts.get(position));
+        });
     }
 
 

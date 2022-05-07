@@ -38,5 +38,18 @@
     <style name="ButtonWarning" parent="Widget.MaterialComponents.Button">
         <item name="backgroundTint">@color/secondary_orange</item>
     </style>
+
+    <style name="TextViewH1" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextViewH2" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/text_color</item>
+    </style>
+
     <dimen name="edit_text_radius">30dp</dimen>
 </resources>

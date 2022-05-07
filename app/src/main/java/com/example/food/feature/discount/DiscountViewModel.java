@@ -2,6 +2,7 @@ package com.example.food.feature.discount;
 
 import androidx.lifecycle.ViewModel;
 
+import com.example.food.Domain.Discount;
 import com.example.food.network.RetroInstance;
 
 import java.util.List;

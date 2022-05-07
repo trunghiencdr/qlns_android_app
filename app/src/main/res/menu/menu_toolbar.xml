@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:title="menu one"
+        app:showAsAction="withText"
+        android:icon="@drawable/ic_baseline_shopping_cart_24"
+        >
+    </item>
+    <item
+        android:title="menu one"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_baseline_shopping_cart_24"
+        >
+    </item>
+    <item
+        android:title="menu two"
+        app:showAsAction="always"
+        app:actionLayout="@layout/profile_menu_layout"
+        >
+    </item>
+
+    <item
+        android:title="menu three"
+        >
+    </item>
+</menu>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <item
+            android:id="@+id/fragment_home"
+            android:title="Home"
+            android:icon="@drawable/ic_baseline_home_24"
+            >
+        </item>
+
+        <item
+            android:id="@+id/menu_cart_item"
+            android:title=""
+            >
+        </item>
+        <item
+            android:id="@+id/fragment_setting"
+            android:title="Setting"
+            android:icon="@drawable/ic_baseline_settings_24"
+            >
+        </item>
+
+
+
+</menu>
