@@ -7,12 +7,19 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.food.Adapter.CustomProductGridAdapter;
+import com.example.food.Api.Api;
+import com.example.food.Domain.Product;
+import com.example.food.Domain.Response.OTPResponse;
+import com.example.food.Listener.OTPResponseListener;
+import com.example.food.Listener.ProductResponseListener;
 import com.example.food.R;
 import com.example.food.dto.UserDTO;
 import com.example.food.feature.adminhome.AdminActivity;
@@ -23,20 +30,24 @@ import com.example.food.viewmodel.UserViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+
 public class SigninActivity extends AppCompatActivity {
 
     TextInputEditText txtUsername, txtPassword;
     TextView tv_forgot_password;
     Button btnSignin, btnSignup;
+    Api api;
     private UserViewModel userViewModel;
     private User user;
     private CheckBox cbRemember;
+    String gmail="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
-
+        api = new Api(SigninActivity.this);
         addControls();
         initData();
         addEvents();
@@ -63,7 +74,16 @@ public class SigninActivity extends AppCompatActivity {
         tv_forgot_password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                gmail=txtUsername.getText().toString().trim();
+                if(gmail.equals("")){
+                    Toast.makeText(SigninActivity.this,"Email can't empty",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(!gmail.matches("^(.+)@(\\S+)$")){
+                    Toast.makeText(SigninActivity.this,"Email khong dung dinh dang",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                api.sendOTP(otpResponseListener,gmail);
             }
         });
     }
@@ -109,4 +129,20 @@ public class SigninActivity extends AppCompatActivity {
         tv_forgot_password=findViewById(R.id.tv_forgot_password);
 //        cbRemember = findViewById(R.id.checkbox_remember_password);
     }
+    private final OTPResponseListener otpResponseListener = new OTPResponseListener() {
+        @Override
+        public void didFetch(OTPResponse response, String message) {
+            Intent intent=new Intent(SigninActivity.this,OTPActivity.class);
+            intent.putExtra("otp",response.getOtp());
+            intent.putExtra("gmail",gmail);
+
+            startActivity(intent);
+        }
+
+        @Override
+        public void didError(String message) {
+
+        }
+    };
+
 }

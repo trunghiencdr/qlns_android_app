@@ -9,9 +9,11 @@ import com.example.food.Domain.Order;
 import com.example.food.Domain.Product;
 import com.example.food.Domain.Response.CartResponse;
 import com.example.food.Domain.Response.DiscountResponse;
+import com.example.food.Domain.Response.OTPResponse;
 import com.example.food.Domain.Response.OrderDetailResponse;
 import com.example.food.Domain.Response.OrderResponse;
 import com.example.food.Domain.Response.ProductResponse;
+import com.example.food.Domain.Response.UpdatePasswordResponse;
 import com.example.food.Listener.CartResponseListener;
 import com.example.food.Listener.CategoryResponseListener;
 import com.example.food.Listener.DeleteCartResponseListener;
@@ -19,8 +21,11 @@ import com.example.food.Listener.DiscountResponseListener;
 import com.example.food.Listener.InsertCartResponseListener;
 import com.example.food.Listener.InsertOrderDetailResponseListener;
 import com.example.food.Listener.InsertOrderResponseListener;
+import com.example.food.Listener.OTPResponseListener;
 import com.example.food.Listener.OneProductResponseListener;
+import com.example.food.Listener.OrdersResponseListener;
 import com.example.food.Listener.ProductResponseListener;
+import com.example.food.Listener.UpdatePasswordResponseListener;
 import com.example.food.dto.CartDTO;
 import com.example.food.dto.DiscountDTO;
 import com.example.food.dto.OrderDetailDTO;
@@ -48,7 +53,7 @@ public class Api {
     }
 
     Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("http://192.168.1.11:8080/")
+            .baseUrl("http://192.168.1.13:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
@@ -67,6 +72,26 @@ public class Api {
 
             @Override
             public void onFailure(Call<ArrayList<Category>> call, Throwable t) {
+                listener.didError(t.getMessage());
+            }
+        });
+    }
+
+    public void getOrdersByUser(OrdersResponseListener listener,int id){
+        CallAllOrderedByUser callAllOrderedByUser=retrofit.create(CallAllOrderedByUser.class);
+        Call<ArrayList<Order>> call = callAllOrderedByUser.getListOrderByUser(id);
+        call.enqueue(new Callback<ArrayList<Order>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Order>> call, Response<ArrayList<Order>> response) {
+                if (!response.isSuccessful()) {
+                    listener.didError(response.message());
+                    return;
+                }
+                listener.didFetch(response.body(), response.message());
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Order>> call, Throwable t) {
                 listener.didError(t.getMessage());
             }
         });
@@ -294,9 +319,54 @@ public class Api {
         });
     }
 
+    public void sendOTP(OTPResponseListener listener, String gmail){
+        CallSendOTP callSendOTP =retrofit.create(CallSendOTP.class);
+        Call<OTPResponse> call = callSendOTP.sendOTP(gmail);
+        call.enqueue(new Callback<OTPResponse>() {
+            @Override
+            public void onResponse(Call<OTPResponse> call, Response<OTPResponse> response) {
+                if (!response.isSuccessful()) {
+                    listener.didError(response.message());
+                    return;
+                }
+                listener.didFetch(response.body(), response.message());
+            }
+
+            @Override
+            public void onFailure(Call<OTPResponse> call, Throwable t) {
+                listener.didError(t.getMessage());
+            }
+        });
+    }
+
+    public void updatePassword(UpdatePasswordResponseListener listener,String gmail,String password){
+        CallUpdatePassword callUpdatePassword=retrofit.create(CallUpdatePassword.class);
+        Call<UpdatePasswordResponse> call= callUpdatePassword.updatePassword(gmail,password);
+        call.enqueue(new Callback<UpdatePasswordResponse>() {
+            @Override
+            public void onResponse(Call<UpdatePasswordResponse> call, Response<UpdatePasswordResponse> response) {
+                if (!response.isSuccessful()) {
+                    listener.didError(response.message());
+                    return;
+                }
+                listener.didFetch(response.body(), response.message());
+            }
+
+            @Override
+            public void onFailure(Call<UpdatePasswordResponse> call, Throwable t) {
+                listener.didError(t.getMessage());
+            }
+        });
+    }
+
     private interface CallAllCategory{
         @GET("api/v1/Categories")
         Call<ArrayList<Category>> getListCategoryDomain();
+    }
+
+    private interface CallAllOrderedByUser{
+        @GET("api/v1/Orders/user/{id}")
+        Call<ArrayList<Order>> getListOrderByUser(@Path(value = "id") int id);
     }
 
     private interface CallAllProduct{
@@ -322,6 +392,17 @@ public class Api {
     private interface CallInsertCart {
         @POST("api/v1/Carts/insert")
         Call<CartResponse> insertCart(@Body CartDTO cartDTO);
+    }
+
+    private interface CallSendOTP{
+        @GET("api/v1/Users/email/{email}")
+        Call<OTPResponse> sendOTP(@Path(value = "email") String email);
+    }
+
+    private interface CallUpdatePassword{
+        @PUT("api/v1/Users/email/{email}/password/{password}")
+        Call<UpdatePasswordResponse> updatePassword(@Path(value = "email") String email,
+                                                    @Path(value = "password") String password);
     }
 
     private interface  CallUpdateCart{

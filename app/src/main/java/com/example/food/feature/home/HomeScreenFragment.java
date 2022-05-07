@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.food.Activity.CartListActivity;
 import com.example.food.Activity.CategoryListActivity;
+import com.example.food.Activity.OrderedListActivity;
 import com.example.food.Activity.SigninActivity;
 import com.example.food.Domain.Discount;
 import com.example.food.R;
@@ -150,6 +151,9 @@ public class HomeScreenFragment extends Fragment implements DiscountAdapter.Clic
         binding.cartBtn.setOnClickListener(view -> {
             startActivity(new Intent(getContext(), CartListActivity.class));
 
+        });
+        binding.orderedBtn.setOnClickListener(view -> {
+            startActivity(new Intent(getContext(), OrderedListActivity.class));
         });
 
     }

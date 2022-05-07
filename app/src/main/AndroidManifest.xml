@@ -17,6 +17,15 @@
         android:theme="@style/Theme.Food"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Activity.NewPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.OTPActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.OrderedListActivity"
+            android:exported="false" />
+        <activity
             android:name=".feature.adminhome.AdminActivity"
             android:exported="false" />
         <activity
