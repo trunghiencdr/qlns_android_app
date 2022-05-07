@@ -111,10 +111,9 @@ public class SigninActivity extends AppCompatActivity {
                 Toast.makeText(this, "Sign in failed because " + userDTO.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }, throwable -> {
-            throwable.printStackTrace();
+            Toast.makeText(this, throwable.getLocalizedMessage(), Toast.LENGTH_SHORT).show();;
 
         }, ()-> {
-            startActivity(new Intent(SigninActivity.this, HomeActivity.class));
             Toast.makeText(this, "Sign in successfully!", Toast.LENGTH_SHORT).show();
 
         });

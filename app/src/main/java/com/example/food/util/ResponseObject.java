@@ -19,19 +19,14 @@ public class ResponseObject<T> {
 
 
     protected String status;
-
-
     protected String message;
-
-
     private T data;
     public ResponseObject(){
 
     }
 
-    public T getData() {
+    public T getDataList() {
         if(this.data.getClass().getName().equals(User.class.getName())){
-
         }
         return data;
     }
