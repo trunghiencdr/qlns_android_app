@@ -200,7 +200,7 @@ public class Api {
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                if (!response.isSuccessful()) {
+                if (response.code()!=200) {
                     listener.didError(response.message());
                     return;
                 }
