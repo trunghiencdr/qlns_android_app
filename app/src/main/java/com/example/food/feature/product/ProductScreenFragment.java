@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,7 +41,8 @@ public class ProductScreenFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         rvProduct = binding.recyclerViewProductsByCategory;
-        rvProduct.addItemDecoration(new ItemMargin(0,0,0,0));
+        rvProduct.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
+
         rvProduct.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
 
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);

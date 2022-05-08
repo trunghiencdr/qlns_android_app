@@ -122,6 +122,7 @@
                         android:paddingEnd="20dp">
 
                         <Button
+                            android:visibility="gone"
                             android:id="@+id/btn_setting_profile_screen"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -135,6 +136,7 @@
                         </Button>
 
                         <Button
+                            android:visibility="gone"
                             android:id="@+id/btn_information_screen"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

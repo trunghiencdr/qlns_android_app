@@ -3,22 +3,23 @@ package com.example.food.feature.adminhome;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.Toast;
 
-import com.example.food.Activity.SigninActivity;
+import com.example.food.Activity.HomeActivity;
 import com.example.food.R;
-import com.example.food.feature.adminhome.ViewPagerAdapter;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
+
+
 
 public class AdminActivity extends AppCompatActivity {
 
@@ -45,13 +46,16 @@ public class AdminActivity extends AppCompatActivity {
         navigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                appBarLayout.setVisibility(View.VISIBLE);
+//                appBarLayout.setVisibility(View.VISIBLE);
                 switch (item.getItemId()){
-                    case R.id.fragment_home:
+                    case R.id.menu_home_item:
                         viewPager2.setCurrentItem(0);
                         break;
-                    case R.id.fragment_setting:
+                    case R.id.menu_setting_item:
                         viewPager2.setCurrentItem(2);
+                        break;
+                    case R.id.menu_cart_item:
+                        viewPager2.setCurrentItem(1);
                         break;
                 }
                 return false;
@@ -64,23 +68,25 @@ public class AdminActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                appBarLayout.setVisibility(View.VISIBLE);
+//                appBarLayout.setVisibility(View.VISIBLE);
                 switch (position){
                     case 0:
-                        navigationView.getMenu().findItem(R.id.fragment_home).setChecked(true);
+                        navigationView.getMenu().findItem(R.id.menu_home_item).setChecked(true);
                         break;
                     case 1:
-                        appBarLayout.setVisibility(View.GONE);
+//                        appBarLayout.setVisibility(View.GONE);
+                        navigationView.getMenu().findItem(R.id.menu_cart_item).setChecked(true);
                         break;
                     case 2:
-                        navigationView.getMenu().findItem(R.id.fragment_setting).setChecked(true);
+                        navigationView.getMenu().findItem(R.id.menu_setting_item).setChecked(true);
                         break;
                 }
             }
         });
         fabCart.setOnClickListener(view ->{
             viewPager2.setCurrentItem(1);
-            appBarLayout.setVisibility(View.GONE);
+            navigationView.getMenu().findItem(R.id.menu_cart_item).setChecked(true);
+//            appBarLayout.setVisibility(View.GONE);
         });
 
 
@@ -106,9 +112,35 @@ public class AdminActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_item_log_out:
-                startActivity(new Intent(this, SigninActivity.class));
+                Intent i = new Intent(this, HomeActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |  Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    boolean doubleBackToExitPressedOnce = false;
+    @Override
+    public void onBackPressed() {
+        //Checking for fragment count on backstack
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
+
+        } else if (!doubleBackToExitPressedOnce) {
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this,"Please click BACK again to exit.", Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce = false;
+                }
+            }, 2000);
+        } else {
+            super.onBackPressed();
+            return;
+        }
     }
 }

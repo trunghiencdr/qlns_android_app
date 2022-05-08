@@ -58,8 +58,8 @@ public class NewPasswordActivity extends AppCompatActivity {
         public void didFetch(UpdatePasswordResponse response, String message) {
             Toast.makeText(NewPasswordActivity.this,"Update password successfully",Toast.LENGTH_SHORT).show();
 
-            Intent intent = new Intent(NewPasswordActivity.this, SigninActivity.class);
-            startActivity(intent);
+//            Intent intent = new Intent(NewPasswordActivity.this, SigninActivity.class);
+//            startActivity(intent);
         }
 
         @Override

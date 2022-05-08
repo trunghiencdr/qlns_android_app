@@ -50,9 +50,6 @@
             android:name=".Activity.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.SigninActivity"
-            android:exported="false" />
-        <activity
             android:name=".Activity.IntroActivity"
             android:exported="true">
             <intent-filter>

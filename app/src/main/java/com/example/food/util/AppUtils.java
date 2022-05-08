@@ -71,7 +71,7 @@ public class AppUtils {
     public static void saveAccount2(Context context, User user){
         SharedPreferences.Editor editor = context.getSharedPreferences(ACCOUNT, 0).edit();
         editor.putString(ACCOUNT, new Gson().toJson(user));
-        editor.apply();
+        editor.commit();
     }
 
 

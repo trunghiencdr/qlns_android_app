@@ -25,7 +25,7 @@ public class IntroActivity extends AppCompatActivity {
             public void run() {
                 User user = AppUtils.getAccount(getSharedPreferences(AppUtils.ACCOUNT, MODE_PRIVATE));
                 if(user==null){
-                    startActivity(new Intent(IntroActivity.this, SigninActivity.class));
+                    startActivity(new Intent(IntroActivity.this, HomeActivity.class));
                 }else{
                     if(user.getRoles().size()>=0){
                         if(user.getRoles().stream().filter(role -> role.getName().equals(AppUtils.ROLES[1])).findFirst().isPresent()){

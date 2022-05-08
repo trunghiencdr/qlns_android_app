@@ -187,4 +187,6 @@ public class HomeAdminFragment extends Fragment {
         anyChartView.setChart(cartesian);
     }
 
+
+
 }

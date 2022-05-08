@@ -21,7 +21,6 @@ import com.example.food.databinding.FragmentProfileScreenBinding;
 import com.example.food.model.User;
 import com.example.food.util.AppUtils;
 import com.example.food.viewmodel.UserViewModel;
-import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.reactivex.disposables.CompositeDisposable;
@@ -76,9 +75,14 @@ public class ProfileScreenFragment extends Fragment {
         });
 
         binding.btnLogOutProfileScreen.setOnClickListener(view -> {
-            NavDirections action = ProfileScreenFragmentDirections.actionProfileScreenFragmentToEditProfileFragment();
-            Navigation.findNavController(view).navigate(action);
+            AppUtils.deleteAccount2(requireContext());
+            navigateToSignin(view);
         });
+    }
+
+    private void navigateToSignin(View view) {
+        NavDirections action = ProfileScreenFragmentDirections.actionProfileScreenFragmentToSigninFragment();
+        Navigation.findNavController(view).navigate(action);
     }
 
     private void setControls() {
