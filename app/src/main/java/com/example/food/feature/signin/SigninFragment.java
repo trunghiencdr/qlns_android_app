@@ -16,6 +16,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
+import com.example.food.Activity.HomeActivity;
+import com.example.food.Activity.IntroActivity;
 import com.example.food.Activity.OTPActivity;
 import com.example.food.Api.Api;
 import com.example.food.Domain.Response.OTPResponse;
@@ -34,6 +36,8 @@ public class SigninFragment extends Fragment {
     private User user;
     private CheckBox cbRemember;
     String gmail="";
+    boolean checkPass;
+    String password;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -41,17 +45,53 @@ public class SigninFragment extends Fragment {
         return binding.getRoot();
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         user = AppUtils.getAccount2(requireContext());
-        if(user!=null) navigateToHomeFragment();
+        password=AppUtils.getPassword(requireContext());
+//        checkPass();
+        if(user!=null) {
+            if (AppUtils.PASS_LOGIN == 1) {
+                if (user.getRoles().size() >= 0) {
+                    if (user.getRoles().stream().filter(role -> role.getName().equals(AppUtils.ROLES[1])).findFirst().isPresent()) {
+                        startActivity(new Intent(requireActivity(), AdminActivity.class));
+                    } else {
+                        navigateToHomeFragment();
+                    }
+                }
+            }
+        }
+
+
         setEvents();
-
-
     }
+
+    @SuppressLint("CheckResult")
+    private void checkPass() {
+        if(user!=null && !password.equalsIgnoreCase("")) {
+            userViewModel.makeApiCallSignIn(user.getUsername(), password)
+                    .subscribe(userDTO -> {
+                        if(userDTO.code()==200){
+                            if(user.getRoles().size()>=0){
+                                if(user.getRoles().stream().filter(role -> role.getName().equals(AppUtils.ROLES[1])).findFirst().isPresent()){
+                                    startActivity(new Intent(requireActivity(), AdminActivity.class));
+                                }else{
+                                    navigateToHomeFragment();
+                                }
+                            }
+
+                        }else {
+                            Toast.makeText(requireContext(),
+                                    AppUtils.getStringFromJsonObject("message", userDTO.errorBody().string()),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }, throwable -> Toast.makeText(requireContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show());
+        }
+    }
+
 
     private void setEvents() {
         binding.btnSignIn.setOnClickListener(view -> {
@@ -74,6 +114,15 @@ public class SigninFragment extends Fragment {
                 api.sendOTP(otpResponseListener,gmail);
             }
         });
+
+        binding.tvForgotPassword.setOnClickListener(view -> navigateToForgotPassword());
+
+
+    }
+
+    private void navigateToForgotPassword() {
+        NavDirections action = SigninFragmentDirections.actionSigninFragmentToForgotPasswordFragment();
+        Navigation.findNavController(requireView()).navigate(action);
     }
 
     private void navigateToSignUp() {
@@ -84,9 +133,11 @@ public class SigninFragment extends Fragment {
     @SuppressLint("CheckResult")
     private void singinProcess(String username, String password) {
         userViewModel.makeApiCallSignIn(username, password).subscribe(userDTO -> {
-            user = userDTO.getUser();
-            if(userDTO.getStatus().equalsIgnoreCase("Ok")){
+
+            if(userDTO.code()==200){
+                user = userDTO.body().getUser();
                 AppUtils.saveAccount2(requireContext(), user);
+                AppUtils.savePassword(requireContext(), password);
                 if(user.getRoles().size()>=0){
                     if(user.getRoles().stream().filter(role -> role.getName().equals(AppUtils.ROLES[1])).findFirst().isPresent()){
 //                        navigateToAdminHome();
@@ -99,7 +150,10 @@ public class SigninFragment extends Fragment {
                     }
                 }
             }else{
-                Toast.makeText(requireContext(), "Sign in failed because " + userDTO.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(),
+                        "Sign in failed because " +
+                                AppUtils.getStringFromJsonObject("message", userDTO.errorBody().string()),
+                        Toast.LENGTH_SHORT).show();
             }
         }, throwable -> {
             Toast.makeText(requireContext(), throwable.getLocalizedMessage(), Toast.LENGTH_SHORT).show();;

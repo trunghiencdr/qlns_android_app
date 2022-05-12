@@ -122,7 +122,10 @@ public class ProfileScreenFragment extends Fragment {
     private void loadInfoUser(User user) {
         String name = user.getName();
         String username = user.getUsername();
-        String linkImageAvt = user.getImageUser().getLink();
+        String linkImageAvt="";
+        if(user.getImageUser()!=null) {
+          linkImageAvt = user.getImageUser().getLink();
+        }
         if(name!=null && !name.equals("")){
             txtName.setText(name);
         }
@@ -137,8 +140,8 @@ public class ProfileScreenFragment extends Fragment {
 //                    .into(imgAvt);
             RequestOptions options = new RequestOptions()
                     .centerCrop()
-                    .placeholder(R.mipmap.ic_launcher_round)
-                    .error(R.mipmap.ic_launcher_round);
+                    .placeholder(R.drawable.user_icon)
+                    .error(R.drawable.user_icon);
 
 
 

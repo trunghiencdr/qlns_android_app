@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.food.Activity.HomeActivity;
 import com.example.food.R;
+import com.example.food.util.AppUtils;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -112,8 +113,9 @@ public class AdminActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_item_log_out:
+                AppUtils.deleteAccount2(this);
                 Intent i = new Intent(this, HomeActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |  Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
                 break;
         }

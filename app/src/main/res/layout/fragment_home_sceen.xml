@@ -44,8 +44,8 @@
                         android:id="@+id/image_user_home_screen"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
+                        android:src="@drawable/user_icon"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_launcher_background"
                         tools:layout_editor_absoluteX="272dp"
                         tools:layout_editor_absoluteY="23dp" />
 
@@ -115,7 +115,7 @@
                         android:id="@+id/slide_discount_home_screen"
                         android:layout_width="match_parent"
                         android:layout_height="250dp"
-                        app:sliderAutoCycleDirection="back_and_forth"
+                        app:sliderAutoCycleDirection="right"
                         app:sliderAutoCycleEnabled="true"
                         app:sliderIndicatorGravity="center_horizontal|bottom"
                         app:sliderIndicatorMargin="15dp"

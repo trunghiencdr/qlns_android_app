@@ -215,17 +215,16 @@ public class HomeScreenFragment extends Fragment implements DiscountAdapter.Clic
             txtName.setText("Hi " + user.getUsername());
         }
 
-        if(!user.getImageUser().getLink().equals("") && user.getImageUser().getLink()!=null){
+
+        if(user.getImageUser()!=null&&!user.getImageUser().getLink().equals("") && user.getImageUser().getLink()!=null){
 //            Picasso.get()
 //                    .load(user.getImageUser().getLink())
 //                    .into(imgAvt);
 
             RequestOptions options = new RequestOptions()
                     .centerCrop()
-                    .placeholder(R.mipmap.ic_launcher_round)
-                    .error(R.mipmap.ic_launcher_round);
-
-
+                    .placeholder(R.drawable.user_icon)
+                    .error(R.drawable.user_icon);
 
             Glide.with(this).load(user.getImageUser().getLink()).apply(options).into(imgAvt);
         }

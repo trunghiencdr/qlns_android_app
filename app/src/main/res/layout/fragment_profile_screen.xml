@@ -72,6 +72,7 @@
                         android:id="@+id/img_avt_profile_screen"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
+                        android:src="@drawable/user_icon"
                         android:layout_gravity="center"
                         android:layout_marginTop="20dp">
 

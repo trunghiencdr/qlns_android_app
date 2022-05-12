@@ -63,9 +63,6 @@
             android:id="@+id/action_profileScreenFragment_self"
             app:destination="@id/profileScreenFragment" />
         <action
-            android:id="@+id/action_profileScreenFragment_to_forgotPasswordFragment"
-            app:destination="@id/forgotPasswordFragment" />
-        <action
             android:id="@+id/action_profileScreenFragment_to_changePasswordFragment"
             app:destination="@id/changePasswordFragment" />
         <action
@@ -92,19 +89,10 @@
         <action
             android:id="@+id/action_changePasswordFragment_to_profileScreenFragment"
             app:destination="@id/profileScreenFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/forgotPasswordFragment"
-        android:name="com.example.food.feature.account.ForgotPasswordFragment"
-        android:label="ForgotPasswordFragment" >
         <action
-            android:id="@+id/action_forgotPasswordFragment_to_profileScreenFragment"
-            app:destination="@id/profileScreenFragment" />
+            android:id="@+id/action_changePasswordFragment_to_homeScreenFragment"
+            app:destination="@id/homeScreenFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/confirmOPTFragment"
-        android:name="com.example.food.feature.account.ConfirmOPTFragment"
-        android:label="ConfirmOPTFragment" />
     <fragment
         android:id="@+id/discountDetailsFragment"
         android:name="com.example.food.feature.discountdetails.DiscountDetailsFragment"
@@ -141,6 +129,9 @@
             app:popUpToInclusive="true"
             app:popUpTo="@id/homeScreenFragment"
             />
+        <action
+            android:id="@+id/action_signinFragment_to_forgotPasswordFragment"
+            app:destination="@id/forgotPasswordFragment" />
     </fragment>
     <fragment
         android:id="@+id/signupFragment"
@@ -149,10 +140,32 @@
         <action
             android:id="@+id/action_signupFragment_to_signinFragment"
             app:destination="@id/signinFragment" />
+        <action
+            android:id="@+id/action_signupFragment_to_homeScreenFragment"
+            app:destination="@id/homeScreenFragment" />
     </fragment>
     <activity
         android:id="@+id/adminActivity"
         android:name="com.example.food.feature.adminhome.AdminActivity"
         android:label="activity_admin"
         tools:layout="@layout/activity_admin" />
+    <fragment
+        android:id="@+id/forgotPasswordFragment"
+        android:name="com.example.food.feature.signin.ForgotPasswordFragment"
+        android:label="ForgotPasswordFragment" >
+        <action
+            android:id="@+id/action_forgotPasswordFragment_to_OTPPhoneFragment"
+            app:destination="@id/OTPPhoneFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/OTPPhoneFragment"
+        android:name="com.example.food.feature.signin.OTPPhoneFragment"
+        android:label="OTPPhoneFragment" >
+        <action
+            android:id="@+id/action_OTPPhoneFragment_to_forgotPasswordFragment"
+            app:destination="@id/forgotPasswordFragment" />
+        <action
+            android:id="@+id/action_OTPPhoneFragment_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
+    </fragment>
 </navigation>

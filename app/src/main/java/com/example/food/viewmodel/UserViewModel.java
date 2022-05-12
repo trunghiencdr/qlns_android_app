@@ -7,21 +7,23 @@ import android.util.Log;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.food.Domain.Response.ResponseObject;
+import com.example.food.Domain.request.RequestChangePassword;
 import com.example.food.dto.UserDTO;
 import com.example.food.feature.account.UserRepository;
 import com.example.food.model.RequestSignup;
 import com.example.food.model.User;
 import com.example.food.network.RetroInstance;
+import com.example.food.util.AppUtils;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 
 import io.reactivex.Observable;
-import io.reactivex.Observer;
+import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -33,14 +35,20 @@ import retrofit2.Response;
 public class UserViewModel extends AndroidViewModel {
     private UserRepository userRepository;
     MutableLiveData<User> user;
+    MutableLiveData<String> message;
+    MutableLiveData<Boolean> existUser;
+    MutableLiveData<String> otp;
 
     public UserViewModel(Application application){
         super(application);
-        userRepository = RetroInstance.getRetrofitClient().create(UserRepository.class);
+        userRepository = RetroInstance.getRetrofitClient(application).create(UserRepository.class);
         user = new MutableLiveData<>();
+        message = new MutableLiveData<>();
+        existUser = new MutableLiveData<>();
+        otp = new MutableLiveData<>();
     }
 
-    public Observable<UserDTO> makeApiCallSignIn(String username, String password){
+    public Observable<Response<UserDTO>> makeApiCallSignIn(String username, String password){
        return userRepository.signin(new User(username, password))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -69,6 +77,15 @@ public class UserViewModel extends AndroidViewModel {
 
     public MutableLiveData<User> getuserMultable(){
         return user;
+    }
+    public MutableLiveData<String> getMessage(){
+        return message;
+    }
+    public MutableLiveData<Boolean> getExistUser() {
+        return existUser;
+    }
+    public MutableLiveData<String> getOTP() {
+        return otp;
     }
 
     @SuppressLint("CheckResult")
@@ -111,5 +128,64 @@ public class UserViewModel extends AndroidViewModel {
                         Log.e("", "call get user by id id userviewModel" + e.getMessage());
                     }
                 });
+    }
+
+    @SuppressLint("CheckResult")
+    public void callChangePassword(RequestChangePassword request){
+        userRepository.changePassword(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(responseObjectResponse -> {
+                    if(responseObjectResponse.code()==200)
+                    {
+                        user.setValue(responseObjectResponse.body().getData());
+                    }else{
+//                        JSONObject jsonObject = new JSONObject(responseObjectResponse.errorBody().string());
+//                        message.setValue(jsonObject.getString("message"));
+                        message.setValue(responseObjectResponse.body().getMessage());
+                    }
+                },throwable -> message.setValue(throwable.getMessage()));
+    }
+
+    @SuppressLint("CheckResult")
+    public void checkUserByPhoneNumber(String phoneNumber){
+     userRepository.checkUserByPhonenumber(phoneNumber)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(responseObjectResponse -> {
+                    if(responseObjectResponse.code()==200){
+                        existUser.setValue(true);
+                    }else {
+                        existUser.setValue(false);
+                        message.setValue(AppUtils.getErrorMessage(
+                                responseObjectResponse.errorBody().string()));
+                    }
+                }, throwable -> message.setValue(throwable.getLocalizedMessage()))
+                ;
+    }
+
+    @SuppressLint("CheckResult")
+    public void sendOTPToPhoneNumber(String phonenumber){
+        phonenumber = "+84" + phonenumber.substring(1, phonenumber.length());
+        userRepository.sendSMS(phonenumber)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(responseObjectResponse -> {
+                    if(responseObjectResponse.code()==200){
+                        otp.setValue(responseObjectResponse.body().getData());
+                    }else{
+                        message.setValue(
+                                AppUtils.getErrorMessage(responseObjectResponse
+                                        .errorBody().string()));
+                    }
+                }, throwable -> message.setValue(
+                        throwable.getLocalizedMessage()
+                ));
+    }
+
+    public boolean checkOTP(String otp) {
+        if(this.otp!=null){
+            return this.otp.getValue().equals(otp);
+        }else return false;
     }
 }

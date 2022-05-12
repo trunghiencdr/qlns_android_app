@@ -1,5 +1,9 @@
 package com.example.food.feature.home;
 
+import android.app.Application;
+import android.content.Context;
+
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.ViewModel;
 
 import com.example.food.Domain.Discount;
@@ -18,17 +22,18 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
-public class HomeViewModel extends ViewModel {
+public class HomeViewModel extends AndroidViewModel {
 
     private CategoryRepository categoryRepository;
     private ProductRepository productRepository;
     private DiscountRepository discountRepository;
 
 
-    public HomeViewModel(){
-        categoryRepository = RetroInstance.getRetrofitClient().create(CategoryRepository.class);
-        productRepository = RetroInstance.getRetrofitClient().create(ProductRepository.class);
-        discountRepository = RetroInstance.getRetrofitClient().create(DiscountRepository.class);
+    public HomeViewModel(Application application){
+        super(application);
+        categoryRepository = RetroInstance.getRetrofitClient(application).create(CategoryRepository.class);
+        productRepository = RetroInstance.getRetrofitClient(application).create(ProductRepository.class);
+        discountRepository = RetroInstance.getRetrofitClient(application).create(DiscountRepository.class);
 
     }
 
