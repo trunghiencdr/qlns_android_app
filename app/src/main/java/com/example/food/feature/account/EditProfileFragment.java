@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -89,11 +90,8 @@ public class EditProfileFragment extends Fragment {
     }
 
     private void updateUser() {
-
         mProgressDialog.show();
         setUpParameters();
-
-
 
     }
 
@@ -109,11 +107,15 @@ public class EditProfileFragment extends Fragment {
                         if(userResponse.code()==200){
                             System.out.println("Upload file success");
                         }else{
-                            System.out.println("Upload file failed");
+                            Toast.makeText(requireContext(),
+                                    AppUtils.getErrorMessage(userResponse.errorBody().string()),
+                                    Toast.LENGTH_SHORT).show();
                         }
                         mProgressDialog.dismiss();
                     }, throwable -> {
-                        System.out.println("upload failed"+ throwable.getLocalizedMessage());
+                        Toast.makeText(requireContext(),
+                                throwable.getLocalizedMessage(),
+                                Toast.LENGTH_SHORT).show();
                     });
         }else{
             String realPath = ChooseImageUtil.getImageString(CODE).split("//")[1].trim();
@@ -125,11 +127,15 @@ public class EditProfileFragment extends Fragment {
                         if(userResponse.code()==200){
                             System.out.println("Upload file success");
                         }else{
-                            System.out.println("Upload file failed");
+                            Toast.makeText(requireContext(),
+                                    AppUtils.getErrorMessage(userResponse.errorBody().string()),
+                                    Toast.LENGTH_SHORT).show();
                         }
                         mProgressDialog.dismiss();
                     }, throwable -> {
-                        System.out.println("upload failed"+ throwable.getLocalizedMessage());
+                        Toast.makeText(requireContext(),
+                                throwable.getLocalizedMessage(),
+                                Toast.LENGTH_SHORT).show();
                     });
         }
 

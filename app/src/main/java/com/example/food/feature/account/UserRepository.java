@@ -55,8 +55,9 @@ public interface UserRepository {
     @GET("v1/Users/id/{id}")
     Single<Response<UserDTO>> getUserById(@Path("id") int id);
 
-    @POST("auth/resetPassword")
-    Single<Response<ResponseObject<User>>> changePassword(@Body RequestChangePassword request);
+    @POST("auth/resetPassword?")
+    Single<Response<ResponseObject<User>>> changePassword(@Body RequestChangePassword request,
+                                                          @Query("state") boolean state);
 
     @GET("v1/Users/{phonenumber}")
     Single<Response<ResponseObject<UserDTO>>> checkUserByPhonenumber(@Path("phonenumber") String phonenumber);

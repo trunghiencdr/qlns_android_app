@@ -148,7 +148,6 @@
                             android:id="@+id/edit_text_name_edit_profile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Arina Hashimoto"
                             android:inputType="textEmailAddress">
 
                         </com.google.android.material.textfield.TextInputEditText>
@@ -173,7 +172,6 @@
                             android:id="@+id/edit_text_email_edit_profile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="abc@gmail.com"
                             android:inputType="textEmailAddress">
 
                         </com.google.android.material.textfield.TextInputEditText>
@@ -199,7 +197,6 @@
                             android:id="@+id/edit_text_address_edit_profile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="97 Man Thiện"
                             android:inputType="textEmailAddress">
 
                         </com.google.android.material.textfield.TextInputEditText>

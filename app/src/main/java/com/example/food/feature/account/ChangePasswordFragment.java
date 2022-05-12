@@ -46,7 +46,13 @@ public class ChangePasswordFragment extends Fragment {
 
     private void setEvents() {
         binding.btnBackSignUp.setOnClickListener(view -> navigateToProfile(view));
-        binding.btnEditProfileScreen.setOnClickListener(view -> changePassword());
+        binding.btnEditProfileScreen.setOnClickListener(view -> {
+            if(navigateTo.equals("Home"))
+                resetPassword();
+            else
+            changePassword();
+        } );
+
 
         // observer user change
         userViewModel.getuserMultable().observe(requireActivity(), new Observer<User>() {
@@ -55,7 +61,7 @@ public class ChangePasswordFragment extends Fragment {
                 AppUtils.saveAccount2(requireContext(), user);
                 Toast.makeText(requireContext(), "Change password success", Toast.LENGTH_SHORT).show();
                 if(navigateTo.equals("Profile"))
-                navigateToProfile(requireView());
+                    navigateToProfile(requireView());
                 else {
                     navigateToHome();
                 }
@@ -70,6 +76,13 @@ public class ChangePasswordFragment extends Fragment {
                 Toast.makeText(requireContext(), s, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void resetPassword() {
+        RequestChangePassword request = getRequest();
+        if(request!=null)
+            // call api change
+            userViewModel.callResetPassword(request);
     }
 
     private void navigateToHome() {

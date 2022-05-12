@@ -132,7 +132,24 @@ public class UserViewModel extends AndroidViewModel {
 
     @SuppressLint("CheckResult")
     public void callChangePassword(RequestChangePassword request){
-        userRepository.changePassword(request)
+        userRepository.changePassword(request, true)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(responseObjectResponse -> {
+                    if(responseObjectResponse.code()==200)
+                    {
+                        user.setValue(responseObjectResponse.body().getData());
+                    }else{
+//                        JSONObject jsonObject = new JSONObject(responseObjectResponse.errorBody().string());
+//                        message.setValue(jsonObject.getString("message"));
+                        message.setValue(responseObjectResponse.body().getMessage());
+                    }
+                },throwable -> message.setValue(throwable.getMessage()));
+    }
+
+    @SuppressLint("CheckResult")
+    public void callResetPassword(RequestChangePassword request){
+        userRepository.changePassword(request, false)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(responseObjectResponse -> {
