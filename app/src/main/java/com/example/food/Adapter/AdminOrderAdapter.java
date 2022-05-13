@@ -1,41 +1,32 @@
 package com.example.food.Adapter;
 
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.food.Activity.ShowDetailActivity;
-import com.example.food.Api.Api;
-import com.example.food.Domain.Cart;
 import com.example.food.Domain.Order;
-import com.example.food.Domain.Product;
-import com.example.food.Domain.Response.CartResponse;
-import com.example.food.Listener.InsertCartResponseListener;
 import com.example.food.R;
-import com.example.food.dto.CartDTO;
-import com.example.food.feature.home.HomeViewModel;
-import com.example.food.model.User;
 import com.example.food.util.AppUtils;
-import com.squareup.picasso.Picasso;
 
-import java.sql.SQLException;
+import io.reactivex.internal.operators.flowable.FlowableOnBackpressureLatest;
 
 public class AdminOrderAdapter extends ListAdapter<Order, AdminOrderAdapter.OrderViewHolder> {
 
-    public AdminOrderAdapter( @NonNull DiffUtil.ItemCallback<Order> diffCallback) {
+    private ClickItem clickItem;
+    public static interface ClickItem{
+        void showDetailsOrder(Order order);
+    }
+
+    public AdminOrderAdapter( @NonNull DiffUtil.ItemCallback<Order> diffCallback, ClickItem clickItem) {
         super(diffCallback);
+        this.clickItem = clickItem;
     }
 
     @NonNull
@@ -56,6 +47,7 @@ public class AdminOrderAdapter extends ListAdapter<Order, AdminOrderAdapter.Orde
     public class OrderViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtOrderId, txtOrderState, txtOrderDate, txtOrderUser;
+        RelativeLayout relativeLayout;
         public OrderViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -63,6 +55,8 @@ public class AdminOrderAdapter extends ListAdapter<Order, AdminOrderAdapter.Orde
             txtOrderState = itemView.findViewById(R.id.text_view_state_order);
             txtOrderDate = itemView.findViewById(R.id.text_view_date_order);
             txtOrderUser = itemView.findViewById(R.id.text_view_user_order);
+            relativeLayout = itemView.findViewById(R.id.relative_layout_order_admin_item);
+            relativeLayout.setOnClickListener(view -> clickItem.showDetailsOrder(getItem(getAdapterPosition())));
 
 
         }

@@ -26,7 +26,6 @@ public class ProductScreenFragment extends Fragment {
     private RecyclerView rvProduct;
     private ProductAdapter productAdapter;
     private HomeViewModel homeViewModel;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

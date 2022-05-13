@@ -216,17 +216,20 @@ public class HomeScreenFragment extends Fragment implements DiscountAdapter.Clic
         }
 
 
-        if(user.getImageUser()!=null&&!user.getImageUser().getLink().equals("") && user.getImageUser().getLink()!=null){
+        if(user.getImageUser()!=null){
 //            Picasso.get()
 //                    .load(user.getImageUser().getLink())
 //                    .into(imgAvt);
+//
+//            RequestOptions options = new RequestOptions()
+//                    .centerCrop()
+//                    .placeholder(R.drawable.user_icon)
+//                    .error(R.drawable.user_icon);
 
-            RequestOptions options = new RequestOptions()
-                    .centerCrop()
-                    .placeholder(R.drawable.user_icon)
-                    .error(R.drawable.user_icon);
+            Glide.with(this).load(user.getImageUser().getLink()).into(imgAvt);
+        }else{
+            Glide.with(this).load(R.drawable.user_icon).into(imgAvt);
 
-            Glide.with(this).load(user.getImageUser().getLink()).apply(options).into(imgAvt);
         }
     }
 

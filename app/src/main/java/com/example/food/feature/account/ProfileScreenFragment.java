@@ -6,11 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
@@ -34,6 +36,7 @@ public class ProfileScreenFragment extends Fragment {
     private CompositeDisposable disposable;
     private TextView txtName, txtUsername;
     private CircleImageView imgAvt;
+
 
     @Nullable
     @Override
@@ -78,6 +81,18 @@ public class ProfileScreenFragment extends Fragment {
             AppUtils.deleteAccount2(requireContext());
             navigateToSignin(view);
         });
+        requireActivity().getOnBackPressedDispatcher().addCallback(requireActivity(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                navigateToHome(requireView());
+            }
+        });
+
+    }
+
+    private void navigateToHome(View requireView) {
+        NavDirections navDirections = ProfileScreenFragmentDirections.actionProfileScreenFragmentToHomeScreenFragment();
+        Navigation.findNavController(requireView).navigate(navDirections);
     }
 
     private void navigateToSignin(View view) {
@@ -135,18 +150,13 @@ public class ProfileScreenFragment extends Fragment {
         }
 
         if(linkImageAvt!=null && !linkImageAvt.equals("")){
-//            Picasso.get()
-//                    .load(linkImageAvt)
-//                    .into(imgAvt);
-            RequestOptions options = new RequestOptions()
-                    .centerCrop()
-                    .placeholder(R.drawable.user_icon)
-                    .error(R.drawable.user_icon);
+            Glide.with(this).load(linkImageAvt).into(imgAvt);
+        }else{
+            Glide.with(this).load(R.drawable.user_icon).into(imgAvt);
 
-
-
-            Glide.with(this).load(linkImageAvt).apply(options).into(imgAvt);
         }
 
     }
+
+
 }

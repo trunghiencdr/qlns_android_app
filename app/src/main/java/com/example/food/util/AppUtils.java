@@ -15,18 +15,26 @@ import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 public class AppUtils {
 
-    public static String BASE_URL="http://192.168.1.15:8080/";
+//    public static String BASE_URL="http://192.168.1.15:8080/";
+    public static String BASE_URL="http://10.0.2.2:8080/";
     public static String[] ROLES={"ROLE_USER", "ROLE_ADMIN"};
     public static int PASS_LOGIN=0;
+    public static String[]orderState={"chua duyet", "Đang giao", "Đã giao"};
+    public static String[]orderTime= {"Hôm nay", "Tuần này", "Tháng này"};
+    public static String dateFormat="dd-MM-yyyy";
+    public static SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
 
     public static final List<Integer> listBackgroundCategory=
            Arrays.asList(R.drawable.category_background1,
@@ -110,6 +118,53 @@ public class AppUtils {
         return new SimpleDateFormat(pattern).format(date);
     }
 
+    public static String getFirstDayOfWeekNow(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.clear(Calendar.MINUTE);
+        calendar.clear(Calendar.SECOND);
+        calendar.clear(Calendar.MILLISECOND);
+        // get start of this week in miliseconds
+        calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
+        return sdf.format(calendar.getTime());
+    }
+
+    public static String getLastDayOfWeekNow(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.clear(Calendar.MINUTE);
+        calendar.clear(Calendar.SECOND);
+        calendar.clear(Calendar.MILLISECOND);
+        // get start of this week in miliseconds
+        calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
+        calendar.add(Calendar.DATE, 6);
+        return sdf.format(calendar.getTime());
+    }
+
+    public static String getFirstDayOfMonthNow(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.clear(Calendar.MINUTE);
+        calendar.clear(Calendar.SECOND);
+        calendar.clear(Calendar.MILLISECOND);
+        // get start of this week in miliseconds
+        calendar.set(Calendar.DATE, 1);
+        return sdf.format(calendar.getTime());
+    }
+    public static String getLastDayOfMonthNow(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.clear(Calendar.MINUTE);
+        calendar.clear(Calendar.SECOND);
+        calendar.clear(Calendar.MILLISECOND);
+        // get start of this week in miliseconds
+        int days = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        calendar.set(Calendar.DATE, days);
+        return sdf.format(calendar.getTime());
+    }
+
+
+
     public static String getStringFromJsonObject(String key, String json){
         try {
             JSONObject jsonObject = new JSONObject(json);
@@ -128,5 +183,11 @@ public class AppUtils {
             e.printStackTrace();
             return "";
         }
+    }
+
+    public static String formatCurrency(float number){
+        Locale locale = new Locale("vi", "VN");
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
+        return currencyFormatter.format(number);
     }
 }

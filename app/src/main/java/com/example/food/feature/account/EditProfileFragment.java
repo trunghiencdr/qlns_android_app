@@ -164,14 +164,12 @@ public class EditProfileFragment extends Fragment {
     }
 
     private void loadInfoUser(User user) {
-        RequestOptions options = new RequestOptions()
-                .centerCrop()
-                .placeholder(R.drawable.user_icon)
-                .error(R.drawable.user_icon);
-
-
         if(user.getImageUser()!=null)
-        Glide.with(this).load(user.getImageUser().getLink()).apply(options).into(binding.imgAvtEditProfileScreen);
+            Glide.with(this).load(user.getImageUser().getLink()).into(binding.imgAvtEditProfileScreen);
+        else{
+            Glide.with(this).load(R.drawable.user_icon).into(binding.imgAvtEditProfileScreen);
+
+        }
 //        Picasso.get()
 //                .load(user.getImageUser().getLink())
 //                .into(binding.imgAvtEditProfileScreen);

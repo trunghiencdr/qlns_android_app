@@ -154,7 +154,7 @@ public class ChangePasswordFragment extends Fragment {
 
         if(getArguments()!=null){
             phoneNumber = getArguments().getString("phoneNumber", "");
-            navigateTo = getArguments().getString("navigateTo");
+            navigateTo = getArguments().getString("navigateTo","Profile");
             if(navigateTo.equals("Home")){
                 binding.textInputCurrentPass.setVisibility(View.GONE);
                 binding.btnBackSignUp.setVisibility(View.GONE);

@@ -1,9 +1,12 @@
 package com.example.food.feature.adminhome;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,7 +32,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class AdminOrderFragment extends Fragment {
+public class AdminOrderFragment extends Fragment implements AdminOrderAdapter.ClickItem, OrderDetailsFragment.ClickButton {
 
     FragmentAdminOrderBinding binding;
     AdminOrderAdapter orderAdapter;
@@ -87,9 +90,18 @@ public class AdminOrderFragment extends Fragment {
                         startDate = AppUtils.formatDate(new Date(), datePattern);
                         endDate = AppUtils.formatDate(new Date(), datePattern);
                         break;
+                    case R.id.chip_week_order_time_filter:
+                        startDate = AppUtils.getFirstDayOfWeekNow();
+                        endDate = AppUtils.getLastDayOfWeekNow();
+                        break;
+                    case R.id.chip_month_time_order_filter:
+                        startDate = AppUtils.getFirstDayOfMonthNow();
+                        endDate = AppUtils.getLastDayOfMonthNow();
+
+                        break;
 
                 }
-
+//                Log.d("AAA","start date:" + startDate + "-endDate:" + endDate);
                 orderViewModel.callOrdersByStateAndCreateAtBetween(
                         orderState,
                         startDate,
@@ -102,10 +114,13 @@ public class AdminOrderFragment extends Fragment {
             public void onCheckedChanged(ChipGroup group, int checkedId) {
                 switch (checkedId){
                     case R.id.chip_unapproved_state_order:
-                        orderState = "chua duyet";
+                        orderState = AppUtils.orderState[0];// Đã giao
                         break;
                     case R.id.chip_approved_state_order:
-                        orderState = "Đã duyệt";
+                        orderState = AppUtils.orderState[1];// Đang giao
+                        break;
+                    case R.id.chip_shiped_state_order:
+                        orderState = AppUtils.orderState[2];// Đang giao
                         break;
 
                 }
@@ -150,7 +165,7 @@ public class AdminOrderFragment extends Fragment {
 
 
         orderViewModel = new ViewModelProvider(this).get(OrderViewModel.class);
-        orderAdapter = new AdminOrderAdapter(Order.itemCallback);
+        orderAdapter = new AdminOrderAdapter(Order.itemCallback, this);
         binding.recyclerViewOrdersState.setLayoutManager(
                 new LinearLayoutManager(requireContext(),
                         RecyclerView.VERTICAL, false));
@@ -174,5 +189,19 @@ public class AdminOrderFragment extends Fragment {
 
     private void getFilter(){
 
+    }
+
+    @Override
+    public void showDetailsOrder(Order order) {
+        OrderDetailsFragment orderDetailsFragment = OrderDetailsFragment.newInstance(order, this);
+        orderDetailsFragment.setCancelable(false);
+        orderDetailsFragment.show(requireActivity().getSupportFragmentManager(), orderDetailsFragment.getTag());
+    }
+
+
+    @Override
+    public void clickButtonAccept(int idOrder, String state) {
+        Toast.makeText(requireContext(), "Click accept button order", Toast.LENGTH_SHORT).show();
+        orderViewModel.callUpdateStateOrder(idOrder, state);
     }
 }

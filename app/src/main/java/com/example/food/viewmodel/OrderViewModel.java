@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.food.Domain.Order;
 import com.example.food.network.RetroInstance;
+import com.example.food.util.AppUtils;
 
 import java.util.List;
 
@@ -22,15 +23,27 @@ public class OrderViewModel extends AndroidViewModel {
     MutableLiveData<List<Order>> data;
     OrderRepository repository;
     Application application;
+    MutableLiveData<Order> order;
+    MutableLiveData<String> message;
     public OrderViewModel(@NonNull Application application) {
         super(application);
         this.application = application;
         data = new MutableLiveData<>();
+        order = new MutableLiveData<>();
+        message = new MutableLiveData<>();
         repository = RetroInstance.getRetrofitClient().create(OrderRepository.class);
     }
 
     public MutableLiveData<List<Order>> getData() {
         return data;
+    }
+
+    public MutableLiveData<Order> getOrder() {
+        return order;
+    }
+
+    public MutableLiveData<String> getMessage() {
+        return message;
     }
 
     public void setData(MutableLiveData<List<Order>> data) {
@@ -63,5 +76,46 @@ public class OrderViewModel extends AndroidViewModel {
                         Toast.makeText(application, orderResponseResponse.errorBody().string(), Toast.LENGTH_SHORT).show();
                     }
                 }, throwable -> Toast.makeText(application, throwable.getLocalizedMessage(), Toast.LENGTH_SHORT).show());
+    }
+
+    @SuppressLint("CheckResult")
+    public void callGetOrderById(int id){
+        repository.getOrderById(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(responseObjectResponse -> {
+                    if(responseObjectResponse.code()==200){
+                        order.setValue(responseObjectResponse.body().getData());
+                    }else{
+                        message.setValue(AppUtils.getErrorMessage(responseObjectResponse.errorBody().string()));
+                    }
+                }, throwable -> message.setValue(throwable.getMessage()));
+    }
+
+    public void updateData(Order order){
+        List<Order> orders = data.getValue();
+
+        for(int i=0; i<orders.size(); i++){
+            if(order.getId()==orders.get(i).getId()){
+                orders.remove(i);
+                orders.add(i, order);
+                break;
+            }
+        }
+        data.setValue(orders);
+
+    }
+    @SuppressLint("CheckResult")
+    public void callUpdateStateOrder(int id, String state){
+        repository.updateStateOrder(id, state)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(responseObjectResponse -> {
+                    if(responseObjectResponse.code()==200){
+                        updateData(responseObjectResponse.body().getData());
+                    }else{
+                        message.setValue(AppUtils.getErrorMessage(responseObjectResponse.errorBody().string()));
+                    }
+                }, throwable -> message.setValue(throwable.getMessage()));
     }
 }

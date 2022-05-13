@@ -133,7 +133,6 @@ public class SigninFragment extends Fragment {
     @SuppressLint("CheckResult")
     private void singinProcess(String username, String password) {
         userViewModel.makeApiCallSignIn(username, password).subscribe(userDTO -> {
-
             if(userDTO.code()==200){
                 user = userDTO.body().getUser();
                 AppUtils.saveAccount2(requireContext(), user);
@@ -145,21 +144,16 @@ public class SigninFragment extends Fragment {
                         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |  Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(i);
                     }else{
-
                         navigateToHomeFragment();
                     }
                 }
             }else{
                 Toast.makeText(requireContext(),
-                        "Sign in failed because " +
                                 AppUtils.getStringFromJsonObject("message", userDTO.errorBody().string()),
                         Toast.LENGTH_SHORT).show();
             }
         }, throwable -> {
             Toast.makeText(requireContext(), throwable.getLocalizedMessage(), Toast.LENGTH_SHORT).show();;
-
-        }, ()-> {
-            Toast.makeText(requireContext(), "Sign in successfully!", Toast.LENGTH_SHORT).show();
 
         });
 
