@@ -45,14 +45,13 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_launcher_background"
                         tools:layout_editor_absoluteX="272dp"
                         tools:layout_editor_absoluteY="23dp" />
 
                 </com.google.android.material.card.MaterialCardView>
 
                 <TextView
-
+                    android:visibility="gone"
                     android:id="@+id/txt_name_user_home_screen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -87,7 +86,43 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/materialCardView" />
 
+                <ImageView
+                    android:id="@+id/image_view_ic_location"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
 
+                    android:layout_marginStart="10dp"
+                    android:src="@drawable/ic_location"
+                    app:layout_constraintBottom_toBottomOf="@id/materialCardView"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_view_your_location_label">
+
+                </ImageView>
+
+                <TextView
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:id="@+id/text_view_your_location_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:drawableEnd="@drawable/ic_baseline_keyboard_arrow_down_24"
+                    android:text="Vị trí của bạn"
+                    app:layout_constraintBottom_toBottomOf="@id/image_view_ic_location"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/materialCardView"
+                    app:layout_constraintVertical_bias="0.0"
+                    app:layout_constraintVertical_chainStyle="spread">
+
+                </TextView>
+                <TextView
+                    android:id="@+id/text_view_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:text="97 Man Thiện"
+                    app:layout_constraintStart_toEndOf="@id/image_view_ic_location"
+                    app:layout_constraintBottom_toBottomOf="@id/image_view_ic_location"
+                    app:layout_constraintTop_toTopOf="@id/image_view_ic_location" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -115,7 +150,7 @@
                         android:id="@+id/slide_discount_home_screen"
                         android:layout_width="match_parent"
                         android:layout_height="250dp"
-                        app:sliderAutoCycleDirection="back_and_forth"
+                        app:sliderAutoCycleDirection="right"
                         app:sliderAutoCycleEnabled="true"
                         app:sliderIndicatorGravity="center_horizontal|bottom"
                         app:sliderIndicatorMargin="15dp"

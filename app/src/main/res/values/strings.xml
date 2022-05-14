@@ -17,4 +17,17 @@
     </array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="otp_string_01">Mã xác thực đã được gửi đến số</string>
+
+    <string-array name="ORDER_TIME_FILTER">
+        <item>Hôm nay</item>
+        <item>Tuần này</item>
+        <item>Tháng này</item>
+    </string-array>
+
+    <string-array name="ORDER_STATE_FILTER">
+        <item>Chưa duyệt</item>
+        <item>Đang giao</item>
+        <item>Đã giao</item>
+    </string-array>
 </resources>

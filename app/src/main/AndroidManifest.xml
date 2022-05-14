@@ -20,6 +20,9 @@
             android:name=".Activity.NewPasswordActivity"
             android:exported="false" />
         <activity
+            android:name=".feature.adminhome.EditProfileFragmentAdmin"
+            android:exported="false" />
+        <activity
             android:name=".Activity.OTPActivity"
             android:exported="false" />
         <activity
@@ -50,7 +53,7 @@
             android:name=".Activity.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.SigninActivity"
+            android:name=".feature.adminhome.ChangePasswordFragmentAdmin"
             android:exported="false" />
         <activity
             android:name=".Activity.IntroActivity"

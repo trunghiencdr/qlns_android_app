@@ -2,6 +2,9 @@ package com.example.food.feature.product;
 
 
 
+import android.app.Application;
+
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.ViewModel;
 
 import com.example.food.Domain.Product;
@@ -17,12 +20,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
-public class ProductViewModel extends ViewModel {
+public class ProductViewModel extends AndroidViewModel {
 
    private ProductRepository productRepository;
 
 
-   public ProductViewModel(){
+   public ProductViewModel(Application application){
+       super(application);
        productRepository = RetroInstance.getRetrofitClient().create(ProductRepository.class);
    }
 

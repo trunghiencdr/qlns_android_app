@@ -6,11 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
@@ -21,7 +23,6 @@ import com.example.food.databinding.FragmentProfileScreenBinding;
 import com.example.food.model.User;
 import com.example.food.util.AppUtils;
 import com.example.food.viewmodel.UserViewModel;
-import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.reactivex.disposables.CompositeDisposable;
@@ -35,6 +36,7 @@ public class ProfileScreenFragment extends Fragment {
     private CompositeDisposable disposable;
     private TextView txtName, txtUsername;
     private CircleImageView imgAvt;
+
 
     @Nullable
     @Override
@@ -73,12 +75,30 @@ public class ProfileScreenFragment extends Fragment {
         binding.btnChangePasswordProfileScreen.setOnClickListener(view -> {
             NavDirections action = ProfileScreenFragmentDirections.actionProfileScreenFragmentToChangePasswordFragment();
             Navigation.findNavController(view).navigate(action);
+
         });
 
         binding.btnLogOutProfileScreen.setOnClickListener(view -> {
-            NavDirections action = ProfileScreenFragmentDirections.actionProfileScreenFragmentToEditProfileFragment();
-            Navigation.findNavController(view).navigate(action);
+            AppUtils.deleteAccount2(requireContext());
+            navigateToSignin(view);
         });
+        requireActivity().getOnBackPressedDispatcher().addCallback(requireActivity(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                navigateToHome(requireView());
+            }
+        });
+
+    }
+
+    private void navigateToHome(View requireView) {
+        NavDirections navDirections = ProfileScreenFragmentDirections.actionProfileScreenFragmentToHomeScreenFragment();
+        Navigation.findNavController(requireView).navigate(navDirections);
+    }
+
+    private void navigateToSignin(View view) {
+        NavDirections action = ProfileScreenFragmentDirections.actionProfileScreenFragmentToSigninFragment();
+        Navigation.findNavController(view).navigate(action);
     }
 
     private void setControls() {
@@ -118,7 +138,10 @@ public class ProfileScreenFragment extends Fragment {
     private void loadInfoUser(User user) {
         String name = user.getName();
         String username = user.getUsername();
-        String linkImageAvt = user.getImageUser().getLink();
+        String linkImageAvt="";
+        if(user.getImageUser()!=null) {
+          linkImageAvt = user.getImageUser().getLink();
+        }
         if(name!=null && !name.equals("")){
             txtName.setText(name);
         }
@@ -128,18 +151,13 @@ public class ProfileScreenFragment extends Fragment {
         }
 
         if(linkImageAvt!=null && !linkImageAvt.equals("")){
-//            Picasso.get()
-//                    .load(linkImageAvt)
-//                    .into(imgAvt);
-            RequestOptions options = new RequestOptions()
-                    .centerCrop()
-                    .placeholder(R.mipmap.ic_launcher_round)
-                    .error(R.mipmap.ic_launcher_round);
+            Glide.with(this).load(linkImageAvt).into(imgAvt);
+        }else{
+            Glide.with(this).load(R.drawable.user_icon).into(imgAvt);
 
-
-
-            Glide.with(this).load(linkImageAvt).apply(options).into(imgAvt);
         }
 
     }
+
+
 }

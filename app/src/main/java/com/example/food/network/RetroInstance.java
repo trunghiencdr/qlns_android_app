@@ -4,6 +4,8 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.example.food.util.AppUtils;
+
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
@@ -18,7 +20,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetroInstance {
 
 
-    public static String BASE_URL = "http://192.168.1.11:8080/api/";
+
+    public static String BASE_URL = "http://192.168.1.16:8080/api/";
+
+//    public static String BASE_URL = "http://172.20.10.6:8080/api/";
+//    public static String BASE_URL = "http://10.0.2.2:8080/api/";
+
 
 
     private static Retrofit retrofit;
@@ -65,8 +72,21 @@ public class RetroInstance {
     public static Retrofit getRetrofitClient(){
         if(retrofit==null){
              retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
+                    .baseUrl(AppUtils.BASE_URL+"api/")
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            System.out.println("retrofit build:"+ retrofit.toString());
+        }
+        return retrofit;
+    }
+
+    public static Retrofit getRetrofitClient(Context context){
+        if(retrofit==null){
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(AppUtils.BASE_URL+"api/")
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .client(initClient(context))
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             System.out.println("retrofit build:"+ retrofit.toString());

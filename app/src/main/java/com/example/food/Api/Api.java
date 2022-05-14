@@ -30,6 +30,7 @@ import com.example.food.dto.CartDTO;
 import com.example.food.dto.DiscountDTO;
 import com.example.food.dto.OrderDetailDTO;
 import com.example.food.dto.OrdersDTO;
+import com.example.food.util.AppUtils;
 
 import java.util.ArrayList;
 
@@ -56,8 +57,8 @@ public class Api {
 
 //            .baseUrl("http://10.0.2.2:8080/")
 
-            .baseUrl("http://192.168.1.11:8080/")
-
+//            .baseUrl("http://192.168.1.16:8080/")
+            .baseUrl(AppUtils.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 

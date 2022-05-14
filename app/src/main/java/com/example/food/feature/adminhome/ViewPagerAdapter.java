@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.example.food.feature.account.ProfileScreenFragment;
+
 public class ViewPagerAdapter extends FragmentStateAdapter {
 
     public ViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
@@ -16,8 +18,8 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position){
             case 0: return new HomeAdminFragment();
-            case 1: return new CartFragment();
-            case 2: return new SettingFragment();
+            case 1: return new AdminOrderFragment();
+            case 2: return new ProfileScreenFragmentAdmin();
             default:return new HomeAdminFragment();
         }
     }

@@ -1,7 +1,8 @@
 package com.example.food.feature.account;
 
+import com.example.food.Domain.Response.ResponseObject;
+import com.example.food.Domain.request.RequestChangePassword;
 import com.example.food.dto.UserDTO;
-import com.example.food.dto.UserRequestForUpdate;
 import com.example.food.model.RequestSignup;
 import com.example.food.model.User;
 import com.example.food.util.ResponseMessage;
@@ -18,8 +19,11 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface UserRepository {
+
+
 
     @GET
     Observable<Response<User>> getUserByUserName(@Path("username") String username);
@@ -39,7 +43,7 @@ public interface UserRepository {
     );
 
     @POST("auth/signin")
-    Observable<UserDTO> signin(@Body User user);
+    Observable<Response<UserDTO>> signin(@Body User user);
 
     @POST("auth/signup")
     Observable<UserDTO> signup(@Body RequestSignup user);
@@ -51,5 +55,14 @@ public interface UserRepository {
     @GET("v1/Users/id/{id}")
     Single<Response<UserDTO>> getUserById(@Path("id") int id);
 
+    @POST("auth/resetPassword?")
+    Single<Response<ResponseObject<User>>> changePassword(@Body RequestChangePassword request,
+                                                          @Query("state") boolean state);
+
+    @GET("v1/Users/{phonenumber}")
+    Single<Response<ResponseObject<UserDTO>>> checkUserByPhonenumber(@Path("phonenumber") String phonenumber);
+
+    @GET("v1/Users/sendSMS?")
+    Single<Response<ResponseObject<String>>> sendSMS(@Query("phone") String phone);
 
 }

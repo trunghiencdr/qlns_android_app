@@ -4,7 +4,7 @@
              android:layout_height="wrap_content">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:src="@drawable/ic_launcher_background"
+        android:src="@drawable/ic_user"
         android:layout_width="30dp"
         android:layout_height="30dp">
 

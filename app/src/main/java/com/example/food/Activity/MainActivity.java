@@ -72,7 +72,7 @@ Api api;
         btnSupport.setOnClickListener(view -> {
             AppUtils.deleteAccount(getSharedPreferences(AppUtils.ACCOUNT, MODE_PRIVATE));
             getSharedPreferences("username", MODE_PRIVATE).edit().putString("username", user.getUsername()).apply();
-            startActivity(new Intent(MainActivity.this, SigninActivity.class));
+//            startActivity(new Intent(MainActivity.this, SigninActivity.class));
 
 
         });
@@ -111,8 +111,8 @@ Api api;
         LinearLayout homeBtn=findViewById(R.id.homeBtn);
         btnSetting = findViewById(R.id.settingBtn);
 
-        btnSetting.setOnClickListener(view -> startActivity(
-                new Intent(MainActivity.this, SigninActivity.class)));
+//        btnSetting.setOnClickListener(view -> startActivity(
+////                new Intent(MainActivity.this, SigninActivity.class)));
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override

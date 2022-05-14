@@ -81,9 +81,9 @@ public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ProductV
 
         public void bind(Product item)  {
             txtProductName.setText(item.getName());
-            txtFeeProduct.setText(item.getPrice()+"");
+            txtFeeProduct.setText(AppUtils.formatCurrency(item.getPrice()));
+            if(item.getImage()!=null)
             Picasso.get().load(item.getImage().getLink()).into(imgProduct);
-            System.out.println(item.getImage().getLink());
 //            imgProduct.setImageBitmap(item.getImageBitmap());
             btnAddProduct.setOnClickListener(new View.OnClickListener() {
                 @Override

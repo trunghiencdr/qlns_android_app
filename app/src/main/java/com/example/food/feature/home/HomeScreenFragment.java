@@ -22,9 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.food.Activity.CartListActivity;
-import com.example.food.Activity.CategoryListActivity;
 import com.example.food.Activity.OrderedListActivity;
-import com.example.food.Activity.SigninActivity;
 import com.example.food.Domain.Discount;
 import com.example.food.R;
 import com.example.food.databinding.FragmentHomeSceenBinding;
@@ -128,26 +126,26 @@ public class HomeScreenFragment extends Fragment implements DiscountAdapter.Clic
     }
 
     private void setEvents() {
-        binding.supportBtn.setOnClickListener(view -> {
-            AppUtils.deleteAccount(requireContext().getSharedPreferences(AppUtils.ACCOUNT, requireContext().MODE_PRIVATE));
-            requireContext().getSharedPreferences("username", requireContext().MODE_PRIVATE).edit().putString("username", user.getUsername()).apply();
-            startActivity(new Intent(requireContext(), SigninActivity.class));
-//            NavDirections action = HomeScreenFragmentDirections.
-
-
-        });
+//        binding.supportBtn.setOnClickListener(view -> {
+//            AppUtils.deleteAccount(requireContext().getSharedPreferences(AppUtils.ACCOUNT, requireContext().MODE_PRIVATE));
+//            requireContext().getSharedPreferences("username", requireContext().MODE_PRIVATE).edit().putString("username", user.getUsername()).apply();
+//            startActivity(new Intent(requireContext(), SigninActivity.class));
+////            NavDirections action = HomeScreenFragmentDirections.
+//
+//
+//        });
 
         binding.imageUserHomeScreen.setOnClickListener(view -> {
             Navigation.findNavController(view).navigate(R.id.action_homeScreenFragment_to_profileScreenFragment);
         });
-        binding.settingBtn.setOnClickListener(view -> {
-                    NavDirections action = HomeScreenFragmentDirections.actionHomeScreenFragmentToProfileScreenFragment();
-                    Navigation.findNavController(view).navigate(action);
-                });
+//        binding.settingBtn.setOnClickListener(view -> {
+//                    NavDirections action = HomeScreenFragmentDirections.actionHomeScreenFragmentToProfileScreenFragment();
+//                    Navigation.findNavController(view).navigate(action);
+//                });
 
-        binding.btnSeeAllCategoriesHomeScreen.setOnClickListener(view -> {
-            startActivity(new Intent(getContext(), CategoryListActivity.class));
-        });
+//        binding.btnSeeAllCategoriesHomeScreen.setOnClickListener(view -> {
+//            startActivity(new Intent(getContext(), CategoryListActivity.class));
+//        });
         binding.cartBtn.setOnClickListener(view -> {
             startActivity(new Intent(getContext(), CartListActivity.class));
 
@@ -217,19 +215,21 @@ public class HomeScreenFragment extends Fragment implements DiscountAdapter.Clic
             txtName.setText("Hi " + user.getUsername());
         }
 
-        if(!user.getImageUser().getLink().equals("") && user.getImageUser().getLink()!=null){
+
+        if(user.getImageUser()!=null){
 //            Picasso.get()
 //                    .load(user.getImageUser().getLink())
 //                    .into(imgAvt);
+//
+//            RequestOptions options = new RequestOptions()
+//                    .centerCrop()
+//                    .placeholder(R.drawable.user_icon)
+//                    .error(R.drawable.user_icon);
 
-            RequestOptions options = new RequestOptions()
-                    .centerCrop()
-                    .placeholder(R.mipmap.ic_launcher_round)
-                    .error(R.mipmap.ic_launcher_round);
+            Glide.with(this).load(user.getImageUser().getLink()).into(imgAvt);
+        }else{
+            Glide.with(this).load(R.drawable.user_icon).into(imgAvt);
 
-
-
-            Glide.with(this).load(user.getImageUser().getLink()).apply(options).into(imgAvt);
         }
     }
 

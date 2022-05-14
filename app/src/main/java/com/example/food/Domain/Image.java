@@ -31,6 +31,7 @@ public class Image implements Serializable {
 
 
     public String getLink() {
+        if(link==null) return "";
         return link;
     }
 

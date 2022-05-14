@@ -40,8 +40,7 @@ public class OrderedListActivity extends AppCompatActivity {
         @Override
         public void didFetch(ArrayList<Order> response, String message) {
             if(response!=null){
-                response.get(0).getId();
-
+                //response.get(0).getId();
                 adapter = new OrderListAdapter(response);
                 binding.rvListOrdered.setAdapter(adapter);
 
