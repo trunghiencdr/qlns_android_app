@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -115,7 +116,6 @@ public class SigninFragment extends Fragment {
             }
         });
 
-        binding.tvForgotPassword.setOnClickListener(view -> navigateToForgotPassword());
 
 
     }

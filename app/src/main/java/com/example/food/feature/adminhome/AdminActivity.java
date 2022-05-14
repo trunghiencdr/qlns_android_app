@@ -5,12 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager2.widget.ViewPager2;
 
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.food.Activity.HomeActivity;
 import com.example.food.R;
@@ -43,11 +46,13 @@ public class AdminActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         navigationView = findViewById(R.id.bottom_navigation);
+
         navigationView.getMenu().findItem(R.id.menu_cart_item).setEnabled(false);
         navigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 //                appBarLayout.setVisibility(View.VISIBLE);
+                toolbar.getMenu().findItem(R.id.menu_item_pdf_admin).setVisible(false);
                 switch (item.getItemId()){
                     case R.id.menu_home_item:
                         viewPager2.setCurrentItem(0);
@@ -56,6 +61,7 @@ public class AdminActivity extends AppCompatActivity {
                         viewPager2.setCurrentItem(2);
                         break;
                     case R.id.menu_cart_item:
+                        toolbar.getMenu().findItem(R.id.menu_item_pdf_admin).setVisible(false);
                         viewPager2.setCurrentItem(1);
                         break;
                 }
@@ -70,15 +76,18 @@ public class AdminActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
 //                appBarLayout.setVisibility(View.VISIBLE);
+                toolbar.getMenu().findItem(R.id.menu_item_pdf_admin).setVisible(false);
                 switch (position){
                     case 0:
                         navigationView.getMenu().findItem(R.id.menu_home_item).setChecked(true);
                         break;
                     case 1:
-//                        appBarLayout.setVisibility(View.GONE);
+//
+                        toolbar.getMenu().findItem(R.id.menu_item_pdf_admin).setVisible(true);
                         navigationView.getMenu().findItem(R.id.menu_cart_item).setChecked(true);
                         break;
                     case 2:
+//                        appBarLayout.setVisibility(View.GONE);
                         navigationView.getMenu().findItem(R.id.menu_setting_item).setChecked(true);
                         break;
                 }
@@ -96,7 +105,6 @@ public class AdminActivity extends AppCompatActivity {
 
     private void setUpViewPager() {
         viewPager2 = findViewById(R.id.view_pager);
-
         viewPagerAdapter = new ViewPagerAdapter(this);
         viewPager2.setAdapter(viewPagerAdapter);
 
@@ -106,13 +114,14 @@ public class AdminActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         this.getMenuInflater().inflate(R.menu.menu_toolbar, menu);
+        menu.findItem(R.id.menu_item_pdf_admin).setVisible(false);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
-            case R.id.menu_item_log_out:
+            case R.id.menu_item_log_out_admin:
                 AppUtils.deleteAccount2(this);
                 Intent i = new Intent(this, HomeActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -128,7 +137,7 @@ public class AdminActivity extends AppCompatActivity {
         //Checking for fragment count on backstack
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStack();
-
+//            finish();
         } else if (!doubleBackToExitPressedOnce) {
             this.doubleBackToExitPressedOnce = true;
             Toast.makeText(this,"Please click BACK again to exit.", Toast.LENGTH_SHORT).show();
@@ -142,7 +151,10 @@ public class AdminActivity extends AppCompatActivity {
             }, 2000);
         } else {
             super.onBackPressed();
+            finish();
             return;
         }
     }
+
+
 }

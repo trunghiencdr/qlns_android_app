@@ -95,7 +95,11 @@ public class Order implements Serializable {
         if (this == o) return true;
         if (!(o instanceof Order)) return false;
         Order order = (Order) o;
-        return getId() == order.getId() && Objects.equals(getUser(), order.getUser()) && Objects.equals(getCreateAt(), order.getCreateAt()) && Objects.equals(getDiscount(), order.getDiscount()) && Objects.equals(getState(), order.getState());
+        return getId() == order.getId() &&
+                Objects.equals(getUser(), order.getUser()) &&
+                Objects.equals(getCreateAt(), order.getCreateAt()) &&
+                Objects.equals(getDiscount(), order.getDiscount()) &&
+                Objects.equals(getState(), order.getState());
     }
 
     @Override
@@ -106,7 +110,7 @@ public class Order implements Serializable {
     public static DiffUtil.ItemCallback<Order> itemCallback = new DiffUtil.ItemCallback<Order>() {
         @Override
         public boolean areItemsTheSame(@NonNull Order oldItem, @NonNull Order newItem) {
-            return oldItem.getId()== newItem.getId();
+            return oldItem.getId() == newItem.getId();
         }
 
         @Override

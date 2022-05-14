@@ -13,9 +13,11 @@ import com.example.food.Domain.Order;
 import com.example.food.network.RetroInstance;
 import com.example.food.util.AppUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.internal.util.ArrayListSupplier;
 import io.reactivex.schedulers.Schedulers;
 
 public class OrderViewModel extends AndroidViewModel {
@@ -31,7 +33,7 @@ public class OrderViewModel extends AndroidViewModel {
         data = new MutableLiveData<>();
         order = new MutableLiveData<>();
         message = new MutableLiveData<>();
-        repository = RetroInstance.getRetrofitClient().create(OrderRepository.class);
+        repository = RetroInstance.getRetrofitClient(application).create(OrderRepository.class);
     }
 
     public MutableLiveData<List<Order>> getData() {
@@ -105,6 +107,17 @@ public class OrderViewModel extends AndroidViewModel {
         data.setValue(orders);
 
     }
+
+    public void deleteData(Order order){
+        List<Order> orders = new ArrayList<>(data.getValue());
+        for(int i=0; i<orders.size(); i++){
+            if(order.getId()==orders.get(i).getId()){
+                orders.remove(i);
+                break;
+            }
+        }
+        data.setValue(orders);
+    }
     @SuppressLint("CheckResult")
     public void callUpdateStateOrder(int id, String state){
         repository.updateStateOrder(id, state)
@@ -112,7 +125,7 @@ public class OrderViewModel extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(responseObjectResponse -> {
                     if(responseObjectResponse.code()==200){
-                        updateData(responseObjectResponse.body().getData());
+                        deleteData(responseObjectResponse.body().getData());
                     }else{
                         message.setValue(AppUtils.getErrorMessage(responseObjectResponse.errorBody().string()));
                     }
