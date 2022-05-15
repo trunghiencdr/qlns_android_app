@@ -35,13 +35,15 @@ import java.util.Random;
 
 public class AppUtils {
 
-    public static String BASE_URL = "http://192.168.1.15:8080/";
-//        public static String BASE_URL="http://10.0.2.2:8080/";
+
+//    public static String BASE_URL = "http://192.168.1.15:8080/";
+        public static String BASE_URL="http://10.0.2.2:8080/";
     public static String[] ROLES = {"ROLE_USER", "ROLE_ADMIN"};
     public static int PASS_LOGIN = 0;
     public static String[] orderState = {"chua duyet", "Đang giao", "Đã giao"};
     public static String[] orderTime = {"Hôm nay", "Tuần này", "Tháng này"};
     public static String dateFormat = "dd-MM-yyyy";
+
     public static SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
     public static final String TOKEN_FIREBASE = "tokenFireBase";
 

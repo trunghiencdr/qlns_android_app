@@ -82,6 +82,7 @@ public class ShowDetailActivity extends AppCompatActivity {
         descriptionExpandListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
             public void onGroupExpand(int groupPosition) {
+
                 int height = 0;
                 for (int i = 0; i < adapter.getChildrenCount(groupPosition); i++) {
                     height += descriptionExpandListView.getChildAt(i).getMeasuredHeight();
@@ -93,7 +94,7 @@ public class ShowDetailActivity extends AppCompatActivity {
         descriptionExpandListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
             @Override
             public void onGroupCollapse(int i) {
-                descriptionExpandListView.getLayoutParams().height = 90;
+                descriptionExpandListView.getLayoutParams().height = 130;
             }
         });
         backBtn.setOnClickListener(new View.OnClickListener() {
