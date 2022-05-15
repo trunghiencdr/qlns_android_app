@@ -68,6 +68,7 @@ public class SignupFragment extends Fragment {
                             user = userDTO.getUser();
                             Toast.makeText(requireContext(), "Sign up successfully!", Toast.LENGTH_SHORT).show();
                             AppUtils.saveAccount2(requireActivity(), user);
+                            userViewModel.callUpdateTokenFireBaseUser(user.getId(), AppUtils.getTokenFireBase(requireContext()));
                             navigateToHome();
                         }else{
                             Toast.makeText(requireContext(), userDTO.getMessage(), Toast.LENGTH_SHORT).show();

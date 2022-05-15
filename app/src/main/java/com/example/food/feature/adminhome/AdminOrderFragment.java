@@ -36,6 +36,10 @@ import com.example.food.R;
 import com.example.food.databinding.FragmentAdminOrderBinding;
 import com.example.food.feature.pdf.Common;
 import com.example.food.feature.pdf.PdfUtil;
+import com.example.food.firebase.CloudMessageBody;
+import com.example.food.firebase.CloudMessageViewModel;
+import com.example.food.firebase.Message;
+import com.example.food.model.User;
 import com.example.food.util.AppUtils;
 import com.example.food.viewmodel.OrderViewModel;
 import com.google.android.material.appbar.AppBarLayout;
@@ -66,6 +70,7 @@ public class AdminOrderFragment extends Fragment implements AdminOrderAdapter.Cl
     FragmentAdminOrderBinding binding;
     AdminOrderAdapter orderAdapter;
     OrderViewModel orderViewModel;
+    CloudMessageViewModel cloudMessageViewModel;
     String datePattern = "dd-MM-yyyy";
     String[] orderTimeFilter;
     String[] orderStateFilter;
@@ -103,6 +108,11 @@ public class AdminOrderFragment extends Fragment implements AdminOrderAdapter.Cl
                 orderState,
                 startDate,
                 endDate);
+        setObserver();
+
+    }
+
+    private void setObserver() {
         orderViewModel.getData().observe(requireActivity(), new Observer<List<Order>>() {
             @Override
             public void onChanged(List<Order> orders) {
@@ -115,6 +125,18 @@ public class AdminOrderFragment extends Fragment implements AdminOrderAdapter.Cl
                 Toast.makeText(requireContext(), s, Toast.LENGTH_SHORT).show();
             }
         });
+        orderViewModel.getOrder().observe(requireActivity(),
+                order -> sendMessageToCloud(order));
+    }
+
+    private void sendMessageToCloud(Order order) {
+        Message message =  new Message("Đơn hàng " + order.getId(),
+                "Đơn hàng của bạn đã đucợ chấp nhận",
+                order.getId(),
+                order.getUser().getId());
+        String toUser = order.getUser().getTokenFireBase();
+        cloudMessageViewModel.callSendMessageToCloud(getString(R.string.authorization_cloud_message),
+                new CloudMessageBody(message, toUser));
     }
 
     private void setEvents() {
@@ -213,7 +235,7 @@ public class AdminOrderFragment extends Fragment implements AdminOrderAdapter.Cl
             }
         });
 
-
+        cloudMessageViewModel = new ViewModelProvider(this).get(CloudMessageViewModel.class);
         orderViewModel = new ViewModelProvider(this).get(OrderViewModel.class);
         orderAdapter = new AdminOrderAdapter(Order.itemCallback, this);
         binding.recyclerViewOrdersState.setLayoutManager(
@@ -253,6 +275,7 @@ public class AdminOrderFragment extends Fragment implements AdminOrderAdapter.Cl
     public void clickButtonAccept(int idOrder, String state) {
         Toast.makeText(requireContext(), "Click accept button order", Toast.LENGTH_SHORT).show();
         orderViewModel.callUpdateStateOrder(idOrder, state);
+        // send message to user
     }
 
     public void createPDF(){

@@ -38,6 +38,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -61,6 +62,14 @@ public class Api {
             .baseUrl(AppUtils.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build();
+
+    public static Retrofit getRetrofit(String url){
+       return new Retrofit.Builder()
+                .baseUrl(url)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+    }
 
     public void getCategories(CategoryResponseListener listener) {
         CallAllCategory callCategories = retrofit.create(CallAllCategory.class);

@@ -25,6 +25,7 @@ import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -204,5 +205,25 @@ public class UserViewModel extends AndroidViewModel {
         if(this.otp!=null){
             return this.otp.getValue().equals(otp);
         }else return false;
+    }
+
+    @SuppressLint("CheckResult")
+    public void callUpdateTokenFireBaseUser(int id, String token){
+        RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), token);
+        userRepository.updateTokenFireBaseOfUser(id, requestBody)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(responseObjectResponse -> {
+                    if(responseObjectResponse.code()==200){
+                        message.setValue(responseObjectResponse.body().getMessage());
+                    }else{
+                        message.setValue(
+                                AppUtils.getErrorMessage(responseObjectResponse
+                                        .errorBody().string()));
+                    }
+                }, throwable -> message.setValue(
+                        throwable.getLocalizedMessage()
+                ));
+
     }
 }

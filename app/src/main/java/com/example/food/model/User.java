@@ -53,6 +53,8 @@ public class User implements Serializable {
 
     private Image imageUser;
 
+    private String tokenFireBase;
+
 
     public User() {
     }
@@ -61,7 +63,7 @@ public class User implements Serializable {
             , String email,String address
             , String rememberToken, Date createdAt, Date updatedAt
             , String username, String password, Set<Role> roles,
-                Image image) {
+                Image image, String tokenFireBase) {
         this.token = token;
         this.type = type;
         this.id = id;
@@ -75,11 +77,20 @@ public class User implements Serializable {
         this.password = password;
         this.roles = roles;
         this.imageUser = image;
+        this.tokenFireBase = tokenFireBase;
     }
 
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    public String getTokenFireBase() {
+        return tokenFireBase;
+    }
+
+    public void setTokenFireBase(String tokenFireBase) {
+        this.tokenFireBase = tokenFireBase;
     }
 
     public Image getImageUser() {

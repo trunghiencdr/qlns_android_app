@@ -125,6 +125,7 @@ public class OrderViewModel extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(responseObjectResponse -> {
                     if(responseObjectResponse.code()==200){
+                        order.setValue(responseObjectResponse.body().getData());
                         deleteData(responseObjectResponse.body().getData());
                     }else{
                         message.setValue(AppUtils.getErrorMessage(responseObjectResponse.errorBody().string()));

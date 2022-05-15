@@ -7,7 +7,11 @@
         <item> #e5f1fe</item>
         <item> #fef4e5</item>
     </string-array>
-
+    <string name="authorization_cloud_message">key=AAAADGEAvcU:APA91bHeDYkiY8nhe1lkoZcyHDNxjWPhp5tXEVl-w1wNqrpAlekus-PzWvUHEXsxwo58XcpRy0z6Z3z4VqhmHvzLBoHdLF5qDpNx5JmX0yksFBMikNwwGZrcVFQ9iBU4N1O8f3Aktc29</string>
+    <string name="mapbox_access_token">pk.eyJ1Ijoic2FuZzAxMCIsImEiOiJjbDJxYXprZnMwMDl3M2RxaHhhbTF4Zm44In0.0CEOCvmscPFaE79KvWPTIQ</string>
+<string name="apikey_here_dot_com">LO44E-q6Z7Nr7s6oOTHozfjmobzRnfv_L9p-1QjTY8E</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
     <array name="category_background">
         <item>@drawable/category_background1</item>
         <item>@drawable/category_background2</item>
@@ -30,4 +34,12 @@
         <item>Đang giao</item>
         <item>Đã giao</item>
     </string-array>
+
+    <!--    map box-->
+    <string name="instruction">Click on map or buttons to change route</string>
+    <string name="driving_profile">%1$sm\nby car</string>
+    <string name="walking_profile">%1$sm\non foot</string>
+    <string name="cycling_profile">%1$sm\nby bike</string>
+    <string name="project_id2">Push notification</string>
+
 </resources>

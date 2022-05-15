@@ -3,6 +3,7 @@ package com.example.food.feature.signin;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,8 +29,13 @@ import com.example.food.feature.adminhome.AdminActivity;
 import com.example.food.model.User;
 import com.example.food.util.AppUtils;
 import com.example.food.viewmodel.UserViewModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class SigninFragment extends Fragment {
+
+    public static final String TAG = SigninFragment.class.getName();
 
     FragmentSigninBinding binding;
     Api api;
@@ -39,6 +45,7 @@ public class SigninFragment extends Fragment {
     String gmail="";
     boolean checkPass;
     String password;
+    boolean updateTokenFireBase = false;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -54,6 +61,7 @@ public class SigninFragment extends Fragment {
         user = AppUtils.getAccount2(requireContext());
         password=AppUtils.getPassword(requireContext());
 //        checkPass();
+
         if(user!=null) {
             if (AppUtils.PASS_LOGIN == 1) {
                 if (user.getRoles().size() >= 0) {
@@ -68,7 +76,27 @@ public class SigninFragment extends Fragment {
 
 
         setEvents();
+        observer();
     }
+
+    private void updateTokenFireBaseUser() {
+        if(user!=null){
+            String token = AppUtils.getTokenFireBase(requireContext());
+            if(user.getTokenFireBase()!=token){
+                userViewModel.callUpdateTokenFireBaseUser(user.getId(),
+                        token);
+                System.out.println("Token_firebase:" + token);
+            }
+        }
+    }
+
+    private void observer() {
+//        userViewModel.getMessage().observe(requireActivity(), s -> {
+//            Toast.makeText(requireContext(), s, Toast.LENGTH_SHORT).show();
+//        });
+    }
+
+
 
     @SuppressLint("CheckResult")
     private void checkPass() {
@@ -100,21 +128,23 @@ public class SigninFragment extends Fragment {
                     binding.editTextPasswordSignIn.getText().toString());
         });
         binding.btnSignUp.setOnClickListener(view -> navigateToSignUp());
-        binding.tvForgotPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                gmail=binding.editTextUsernameSignIn.getText().toString().trim();
-                if(gmail.equals("")){
-                    Toast.makeText(requireContext(),"Email can't empty",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(!gmail.matches("^(.+)@(\\S+)$")){
-                    Toast.makeText(requireContext(),"Email khong dung dinh dang",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                api.sendOTP(otpResponseListener,gmail);
-            }
-        });
+//        binding.tvForgotPassword.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                gmail=binding.editTextUsernameSignIn.getText().toString().trim();
+//                if(gmail.equals("")){
+//                    Toast.makeText(requireContext(),"Email can't empty",Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                if(!gmail.matches("^(.+)@(\\S+)$")){
+//                    Toast.makeText(requireContext(),"Email khong dung dinh dang",Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                api.sendOTP(otpResponseListener,gmail);
+//            }
+//        });
+
+        binding.tvForgotPassword.setOnClickListener(view -> navigateToForgotPassword());
 
 
 
@@ -137,6 +167,7 @@ public class SigninFragment extends Fragment {
                 user = userDTO.body().getUser();
                 AppUtils.saveAccount2(requireContext(), user);
                 AppUtils.savePassword(requireContext(), password);
+                updateTokenFireBaseUser();
                 if(user.getRoles().size()>=0){
                     if(user.getRoles().stream().filter(role -> role.getName().equals(AppUtils.ROLES[1])).findFirst().isPresent()){
 //                        navigateToAdminHome();

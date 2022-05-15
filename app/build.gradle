@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id "androidx.navigation.safeargs"
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -40,6 +41,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.github.smarteist:autoimageslider:1.4.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.android.gms:play-services-base:18.0.1'
 
 
     compileOnly 'org.projectlombok:lombok:1.18.22'
@@ -84,4 +86,25 @@ dependencies {
 
     implementation 'com.itextpdf:itextg:5.5.10'
     implementation 'com.karumi:dexter:5.0.0'
+
+    // mapbox sdk
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.1.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-telemetry:5.0.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-places-v9:0.12.0'
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.2.0'
+
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-navigation:0.42.6'
+    implementation('com.mapbox.mapboxsdk:mapbox-android-navigation-ui:0.42.6') {
+        transitive = true
+    }
+
+    // dialog
+    implementation 'com.github.d-max:spots-dialog:1.1@aar'
+
+    // fire base
+    implementation platform('com.google.firebase:firebase-bom:28.2.1')
+
+    implementation "com.google.firebase:firebase-messaging"
+    implementation 'com.google.firebase:firebase-core:16.0.6'
+//    implementation platform('com.google.firebase:firebase-bom:30.0.1')
 }

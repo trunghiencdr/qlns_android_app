@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <color name="colorPrimary">#009688</color>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -13,6 +13,7 @@
     <color name="mint_green">#22F456</color>
     <color name="color_primary_variant_lighter">#62f6bb</color>
     <color name="color_primary_variant_darker">#00905e</color>
+    <color name="icon_background">#20FFFFFF</color>
 
     <color name="textview_button_background">#62f6bb</color>
     <color name="textview_button_textcolor">#00905e</color>

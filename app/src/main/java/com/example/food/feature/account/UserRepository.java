@@ -65,4 +65,9 @@ public interface UserRepository {
     @GET("v1/Users/sendSMS?")
     Single<Response<ResponseObject<String>>> sendSMS(@Query("phone") String phone);
 
+    @Multipart
+    @PUT("v1/Users/updateTokenFireBase/{id}")
+    Single<Response<ResponseObject<User>>> updateTokenFireBaseOfUser(@Path("id") int id,
+                                                                     @Part("token") RequestBody token);
+
 }

@@ -77,6 +77,19 @@ public class RetroInstance {
         return retrofit;
     }
 
+    public static Retrofit getRetrofitExpand(Context context, String url){
+        if(retrofit==null){
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(url)
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .client(initClient(context))
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            System.out.println("retrofit build:"+ retrofit.toString());
+        }
+        return retrofit;
+    }
+
     public static Retrofit getRetrofitClient(Context context){
         if(retrofit==null){
             retrofit = new Retrofit.Builder()
