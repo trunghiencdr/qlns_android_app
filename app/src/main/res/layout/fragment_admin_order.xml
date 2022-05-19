@@ -34,9 +34,15 @@
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Hôm nay(20)"></com.google.android.material.chip.Chip>
+                        android:text="Hôm nay"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"></com.google.android.material.chip.Chip>
 
                     <com.google.android.material.chip.Chip
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
                         android:id="@+id/chip_week_order_time_filter"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
@@ -44,6 +50,9 @@
                         android:text="Tuần này"></com.google.android.material.chip.Chip>
 
                     <com.google.android.material.chip.Chip
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
                         android:id="@+id/chip_month_time_order_filter"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
@@ -68,13 +77,20 @@
                     app:singleSelection="true">
 
                     <com.google.android.material.chip.Chip
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
                         android:id="@+id/chip_unapproved_state_order"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Chưa duyệt(10)"></com.google.android.material.chip.Chip>
+                        android:text="Chưa duyệt"></com.google.android.material.chip.Chip>
 
                     <com.google.android.material.chip.Chip
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:visibility="gone"
                         android:id="@+id/chip_approved_state_order"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
@@ -82,6 +98,9 @@
                         android:text="Đang giao"></com.google.android.material.chip.Chip>
 
                     <com.google.android.material.chip.Chip
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
                         android:id="@+id/chip_shiped_state_order"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"

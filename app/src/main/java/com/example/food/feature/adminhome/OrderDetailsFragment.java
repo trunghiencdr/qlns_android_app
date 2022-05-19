@@ -50,6 +50,7 @@ public class OrderDetailsFragment extends BottomSheetDialogFragment {
         Bundle bundleReceive = getArguments();
         if(bundleReceive!=null){
             mOrder = (Order) bundleReceive.getSerializable(KEY_ORDER_DETAILS);
+
         }
     }
 
@@ -87,6 +88,11 @@ public class OrderDetailsFragment extends BottomSheetDialogFragment {
 
     private void setDataOrder(){
         if(mOrder==null) return;
+        if(!mOrder.getState().equals(AppUtils.orderState[0])){
+            btnAccept.setVisibility(View.INVISIBLE);
+        }else{
+            btnAccept.setVisibility(View.VISIBLE);
+        }
         txtOrderId.setText("Mã đơn hàng: " + mOrder.getId());
         txtTotal.setText(AppUtils.formatCurrency(mOrder.getTotalPriceOfProducts()));
         txtProductName.setText(mOrder.getProductsName());

@@ -13,11 +13,13 @@ import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 import com.example.food.Activity.HomeActivity;
 import com.example.food.Activity.IntroActivity;
 import com.example.food.R;
+import com.example.food.model.User;
 import com.example.food.util.AppUtils;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -27,6 +29,7 @@ import java.util.Map;
 public class  MyFirebaseMessagingService extends FirebaseMessagingService {
 
     public static final String TAG = MyFirebaseMessagingService.class.getName();
+    private User user;
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
@@ -43,7 +46,9 @@ public class  MyFirebaseMessagingService extends FirebaseMessagingService {
         String orderId = stringMap.get("orderId");
         String userId = stringMap.get("userId");
 
-        sendNotification2(strTitle, strBody + "orderId:" + orderId + "userId:" + userId);
+        user = AppUtils.getAccount2(this);
+        if(user!=null && user.getId()==Integer.parseInt(userId))
+        sendNotification2(strTitle, strBody);
     }
 
     @Override
@@ -58,6 +63,7 @@ public class  MyFirebaseMessagingService extends FirebaseMessagingService {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void sendNotification(String strTitle, String strBody) {
 
         // click vao chuyen vao dau
@@ -90,8 +96,8 @@ public class  MyFirebaseMessagingService extends FirebaseMessagingService {
 
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
-                        .setSmallIcon(R.drawable.ic_launcher_background)
-                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_background))
+                        .setSmallIcon(R.drawable.icon_app)
+                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon_app))
                         .setContentTitle(title)
                         .setContentText(messageBody)
                         .setAutoCancel(true)

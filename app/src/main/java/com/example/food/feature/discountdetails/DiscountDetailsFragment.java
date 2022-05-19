@@ -9,6 +9,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.example.food.Domain.Discount;
 import com.example.food.R;
 import com.example.food.databinding.FragmentDiscountDetailsBinding;
+import com.example.food.feature.signin.SigninFragmentDirections;
 import com.example.food.util.AppUtils;
 
 /**
@@ -73,7 +76,6 @@ public class DiscountDetailsFragment extends Fragment {
             voucherId = DiscountDetailsFragmentArgs.fromBundle(getArguments()).getDiscountId();
             discount =(Discount) getArguments().getSerializable("discount");
             loadInfoDiscount(discount);
-            Toast.makeText(requireContext(), discount.toString(), Toast.LENGTH_SHORT).show();
         }
 
         setControls();
@@ -82,6 +84,12 @@ public class DiscountDetailsFragment extends Fragment {
     }
 
     private void setEvents() {
+        binding.btnBackDiscountDetails.setOnClickListener(view -> navigationToHome());
+    }
+
+    private void navigationToHome() {
+        NavDirections action = DiscountDetailsFragmentDirections.actionDiscountDetailsFragmentToHomeScreenFragment();
+        Navigation.findNavController(requireView()).navigate(action);
     }
 
     private void setControls() {
@@ -94,8 +102,10 @@ public class DiscountDetailsFragment extends Fragment {
     }
 
     private void loadInfoDiscount(Discount discount) {
-        binding.textViewVoucherName.setText(discount.getId() +" | " + discount.getPercent());
+        int percent = (int)(discount.getPercent()*100);
+        binding.textViewVoucherName.setText(discount.getId() +" | " +percent + "%");
         binding.textViewEndDateVoucher.setText(AppUtils.formatDate(discount.getEndDate(), "dd-MM-yyyy"));
+        binding.textViewDescriptionInfoVoucher.setText("Voucher khuyến mãi "+percent+"% cho đơn hàng từ 50k tối đa giảm 20k cho 1 đơn hàng. Số lượng có hạn. Mại dô mại dô");
 
         Glide.with(requireContext())
                 .load(discount.getImageDiscount().getLink())

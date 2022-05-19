@@ -16,5 +16,4 @@ interface MapRepository {
     Single<Response<ResponsePlace>> getGeoCode(@Query("q") String q,
                                                         @Query("apikey") String apikey);
 
-
 }

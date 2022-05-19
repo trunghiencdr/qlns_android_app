@@ -19,6 +19,7 @@ import com.example.food.Activity.HomeActivity;
 import com.example.food.R;
 import com.example.food.util.AppUtils;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
@@ -28,6 +29,7 @@ import com.google.android.material.navigation.NavigationBarView;
 public class AdminActivity extends AppCompatActivity {
 
     BottomNavigationView navigationView;
+    BottomAppBar bottomAppBar;
     ViewPager2 viewPager2;
     ViewPagerAdapter viewPagerAdapter;
     FloatingActionButton fabCart;
@@ -46,21 +48,28 @@ public class AdminActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         navigationView = findViewById(R.id.bottom_navigation);
+        bottomAppBar = findViewById(R.id.bottom_bar);
 
         navigationView.getMenu().findItem(R.id.menu_cart_item).setEnabled(false);
         navigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 //                appBarLayout.setVisibility(View.VISIBLE);
+                bottomAppBar.setVisibility(View.VISIBLE);
+                fabCart.setVisibility(View.VISIBLE);
+                toolbar.getMenu().findItem(R.id.menu_item_profile).setVisible(true);
                 toolbar.getMenu().findItem(R.id.menu_item_pdf_admin).setVisible(false);
                 switch (item.getItemId()){
                     case R.id.menu_home_item:
                         viewPager2.setCurrentItem(0);
                         break;
                     case R.id.menu_setting_item:
+                        toolbar.getMenu().findItem(R.id.menu_item_profile).setVisible(false);
+
                         viewPager2.setCurrentItem(2);
                         break;
                     case R.id.menu_cart_item:
+
                         toolbar.getMenu().findItem(R.id.menu_item_pdf_admin).setVisible(false);
                         viewPager2.setCurrentItem(1);
                         break;
@@ -76,17 +85,20 @@ public class AdminActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
 //                appBarLayout.setVisibility(View.VISIBLE);
+                bottomAppBar.setVisibility(View.VISIBLE);
+                fabCart.setVisibility(View.VISIBLE);
+                toolbar.getMenu().findItem(R.id.menu_item_profile).setVisible(true);
                 toolbar.getMenu().findItem(R.id.menu_item_pdf_admin).setVisible(false);
                 switch (position){
                     case 0:
                         navigationView.getMenu().findItem(R.id.menu_home_item).setChecked(true);
                         break;
                     case 1:
-//
                         toolbar.getMenu().findItem(R.id.menu_item_pdf_admin).setVisible(true);
                         navigationView.getMenu().findItem(R.id.menu_cart_item).setChecked(true);
                         break;
                     case 2:
+                        toolbar.getMenu().findItem(R.id.menu_item_profile).setVisible(false);
 //                        appBarLayout.setVisibility(View.GONE);
                         navigationView.getMenu().findItem(R.id.menu_setting_item).setChecked(true);
                         break;
@@ -122,10 +134,14 @@ public class AdminActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_item_log_out_admin:
-                AppUtils.deleteAccount2(this);
-                Intent i = new Intent(this, HomeActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i);
+//                AppUtils.deleteAccount2(this);
+//                Intent i = new Intent(this, HomeActivity.class);
+//                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                startActivity(i);
+                break;
+            case R.id.menu_item_profile:
+                toolbar.getMenu().findItem(R.id.menu_item_profile).setVisible(false);
+                viewPager2.setCurrentItem(2);
                 break;
         }
         return super.onOptionsItemSelected(item);

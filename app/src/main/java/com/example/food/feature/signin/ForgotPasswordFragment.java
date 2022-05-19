@@ -41,6 +41,7 @@ public class ForgotPasswordFragment extends Fragment {
             String sdt = binding.editTextPhone.getText().toString();
             checkSDT(sdt);
         });
+        binding.btnBack.setOnClickListener(view ->requireActivity().onBackPressed());
     }
 
     private void observer() {

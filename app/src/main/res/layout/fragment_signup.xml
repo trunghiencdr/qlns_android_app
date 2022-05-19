@@ -11,7 +11,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint_register"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?attr/actionBarSize"
             android:background="@color/white">
 
 
@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
-                android:text="REGISTER"
+                android:text="Đăng ký"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="20sp"
@@ -81,11 +81,12 @@
                     android:paddingEnd="40dp">
 
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/error_phone_register"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
-                        android:hint="Phone number"
+                        android:hint="Số điện thoại"
                         android:textColorHint="@color/black"
                         app:boxCornerRadiusBottomEnd="@dimen/edit_text_radius"
                         app:boxCornerRadiusBottomStart="@dimen/edit_text_radius"
@@ -105,11 +106,12 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/error_name_register"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:hint="Your name"
+                        android:hint="Tên"
                         android:textColorHint="@color/black"
                         app:boxCornerRadiusBottomEnd="@dimen/edit_text_radius"
                         app:boxCornerRadiusBottomStart="@dimen/edit_text_radius"
@@ -130,11 +132,12 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/error_password_register"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:hint="Password"
+                        android:hint="Mật khẩu"
                         android:textColorHint="@color/black"
                         app:boxCornerRadiusBottomEnd="@dimen/edit_text_radius"
                         app:boxCornerRadiusBottomStart="@dimen/edit_text_radius"
@@ -148,17 +151,18 @@
                             android:id="@+id/edit_text_password_sign_up"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="text">
+                            android:inputType="textPassword">
 
                         </com.google.android.material.textfield.TextInputEditText>
 
                     </com.google.android.material.textfield.TextInputLayout>
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/error_confirm_password_register"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:hint="Confirm password"
+                        android:hint="Nhập lại mật khẩu"
                         android:textColorHint="@color/black"
                         app:boxCornerRadiusBottomEnd="@dimen/edit_text_radius"
                         app:boxCornerRadiusBottomStart="@dimen/edit_text_radius"
@@ -172,7 +176,7 @@
                             android:id="@+id/edit_text_confirm_password_sign_up"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="text">
+                            android:inputType="textPassword">
 
                         </com.google.android.material.textfield.TextInputEditText>
 
@@ -185,7 +189,7 @@
                         android:layout_gravity="center"
                         android:layout_marginTop="40dp"
                         android:layout_marginBottom="6dp"
-                        android:text="Register"
+                        android:text="Đăng ký"
                         android:textSize="20dp" />
 
                 </LinearLayout>

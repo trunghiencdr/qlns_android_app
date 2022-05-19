@@ -2,6 +2,7 @@ package com.example.food.Adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,34 +14,45 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.example.food.Activity.CartListActivity;
-import com.example.food.Activity.ShowDetailActivity;
 import com.example.food.Api.Api;
 import com.example.food.Domain.Cart;
 import com.example.food.Domain.Product;
 import com.example.food.Domain.Response.CartResponse;
-import com.example.food.Interface.ChangNumberItemsListener;
 import com.example.food.Listener.CartResponseListener;
 import com.example.food.Listener.DeleteCartResponseListener;
 import com.example.food.Listener.InsertCartResponseListener;
 import com.example.food.R;
 import com.example.food.dto.CartDTO;
 import com.example.food.model.User;
+import com.example.food.repository.CartRepository;
 import com.example.food.util.AppUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHolder> {
     ArrayList<Cart> carts=new ArrayList<>();
     Api api;
     Context context;
+
     private ChangNumberItemsListener changNumberItemsListener;
 
-    public CardListAdapter(ArrayList<Cart> carts, Context context) {
+    public void setValue(ArrayList<Cart> list){
+        this.carts = list;
+        notifyDataSetChanged();
+    }
+
+    public interface ChangNumberItemsListener{
+        void changeQuantity(boolean isPlus, float price);
+    }
+
+    public CardListAdapter(ArrayList<Cart> carts, Context context, ChangNumberItemsListener changNumberItemsListener) {
         this.carts = carts;
         this.context=context;
+        this.changNumberItemsListener = changNumberItemsListener;
     }
 
     @NonNull
@@ -53,9 +65,13 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        Product productTemp = carts.get(position).getProductDomain();
         holder.title.setText(carts.get(position).getProductDomain().getName());
-        holder.feeEachItem.setText(String.valueOf(carts.get(position).getProductDomain().getPrice()));
-        holder.totalEachItem.setText(String.valueOf(Math.round(carts.get(position).getProductDomain().getPrice()*carts.get(position).getQuantity()*100.0)/100.0));
+        holder.feeEachItem.setText(AppUtils.formatCurrency(carts.get(position).getProductDomain().getPrice()));
+        holder.feeEachItem.setPaintFlags(holder.feeEachItem.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        float priceSale = productTemp.getPrice()*(1-productTemp.getDiscount());
+        holder.feeSaleEachItem.setText(AppUtils.formatCurrency(priceSale));
+        holder.totalEachItem.setText(AppUtils.formatCurrency(Math.round(priceSale)*carts.get(position).getQuantity()));
         Picasso.get().load(carts.get(position).getProductDomain().getImage().getLink()).into(holder.pic);
         holder.num.setText(String.valueOf(carts.get(position).getQuantity()));
 
@@ -64,41 +80,68 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
         User user = AppUtils.getAccount(context.getSharedPreferences(AppUtils.ACCOUNT, Context.MODE_PRIVATE));
 
         holder.plusItem.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("CheckResult")
             @Override
             public void onClick(View view) {
-                int quantity=carts.get(position).getQuantity();
-//                holder.num.setText(String.valueOf(quantity++));
-                quantity++;
-                //update cart
-                CartDTO cartDTO=new CartDTO(Integer.parseInt(user.getId()+"")
-                        ,Integer.parseInt(carts.get(position).getProductDomain().getProductId()+"")
-                        ,quantity);
-                api.updateCart(updateCartResponseListener,cartDTO);
-                setData();
+                Product product = carts.get(position).getProductDomain();
+                // update ui
+                int quantity=Integer.parseInt(holder.num.getText().toString());
+                holder.num.setText(String.valueOf(++quantity));
+                holder.totalEachItem.setText(quantity*product.getPrice()*(1-product.getDiscount()) + "");
+
+                //update cart data
+                CartDTO cartDTO=new CartDTO(user.getId()
+                        , Math.toIntExact(product.getProductId())
+                        ,1);
+                //
+                Api.getRetrofit(AppUtils.BASE_URL)
+                        .create(CartRepository.class)
+                        .plusQuantity(cartDTO)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(responseObjectResponse -> {
+                         if(responseObjectResponse.code()!=200){
+                        Toast.makeText(context,
+                                AppUtils.getErrorMessage(responseObjectResponse.errorBody().string()), Toast.LENGTH_SHORT).show();
+                    }
+                }, throwable -> Toast.makeText(context, throwable.getMessage(), Toast.LENGTH_SHORT).show() );
+                changNumberItemsListener.changeQuantity(true, product.getPrice()*(1-product.getDiscount()));
             }
         });
 
         holder.minusItem.setOnClickListener(new View.OnClickListener() {
+
+            @SuppressLint("CheckResult")
             @Override
             public void onClick(View view) {
-                int quantity=carts.get(position).getQuantity();
-                if(quantity>1){
-                    //holder.num.setText(String.valueOf(quantity--));
-                    quantity--;
-                    //update cart
-                    CartDTO cartDTO=new CartDTO(Integer.parseInt(user.getId()+"")
-                            ,Integer.parseInt(carts.get(position).getProductDomain().getProductId()+"")
-                            ,quantity);
-                    api.updateCart(updateCartResponseListener,cartDTO);
+                // call minus quantity
+                Product product = carts.get(position).getProductDomain();
+                CartDTO cartDTO=new CartDTO(user.getId()
+                        , Math.toIntExact(product.getProductId())
+                        ,1);
+                Api.getRetrofit(AppUtils.BASE_URL)
+                        .create(CartRepository.class)
+                        .minusQuantity(cartDTO)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(responseObjectResponse -> {
+                            if(responseObjectResponse.code()!=200){
+                                Toast.makeText(context,
+                                        AppUtils.getErrorMessage(responseObjectResponse.errorBody().string()), Toast.LENGTH_SHORT).show();
+                            }
+                        } , throwable -> Log.d("APIminus", throwable.getMessage()));
 
+                // update ui
+                int quantity=Integer.parseInt(holder.num.getText().toString());
+                if(quantity==1) {
+                    carts.remove(position);
+                    notifyDataSetChanged();
+                    return;
                 }
-                if(quantity==1){
-                    //delete cart
-                    api.deleteCartByUserIdAndProductId(deleteCartResponseListener,Integer.parseInt(user.getId()+"")
-                            ,Integer.parseInt(carts.get(position).getProductDomain().getProductId()+""));
-                }
-                setData();
-
+                holder.num.setText(String.valueOf(--quantity));
+                holder.totalEachItem.setText(quantity*product.getPrice()*(1-product.getDiscount()) + "");
+                changNumberItemsListener.changeQuantity(false, product.getPrice()*(1-product.getDiscount()));
+                holder.totalEachItem.setText(quantity*product.getPrice()*(1-product.getDiscount()) + "");
             }
         });
     }
@@ -161,13 +204,14 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView title,feeEachItem,totalEachItem,addBtn,num;
+        TextView title,feeEachItem,totalEachItem,addBtn,num, feeSaleEachItem;
         ImageView pic,plusItem,minusItem;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.title2Txt);
             feeEachItem = itemView.findViewById(R.id.feeEachItem);
+            feeSaleEachItem = itemView.findViewById(R.id.feeSaleEachItem);
             totalEachItem = itemView.findViewById(R.id.totalEachItem);
             pic = itemView.findViewById(R.id.picCard);
             num=itemView.findViewById(R.id.numberItemTxt);

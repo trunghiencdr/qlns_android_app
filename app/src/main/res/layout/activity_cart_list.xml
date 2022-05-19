@@ -1,42 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activity.CartListActivity">
 
-    <ScrollView
-        android:id="@+id/scrollView2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+
+
+    <RelativeLayout
+        android:id="@+id/relative_your_cart"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <ImageView
+            android:layout_alignBottom="@+id/text_view_title_product_details"
+            android:layout_alignTop="@+id/text_view_title_product_details"
+            android:id="@+id/backBtn_your_cart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+
+            app:srcCompat="@drawable/ic_baseline_arrow_back_ios_24" />
+
+        <TextView
+            android:id="@+id/text_view_title_product_details"
+            style="@style/TextViewH1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Giỏ hàng của bạn"
+            android:textAlignment="center">
+
+        </TextView>
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycleViewCart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/linear_layout_bottom_your_cart"
+        android:layout_below="@+id/relative_your_cart">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
 
         <LinearLayout
+            android:id="@+id/linear_layout_bottom_your_cart"
+            android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:text="Your Card"
-                android:textAlignment="center"
-                android:textColor="#ff3d00"
-                android:textSize="20sp"
-                android:textStyle="bold" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycleViewCart"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
 
-            </androidx.recyclerview.widget.RecyclerView>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -47,14 +67,29 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:visibility="gone"
+                    android:id="@+id/text_view_total_item_temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                </TextView>
+
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/text_view_delivery_item_temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                </TextView>
+                <TextView
                     android:id="@+id/textView9"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
                     android:layout_weight="1"
-                    android:text="Item total"
-                    android:textColor="#373b54"
-                    android:textSize="18sp"
+                    android:text="Tổng sản phẩm:"
+                    android:textColor="#676363"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     tools:ignore="DuplicateIds" />
 
@@ -62,8 +97,8 @@
                     android:id="@+id/ItemTotalFeeTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="$0"
-                    android:textColor="#373b54"
+                    android:text="0"
+                    android:textColor="#676363"
                     android:textSize="18sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -82,16 +117,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Delivery"
-                    android:textColor="#373b54"
-                    android:textSize="18sp"
+                    android:text="Phí giao hàng:"
+                    android:textColor="#5E5B5B"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/DeliveryFeeTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="$0"
+                    android:text="0"
                     android:textColor="#373b54"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -104,38 +139,73 @@
                 android:weightSum="10">
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="0dp"
-                    android:layout_weight="8"
+                    android:layout_weight="7"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
                     android:layout_marginBottom="4dp"
                     android:textColor="#373b54"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:hint="Discount"
+                    android:hint="Mã giảm giá"
                     android:id="@+id/edit_discount"/>
-                <Button
+                <TextView
                     android:id="@+id/btn_add_discount"
                     android:layout_width="0dp"
+                    android:layout_weight="3"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="5dp"
                     android:layout_marginBottom="4dp"
-                    android:text="ADD"
-                    android:layout_weight="2"/>
+                    android:background="@drawable/organ_button_background"
+                    android:text="Thêm"
+                    android:textAlignment="center"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/txtValueDiscount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/mint_green"
+            <RelativeLayout
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="4dp"/>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/text_view_sale_off_cart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:layout_weight="1"
+                    android:text="Giảm giá: "
+                    android:textColor="#676363"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    tools:ignore="DuplicateIds" />
+
+                <TextView
+                    android:id="@+id/txtValueDiscount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/text_view_sale_off_cart"
+                    android:text="0"
+                    android:textColor="#373b54"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtPercent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/txtValueDiscount"
+                    android:text="%"
+                    android:textColor="#373b54"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+
 
 <!--                android:text="You have 20% discount order"-->
             <LinearLayout
@@ -152,16 +222,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Total"
+                    android:text="Tổng cộng:"
                     android:textColor="#373b54"
                     android:textSize="24sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/AllTxt"
+                    android:id="@+id/text_view_total_order_carts"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="$0"
+                    android:text="0"
                     android:textColor="#373b54"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -176,13 +246,13 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="4dp"
                 android:background="@drawable/organ_button_background"
-                android:text="CheckOut"
+                android:text="Đặt hàng"
                 android:textAlignment="center"
                 android:textColor="#FFFFFF"
                 android:textSize="24sp"
                 android:textStyle="bold" />
         </LinearLayout>
-    </ScrollView>
+
 
     <TextView
         android:id="@+id/emptyTxt"
@@ -197,4 +267,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

@@ -7,6 +7,7 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.card.MaterialCardView
+        android:layout_margin="1dp"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         app:strokeWidth="1dp"
@@ -26,20 +27,22 @@
                 android:layout_height="wrap_content">
 
                 <androidx.cardview.widget.CardView
+                    android:layout_marginStart="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
 
                     android:layout_marginTop="15dp"
-                    app:cardCornerRadius="20dp">
+                    app:cardCornerRadius="10dp">
 
                     <TextView
+
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp"
                         android:id="@+id/txt_product_sale_item"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@color/secondary_red"
-                        android:text="Sales 20% off"
+                        android:text="Sales 20%"
                         android:textColor="@color/white">
 
                     </TextView>
@@ -88,6 +91,7 @@
                         android:textColor="@color/text_color"
                         android:textSize="12sp" />
                     <TextView
+                        android:visibility="invisible"
                         android:textAlignment="viewEnd"
                         android:id="@+id/textView17"
                         android:layout_width="match_parent"
@@ -115,14 +119,26 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:weightSum="2"
                     android:orientation="horizontal">
 
 
+                    <TextView
+                        android:textColor="@color/black"
+                        android:textAlignment="viewStart"
+                        android:id="@+id/txt_product_price_item_sale"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="45.000đ"
+                        tools:ignore="RtlCompat"></TextView>
 
                     <TextView
                         android:textAlignment="viewEnd"
                         android:id="@+id/txt_product_price_item"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:text="45.000đ"

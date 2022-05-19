@@ -26,6 +26,7 @@ public class ChangePasswordFragment extends Fragment {
     private UserViewModel userViewModel;
     private String navigateTo = "Profile";
     private String phoneNumber = "";
+    String password="";
 
 
     @Nullable
@@ -59,10 +60,12 @@ public class ChangePasswordFragment extends Fragment {
             @Override
             public void onChanged(User user) {
                 AppUtils.saveAccount2(requireContext(), user);
+                AppUtils.savePassword(requireContext(), password);
                 Toast.makeText(requireContext(), "Change password success", Toast.LENGTH_SHORT).show();
                 if(navigateTo.equals("Profile"))
                     navigateToProfile(requireView());
                 else {
+
                     navigateToHome();
                 }
             }
@@ -125,7 +128,7 @@ public class ChangePasswordFragment extends Fragment {
 
 
         if(!request.isValidNewPassword()){
-            binding.textInputNewPass.setError("Not empty.");
+            binding.textInputNewPass.setError("Mật khẩu ít nhất 6 kí tự");
             binding.editTextNewPassword.requestFocus();
             return null;
         }else{
@@ -133,12 +136,13 @@ public class ChangePasswordFragment extends Fragment {
         }
 
         if(!request.isValidConfirmPassword()){
-            binding.textInputConfirmPass.setError("Not empty.");
+            binding.textInputConfirmPass.setError("Mật khẩu không khớp");
             binding.editTextConfirmPass.requestFocus();
             return null;
         }else{
             binding.textInputConfirmPass.setErrorEnabled(false);
         }
+        password = newPass;
         return request;
     }
 

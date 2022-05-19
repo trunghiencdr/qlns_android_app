@@ -3,6 +3,7 @@ package com.example.food.util;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -10,6 +11,10 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.view.View;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
@@ -32,15 +37,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+import java.util.concurrent.Callable;
 
 public class AppUtils {
 
 
-//    public static String BASE_URL = "http://192.168.1.15:8080/";
-        public static String BASE_URL="http://10.0.2.2:8080/";
+    public static String BASE_URL = "http://172.20.10.6:8080/";
+//    public static String BASE_URL = "http://192.168.143.130:8080/";
+//        public static String BASE_URL="http://10.0.2.2:8080/";
     public static String[] ROLES = {"ROLE_USER", "ROLE_ADMIN"};
     public static int PASS_LOGIN = 0;
-    public static String[] orderState = {"chua duyet", "Đang giao", "Đã giao"};
+    public static String[] orderState = {"Chưa duyệt", "Đang giao", "Đã giao", "Đã hủy"};
     public static String[] orderTime = {"Hôm nay", "Tuần này", "Tháng này"};
     public static String dateFormat = "dd-MM-yyyy";
 
@@ -230,4 +237,118 @@ public class AppUtils {
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
     }
+
+    // custom dialog
+    public static void showNotiDialog(
+            Context context,
+            String content,
+            Callable<Void> actionAccept
+    ) {
+        Dialog dialog = new Dialog(context, R.style.CustomDialogStyleNotification);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_notification);
+        TextView txtContentNoti = dialog.findViewById(R.id.txt_content_noti);
+        Button btnAcceptNoti = dialog.findViewById(R.id.btn_accept_noti);
+        Button btnCancelNoti = dialog.findViewById(R.id.btn_cancel_noti);
+
+
+        txtContentNoti.setText(content);
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_white_color);
+        btnCancelNoti.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        btnAcceptNoti.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    actionAccept.call();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+
+
+    }
+
+    public static void showSuccessDialog(
+            Context context,
+            String content
+    ) {
+        Dialog dialog = new Dialog(context, R.style.CustomDialogStyleSuccess);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_success);
+        TextView txtContentSuccess = dialog.findViewById(R.id.txt_content_success);
+        Button btnOk = dialog.findViewById(R.id.btn_ok_success);
+
+
+        txtContentSuccess.setText(content);
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_white_color);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                return;
+            }
+        });
+
+        dialog.show();
+    }
+
+    public static void showErrorDialog(
+            Context context,
+            String title,
+            String content
+    ) {
+        Dialog dialog = new Dialog(context, R.style.CustomDialogStyleError);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_error);
+        TextView txtTitleError = dialog.findViewById(R.id.txt_title_error);
+        TextView txtContentError = dialog.findViewById(R.id.txt_content_error);
+        Button btnTryAgainError = dialog.findViewById(R.id.btn_try_again_error);
+
+
+        txtTitleError.setText(title);
+        txtContentError.setText(content);
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_white_color);
+        btnTryAgainError.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    public static void showSuccessDialog(
+            Activity activity,
+            String content
+    ) {
+        Dialog dialog = new Dialog(activity, R.style.CustomDialogStyleSuccess);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_success);
+        TextView txtContentSuccess = dialog.findViewById(R.id.txt_content_success);
+        Button btnOk = dialog.findViewById(R.id.btn_ok_success);
+
+
+        txtContentSuccess.setText(content);
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_white_color);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                activity.finish();
+                return;
+            }
+        });
+
+        dialog.show();
+    }
+
+
 }

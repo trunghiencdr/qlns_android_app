@@ -35,6 +35,9 @@
         <action
             android:id="@+id/action_homeScreenFragment_to_discountDetailsFragment"
             app:destination="@id/discountDetailsFragment" />
+        <action
+            android:id="@+id/action_homeScreenFragment_to_productScreenFragment2"
+            app:destination="@id/productScreenFragment" />
     </fragment>
     <fragment
         android:id="@+id/productScreenFragment"

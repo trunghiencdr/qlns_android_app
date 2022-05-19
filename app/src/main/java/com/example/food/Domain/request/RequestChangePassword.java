@@ -22,6 +22,10 @@ public class RequestChangePassword{
     }
 
     public boolean isValidConfirmPassword(){
-        return confirmPassword!=null && !confirmPassword.equals("") && confirmPassword.length()>=6;
+        return confirmPassword!=null && !confirmPassword.equals("") && confirmPassword.length()>=6 && confirmPassword.equals(newPassword);
+    }
+
+    public String getNewPassword() {
+        return newPassword;
     }
 }

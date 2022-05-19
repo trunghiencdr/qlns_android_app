@@ -39,6 +39,7 @@ public class UserViewModel extends AndroidViewModel {
     MutableLiveData<String> message;
     MutableLiveData<Boolean> existUser;
     MutableLiveData<String> otp;
+    MutableLiveData<Boolean> success;
 
     public UserViewModel(Application application){
         super(application);
@@ -149,6 +150,13 @@ public class UserViewModel extends AndroidViewModel {
     }
 
     @SuppressLint("CheckResult")
+    public Single<Response<ResponseObject<User>>> callChangePassword2(RequestChangePassword request){
+        return userRepository.changePassword(request, true)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @SuppressLint("CheckResult")
     public void callResetPassword(RequestChangePassword request){
         userRepository.changePassword(request, false)
                 .subscribeOn(Schedulers.io())
@@ -160,7 +168,7 @@ public class UserViewModel extends AndroidViewModel {
                     }else{
 //                        JSONObject jsonObject = new JSONObject(responseObjectResponse.errorBody().string());
 //                        message.setValue(jsonObject.getString("message"));
-                        message.setValue(responseObjectResponse.body().getMessage());
+                        message.setValue("Mật khẩu không đúng");
                     }
                 },throwable -> message.setValue(throwable.getMessage()));
     }
@@ -175,8 +183,9 @@ public class UserViewModel extends AndroidViewModel {
                         existUser.setValue(true);
                     }else {
                         existUser.setValue(false);
-                        message.setValue(AppUtils.getErrorMessage(
-                                responseObjectResponse.errorBody().string()));
+                        message.setValue("Số điện thoại không đúng hoặc chưa đăng ký");
+//                        message.setValue(AppUtils.getErrorMessage(
+//                                responseObjectResponse.errorBody().string()));
                     }
                 }, throwable -> message.setValue(throwable.getLocalizedMessage()))
                 ;

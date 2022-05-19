@@ -40,6 +40,7 @@ import com.anychart.enums.ScaleStackMode;
 import com.anychart.enums.TooltipDisplayMode;
 import com.anychart.enums.TooltipPositionMode;
 import com.example.food.feature.product.ProductViewModel;
+import com.example.food.util.AppUtils;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
@@ -85,8 +86,10 @@ public class HomeAdminFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        String startDate = AppUtils.getFirstDayOfMonthNow();
+        String endDate = AppUtils.getLastDayOfMonthNow();
 
-        productViewModel.getProductRevenue("2022-05-07","2022-05-07", 5, 0 )
+        productViewModel.getProductRevenue(startDate,endDate, 5, 0 )
                 .subscribe(new SingleObserver<Response<ProductReportResponse>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -144,20 +147,20 @@ public class HomeAdminFragment extends Fragment {
                 .anchor(Anchor.CENTER_BOTTOM)
                 .offsetX(5d)
                 .offsetY(5d)
-                .format("${%Value}{groupsSeparator: }");
+                .format("{%Value}{groupsSeparator: }");
 
         cartesian.animation(true);
-        cartesian.title("Top 10 Cosmetic Products by Revenue");
+        cartesian.title("Xếp hạng sản phẩm có doanh thu cao nhất");
 
         cartesian.yScale().minimum(0d);
 
-        cartesian.yAxis(0).labels().format("${%Value}{groupsSeparator: }");
+        cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }");
 
         cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
         cartesian.interactivity().hoverMode(HoverMode.BY_X);
 
-        cartesian.xAxis(0).title("Product");
-        cartesian.yAxis(0).title("Revenue");
+        cartesian.xAxis(0).title("Tên sản phẩm");
+        cartesian.yAxis(0).title("Doanh thu(vnd)");
 
         anyChartView.setChart(cartesian);
     }

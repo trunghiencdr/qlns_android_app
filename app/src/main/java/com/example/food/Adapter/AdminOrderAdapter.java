@@ -65,7 +65,7 @@ public class AdminOrderAdapter extends ListAdapter<Order, AdminOrderAdapter.Orde
             txtOrderId.setText("ID: " + item.getId());
             txtOrderState.setText("Trạng thái: " + item.getState());
             txtOrderUser.setText("Người đặt: " + item.getUser().getName());
-            txtOrderDate.setText(AppUtils.formatDate(item.getCreateAt(), "dd-MM-yyyy hh:mm:ss"));
+            txtOrderDate.setText(AppUtils.formatDate(item.getCreateAt(), "dd-MM-yyyy"));
         }
     }
 

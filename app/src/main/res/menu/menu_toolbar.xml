@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/menu_item_log_out_admin"
-        android:title="dang xuat"
+        android:title="menu item 1"
         app:showAsAction="withText"
         android:icon="@drawable/ic_baseline_shopping_cart_24"
         >
@@ -17,6 +17,7 @@
         >
     </item>
     <item
+        android:id="@+id/menu_item_profile"
         android:title="menu two"
         app:showAsAction="always"
         app:actionLayout="@layout/profile_menu_layout"
@@ -24,7 +25,7 @@
     </item>
 
     <item
-        android:title="menu three"
+        android:title="menu item 2"
         >
     </item>
 </menu>

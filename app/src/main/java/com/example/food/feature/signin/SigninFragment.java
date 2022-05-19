@@ -63,7 +63,10 @@ public class SigninFragment extends Fragment {
 //        checkPass();
 
         if(user!=null) {
-            if (AppUtils.PASS_LOGIN == 1) {
+            if (AppUtils.PASS_LOGIN == 1) {// if has account
+                userViewModel.callUpdateTokenFireBaseUser(user.getId(), AppUtils.getTokenFireBase(requireActivity()));
+
+
                 if (user.getRoles().size() >= 0) {
                     if (user.getRoles().stream().filter(role -> role.getName().equals(AppUtils.ROLES[1])).findFirst().isPresent()) {
                         startActivity(new Intent(requireActivity(), AdminActivity.class));
@@ -179,12 +182,13 @@ public class SigninFragment extends Fragment {
                     }
                 }
             }else{
-                Toast.makeText(requireContext(),
-                                AppUtils.getStringFromJsonObject("message", userDTO.errorBody().string()),
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireActivity(), "Vui lòng kiểm tra lại thông tin đăng nhập", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(requireContext(),
+//                                AppUtils.getStringFromJsonObject("message", userDTO.errorBody().string()),
+//                        Toast.LENGTH_SHORT).show();
             }
         }, throwable -> {
-            Toast.makeText(requireContext(), throwable.getLocalizedMessage(), Toast.LENGTH_SHORT).show();;
+//            Toast.makeText(requireContext(), throwable.getLocalizedMessage(), Toast.LENGTH_SHORT).show();;
 
         });
 

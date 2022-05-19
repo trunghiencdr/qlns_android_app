@@ -9,9 +9,10 @@
     </string-array>
     <string name="authorization_cloud_message">key=AAAADGEAvcU:APA91bHeDYkiY8nhe1lkoZcyHDNxjWPhp5tXEVl-w1wNqrpAlekus-PzWvUHEXsxwo58XcpRy0z6Z3z4VqhmHvzLBoHdLF5qDpNx5JmX0yksFBMikNwwGZrcVFQ9iBU4N1O8f3Aktc29</string>
     <string name="mapbox_access_token">pk.eyJ1Ijoic2FuZzAxMCIsImEiOiJjbDJxYXprZnMwMDl3M2RxaHhhbTF4Zm44In0.0CEOCvmscPFaE79KvWPTIQ</string>
-<string name="apikey_here_dot_com">LO44E-q6Z7Nr7s6oOTHozfjmobzRnfv_L9p-1QjTY8E</string>
+    <string name="apikey_here_dot_com">LO44E-q6Z7Nr7s6oOTHozfjmobzRnfv_L9p-1QjTY8E</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="discount_description">Voucher khuyến mãi 35% cho đơn hàng từ  tối đa giảm 20k cho 1 đơn hàng, mỗi tài khoản chỉ sử dụng được 1 lần</string>
     <array name="category_background">
         <item>@drawable/category_background1</item>
         <item>@drawable/category_background2</item>
@@ -21,7 +22,7 @@
     </array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="otp_string_01">Mã xác thực đã được gửi đến số</string>
+    <string name="otp_string_01">Mã xác thực gồm 5 số đã được gửi đến số</string>
 
     <string-array name="ORDER_TIME_FILTER">
         <item>Hôm nay</item>

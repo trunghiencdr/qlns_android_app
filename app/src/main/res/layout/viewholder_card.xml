@@ -74,47 +74,34 @@
         android:id="@+id/feeEachItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:text="0"
         android:textColor="#373b54"
         android:textSize="16sp"
 
-        app:layout_constraintBottom_toBottomOf="@+id/title2Txt"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/title2Txt" />
-
+        app:layout_constraintStart_toStartOf="@+id/title2Txt"
+        app:layout_constraintTop_toBottomOf="@+id/title2Txt" />
     <TextView
-        android:id="@+id/textView18"
+        android:id="@+id/feeSaleEachItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
-        android:text="$"
+        android:text="0"
         android:textColor="#373b54"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/feeEachItem"
-        app:layout_constraintEnd_toStartOf="@+id/feeEachItem"
-        app:layout_constraintTop_toTopOf="@+id/feeEachItem" />
+        android:layout_marginEnd="20dp"
+        app:layout_constraintTop_toTopOf="@id/feeEachItem"
+        app:layout_constraintBottom_toBottomOf="@id/feeEachItem"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/totalEachItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
         android:text="0"
         android:textColor="#373b54"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/plusItem"
-        app:layout_constraintEnd_toEndOf="@+id/feeEachItem"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/plusItem" />
 
-    <TextView
-        android:id="@+id/textView20"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
-        android:text="$"
-        android:textColor="#373b54"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/totalEachItem"
-        app:layout_constraintEnd_toStartOf="@+id/totalEachItem"
-        app:layout_constraintTop_toTopOf="@+id/totalEachItem" />
 </androidx.constraintlayout.widget.ConstraintLayout>

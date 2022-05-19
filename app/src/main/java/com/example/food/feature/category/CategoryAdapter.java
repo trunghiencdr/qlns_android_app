@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DiffUtil;
@@ -99,7 +100,7 @@ public class CategoryAdapter extends ListAdapter<CategoryDTO, CategoryAdapter.Ca
             int background = item.getId()%categoryBackground.length();
 
 //            mainLayoutCat.setBackgroundColor(Color.parseColor(colorsBackground[new Random().nextInt(colorsBackground.length)]));
-            mainLayoutCat.setBackground(categoryBackground.getDrawable(background));
+//            mainLayoutCat.setBackground(categoryBackground.getDrawable(background));
 //            mainLayoutCat.setBackgroundColor(Color.parseColor(colorsBackground[color]));
             System.out.println("image category:" + item.getLink());
             Picasso.get().load(item.getLink()).into(img_category);
@@ -109,14 +110,19 @@ public class CategoryAdapter extends ListAdapter<CategoryDTO, CategoryAdapter.Ca
         @Override
         public void onClick(View view) {
             if(view.getId()==R.id.mainLayoutCat){
+                // Create the Bundle to pass, you can put String, Integer, or serializable object
                 Bundle bundle = new Bundle();
-                bundle.putInt("categoryId", Category.getId());
-              HomeScreenFragmentDirections.ActionHomeScreenFragmentToProductScreenFragment action = HomeScreenFragmentDirections.actionHomeScreenFragmentToProductScreenFragment().setCategoryId(Category.getId());
-
-                Navigation.findNavController(view).navigate(action);
-//                NavDirections action = HomeScreenFragmentDirections.actionHomeScreenFragmentToProductScreenFragment();
-
-//                Navigation.findNavController(view).navigate(R.id.mainLayoutCat, bundle);
+                bundle.putSerializable("category", Category); // Serializable Object
+                Navigation.findNavController(view).navigate(R.id.productScreenFragment, bundle);
+//                Bundle bundle = new Bundle();
+//                bundle.putInt("categoryId", Category.getId());
+//                bundle.putString("categoryName", Category.getName());
+//              HomeScreenFragmentDirections.ActionHomeScreenFragmentToProductScreenFragment action = HomeScreenFragmentDirections.actionHomeScreenFragmentToProductScreenFragment().setCategoryId(Category.getId());
+//
+//                Navigation.findNavController(view).navigate(action);
+////                NavDirections action = HomeScreenFragmentDirections.actionHomeScreenFragmentToProductScreenFragment();
+//
+////                Navigation.findNavController(view).navigate(R.id.mainLayoutCat, bundle);
             }
 
         }

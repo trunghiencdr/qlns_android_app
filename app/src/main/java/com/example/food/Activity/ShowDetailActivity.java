@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -44,7 +45,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ShowDetailActivity extends AppCompatActivity {
-    private TextView addToCartBtn,titleTxt,feeTxt,descriptionTxt,numberOrderTxt;
+    private TextView addToCartBtn,titleTxt,feeTxt,descriptionTxt,numberOrderTxt, txtPriceSale, txtDiscount;
     private ImageView plusBtn,minusBtn,foodPicBtn,backBtn;
     private Product product;
     private int numberOrder =1;
@@ -53,6 +54,7 @@ public class ShowDetailActivity extends AppCompatActivity {
     private ProductAdapter productAdapter;
     private Api api;
     private ExpandableListView descriptionExpandListView;
+
     ExpandableTextViewAdapter adapter;
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
@@ -68,6 +70,8 @@ public class ShowDetailActivity extends AppCompatActivity {
         setEvent();
 
     }
+
+
 
     private void setEvent() {
         addToCartBtn.setOnClickListener(new View.OnClickListener() {
@@ -107,13 +111,13 @@ public class ShowDetailActivity extends AppCompatActivity {
     private final InsertCartResponseListener insertCartResponseListener=new InsertCartResponseListener() {
         @Override
         public void didFetch(CartResponse response, String message) {
-            Toast.makeText(ShowDetailActivity.this, "Call api success"+message.toString(),Toast.LENGTH_SHORT).show();
+            Toast.makeText(ShowDetailActivity.this, "Đã thêm vào giỏ hàng"+message.toString(),Toast.LENGTH_SHORT).show();
             Log.d("success",message.toString());
         }
 
         @Override
         public void didError(String message) {
-            Toast.makeText(ShowDetailActivity.this,"Call api error"+message.toString(),Toast.LENGTH_SHORT).show();
+//            Toast.makeText(ShowDetailActivity.this,"Call api error"+message.toString(),Toast.LENGTH_SHORT).show();
             Log.d("zzz",message.toString());
         }
     };
@@ -123,8 +127,12 @@ public class ShowDetailActivity extends AppCompatActivity {
             product=response.getData();
             Picasso.get().load(product.getImage().getLink()).into(foodPicBtn);
             System.out.println(product.getImage().getLink());
+            txtDiscount.setText("Sale " + product.getDiscount()*100+" %");
             titleTxt.setText(product.getName());
-            feeTxt.setText("$"+ product.getPrice());
+            feeTxt.setText(AppUtils.formatCurrency(product.getPrice()));
+            feeTxt.setPaintFlags(feeTxt.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            txtPriceSale.setText(AppUtils.formatCurrency(product.getPrice()*(1-product.getDiscount())));
+
             //descriptionTxt.setText(product.getDescription());
             numberOrderTxt.setText(String.valueOf(numberOrder));
             /////////////////////////////////
@@ -132,7 +140,7 @@ public class ShowDetailActivity extends AppCompatActivity {
             listDataChild = new HashMap<String, List<String>>();
 
             // Adding child data
-            listDataHeader.add("Description");
+            listDataHeader.add("Mô tả sản phẩm");
 
             // Adding child data
             List<String> top250 = new ArrayList<String>();
@@ -142,13 +150,13 @@ public class ShowDetailActivity extends AppCompatActivity {
             adapter=new ExpandableTextViewAdapter(ShowDetailActivity.this,listDataHeader, listDataChild);
             descriptionExpandListView.setAdapter(adapter);
             loadProducts(product.getCategory().getId());
-            Toast.makeText(ShowDetailActivity.this, "Call api one product success"+message.toString(),Toast.LENGTH_SHORT).show();
+//            Toast.makeText(ShowDetailActivity.this, "Call api one product success"+message.toString(),Toast.LENGTH_SHORT).show();
             Log.d("success",message.toString());
         }
 
         @Override
         public void didError(String message) {
-            Toast.makeText(ShowDetailActivity.this,"Call api one product error"+message.toString(),Toast.LENGTH_SHORT).show();
+//            Toast.makeText(ShowDetailActivity.this,"Call api one product error"+message.toString(),Toast.LENGTH_SHORT).show();
             Log.d("zzz",message.toString());
         }
     };
@@ -236,6 +244,8 @@ public class ShowDetailActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        txtDiscount = findViewById(R.id.txt_product_sale_product_details);
+        txtPriceSale = findViewById(R.id.priceTxtSale);
         addToCartBtn=findViewById(R.id.addToCartBtn);
         titleTxt=findViewById(R.id.titleTxt);
         feeTxt=findViewById(R.id.priceTxt);
@@ -253,6 +263,8 @@ public class ShowDetailActivity extends AppCompatActivity {
                 new ItemMargin(10, 0, 30, 10));
         recyclerViewProductRelated.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerViewProductRelated.setAdapter(productAdapter);
+
+
 
 
     }

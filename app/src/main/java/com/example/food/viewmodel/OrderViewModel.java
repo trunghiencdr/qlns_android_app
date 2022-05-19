@@ -2,7 +2,6 @@ package com.example.food.viewmodel;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -10,15 +9,17 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.food.Domain.Order;
+import com.example.food.Domain.Response.ResponseObject;
 import com.example.food.network.RetroInstance;
 import com.example.food.util.AppUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.internal.util.ArrayListSupplier;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Response;
 
 public class OrderViewModel extends AndroidViewModel {
 
@@ -132,4 +133,10 @@ public class OrderViewModel extends AndroidViewModel {
                     }
                 }, throwable -> message.setValue(throwable.getMessage()));
     }
+    public Single<Response<ResponseObject<Order>>> callUpdateStateOrder2(int id, String state){
+        return repository.updateStateOrder(id, state)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
 }

@@ -119,7 +119,7 @@
                     android:id="@+id/text_view_location"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
-                    android:text="97 Man Thiện"
+                    android:text=""
                     app:layout_constraintStart_toEndOf="@id/image_view_ic_location"
                     app:layout_constraintBottom_toBottomOf="@id/image_view_ic_location"
                     app:layout_constraintTop_toTopOf="@id/image_view_ic_location" />
@@ -191,7 +191,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:layout_alignParentBottom="true"
-                            android:text="Categories"
+                            android:text="Danh mục"
                             android:textColor="@color/black"
                             android:textSize="20sp"
                             android:textStyle="bold"
@@ -203,6 +203,7 @@
 
 
                         <TextView
+                            android:visibility="invisible"
                             style="@style/TextViewButton"
                             android:id="@+id/btn_see_all_categories_home_screen"
                             android:layout_width="wrap_content"
@@ -239,7 +240,7 @@
                             android:id="@+id/textViewPopular"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Popular"
+                            android:text="Phổ biến"
                             android:textColor="@color/black"
                             android:textSize="20sp"
                             android:textStyle="bold"
@@ -253,6 +254,7 @@
 
 
                             <TextView
+                                android:visibility="invisible"
                                 style="@style/TextViewButton"
                                 android:id="@+id/btn_see_all_popular_home_screen"
                                 android:layout_width="wrap_content"
@@ -319,10 +321,11 @@
                         <ImageView
                             android:id="@+id/imageView6"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/bottom_btn1" />
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_home" />
 
                         <TextView
+                            android:visibility="invisible"
                             android:id="@+id/textView7"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -342,10 +345,11 @@
                         <ImageView
                             android:id="@+id/imageView10"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/bottom_btn2" />
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_order" />
 
                         <TextView
+                            android:visibility="invisible"
                             android:id="@+id/textView10"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -369,6 +373,8 @@
                             android:src="@drawable/bottom_btn1" />
 
                         <TextView
+                            android:visibility="invisible"
+
                             android:id="@+id/textView11"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -388,14 +394,16 @@
                         <ImageView
                             android:id="@+id/imageView12"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/bottom_btn3" />
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_location_shop" />
 
                         <TextView
+                            android:visibility="invisible"
+
                             android:id="@+id/textView12"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Support"
+                            android:text="Map"
                             android:textAlignment="center"
                             android:textColor="#676767"
                             android:textSize="12sp" />
@@ -411,14 +419,16 @@
                         <ImageView
                             android:id="@+id/imageView13"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/bottom_btn4" />
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_profile" />
 
                         <TextView
+                            android:visibility="invisible"
+
                             android:id="@+id/textView13"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Settings"
+                            android:text="Profile"
                             android:textAlignment="center"
                             android:textColor="#676767"
                             android:textSize="12sp" />

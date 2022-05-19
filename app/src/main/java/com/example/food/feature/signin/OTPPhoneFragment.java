@@ -1,6 +1,7 @@
 package com.example.food.feature.signin;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -42,19 +43,33 @@ public class OTPPhoneFragment extends Fragment {
     }
 
     private void setTimer() {
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            int time = 59;
-            @Override
-            public void run() {
-                binding.txtTime.setText("00:" + (time<10?"0"+ time:time));
-                time--;
-                if(time<0){
-                    timer.cancel();
-                    binding.txtResendOtp.setEnabled(true);
-                }
+        binding.txtResendOtp.setVisibility(View.GONE);
+        new CountDownTimer(60000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                binding.txtTime.setText( millisUntilFinished / 1000 +"s");
+                //here you can have your logic to set text to edittext
             }
-        }, 0, 1000);
+
+            public void onFinish() {
+                binding.txtResendOtp.setVisibility(View.VISIBLE);
+                binding.txtTime.setText("Hết thời gian!");
+            }
+
+        }.start();
+//        Timer timer = new Timer();
+//        timer.scheduleAtFixedRate(new TimerTask() {
+//            int time = 59;
+//            @Override
+//            public void run() {
+//                binding.txtTime.setText("00:" + (time<10?"0"+ time:time));
+//                time--;
+//                if(time<0){
+//                    timer.cancel();
+//                    binding.txtResendOtp.setEnabled(true);
+//                }
+//            }
+//        }, 0, 1000);
     }
 
     private void callApi() {
@@ -69,15 +84,15 @@ public class OTPPhoneFragment extends Fragment {
         binding.btnConfirm.setOnClickListener(view -> {
             String otp = binding.editTextOTP.getText().toString();
             if(userViewModel.checkOTP(otp)){
-
-                Toast.makeText(requireContext(), "OTP success", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(requireContext(), "OTP success", Toast.LENGTH_SHORT).show();
                 navigateToChangePassword(binding.txtPhoneNumber.getText().toString());
             }
 
             else {
-                Toast.makeText(requireContext(), "OTP not matches", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "OTP không đúng", Toast.LENGTH_SHORT).show();
             }
         });
+        binding.btnBack.setOnClickListener(view -> navigatoToForgotPassword(view));
         binding.editTextOTP.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -100,6 +115,11 @@ public class OTPPhoneFragment extends Fragment {
             callApi();
             setTimer();
         });
+    }
+
+    private void navigatoToForgotPassword(View view) {
+        NavDirections action = OTPPhoneFragmentDirections.actionOTPPhoneFragmentToForgotPasswordFragment();
+        Navigation.findNavController(view).navigate(action);
     }
 
     private void navigateToChangePassword(String phoneNumber) {

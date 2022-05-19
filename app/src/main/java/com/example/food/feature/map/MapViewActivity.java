@@ -6,6 +6,7 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineColor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -26,9 +27,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 
+import com.example.food.Domain.AddressShop;
 import com.example.food.R;
+import com.example.food.model.User;
+import com.example.food.util.AppUtils;
+import com.example.food.viewmodel.AddressShopViewModel;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -88,8 +94,8 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
     private String symbolIconId = "symbolIconId";
     private static final int REQUEST_CODE = 5678;
     String address;
-    Point origin = Point.fromLngLat(90.399452, 23.777176);
-    Point destination = Point.fromLngLat(90.399452, 23.777176);
+    Point origin = Point.fromLngLat(106.64011, 10.83591);
+    Point destination = Point.fromLngLat(106.78736, 10.84898);
     private static final String ROUTE_LAYER_ID = "route-layer-id";
     private static final String ROUTE_SOURCE_ID = "route-source-id";
     private static final String ICON_LAYER_ID = "icon-layer-id";
@@ -101,36 +107,48 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
     String st;
     String startLocation = "";
     String endLocation = "";
+    AddressShopViewModel addressShopViewModel;
+    MapViewModel mapViewModel;
 
 
-    TextView txtName;
+    TextView txtNameFrom, txtNameTo;
     RoundedImageView imageRoom;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         getMyLocation();
-
-                Mapbox.getInstance(MapViewActivity.this, getString(R.string.mapbox_access_token));
-
-
-
-//        Mapbox.getInstance(this, getResources().getString(R.string.mapbox_access_token));
+        Mapbox.getInstance(MapViewActivity.this, getString(R.string.mapbox_access_token));
 
         setContentView(R.layout.activity_map_view);
 
-        txtName = findViewById(R.id.txtName);
+        addressShopViewModel = new ViewModelProvider(this).get(AddressShopViewModel.class);
+        mapViewModel = new ViewModelProvider(this).get(MapViewModel.class);
+        getDestination();
+
+        txtNameFrom = findViewById(R.id.txtNameFrom);
+        txtNameTo = findViewById(R.id.txtNameTo);
         imageRoom = findViewById(R.id.imageRoom);
         dialog = new SpotsDialog.Builder().setContext(MapViewActivity.this).setTheme(R.style.Custom).build();
         dialog.show();
-        String json = getIntent().getStringExtra("room_detail");
 
-        Gson gson = new Gson();
+        String from = origin.latitude()+","+origin.longitude();
+        String to = destination.latitude() + "," + origin.longitude();
+//        mapViewModel.callGetPlaceFromGeocode2(from, "vi-VN", getString(R.string.apikey_here_dot_com))
+//        .subscribe(responsePlaceResponse -> {
+//            if(responsePlaceResponse.code()==200){
+//                txtNameFrom.setText("From:" + responsePlaceResponse.body().items.get(0).title);
+//            }
+//        });
+//        mapViewModel.callGetPlaceFromGeocode2(to, "vi-VN", getString(R.string.apikey_here_dot_com))
+//                .subscribe(responsePlaceResponse -> {
+//                    if(responsePlaceResponse.code()==200){
+//                        txtNameTo.setText("To:" +responsePlaceResponse.body().items.get(0).title);
+//                    }
+//                });
 
-        Toast.makeText(MapViewActivity.this, "roomDetaildescription", Toast.LENGTH_LONG).show();
-
-        txtName.setText("roomDetailname");
 //        Picasso.get().load(com.devpro.airj18bookingapp.utils.Constants.BASE_URL + roomDetail.thumbnail).into(imageRoom);
 //        Picasso.get().load(R.drawable.marker).into(imageRoom);
 
@@ -140,6 +158,24 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
+
+    }
+
+    @SuppressLint("CheckResult")
+    private void getDestination() {
+        user = AppUtils.getAccount2(this);
+        if(user == null) return;
+        // if user is role_user then set destination to address shop
+        // else set destination equal
+        if(user.getRoles().stream().filter(role -> role.getName().equalsIgnoreCase(AppUtils.ROLES[0])).findFirst().isPresent()){
+            addressShopViewModel.getAddressShopBySTT(1)
+            .subscribe(responseObjectResponse -> {
+                if(responseObjectResponse.code()==200){
+                    AddressShop addressShop = responseObjectResponse.body().getData();
+                    destination = Point.fromLngLat(addressShop.getLongitude(), addressShop.getLatitude());
+                }
+            });
+        }
 
     }
 
@@ -157,17 +193,11 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
     @Override
     public void onMapReady(final MapboxMap mapboxMap) {
         this.mapboxMap = mapboxMap;
-
-
-
         mapboxMap.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
             @Override
-
             public void onStyleLoaded(@NonNull Style style) {
-
                 enableLocationComponent(style);
 //                initSearchFab();
-
                 addUserLocations();
                 Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_location_on_24, null);
                 Bitmap mBitmap = BitmapUtils.getBitmapFromDrawable(drawable);
@@ -184,75 +214,12 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
                 initSource(style);
 
                 initLayers(style);
-
                 Location lastKnownLocation = mapboxMap.getLocationComponent().getLastKnownLocation();
                 origin = Point.fromLngLat(lastKnownLocation.getLongitude(), lastKnownLocation.getLatitude());
-                destination = Point.fromLngLat(106.7824544, 10.8390618);
-
+                if(user.getRoles().stream().filter(role -> role.getName().equalsIgnoreCase(AppUtils.ROLES[1])).findFirst().isPresent()){
+                    destination = origin;
+                }
                 getRoute(mapboxMap, origin, destination);
-
-
-                //  CameraPosition position = new CameraPosition.Builder().target(new LatLng(destination.latitude(), destination.longitude()))
-                //      .zoom(13).tilt(13).build();
-                //  mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position), 100);
-//                mapboxMap.addOnMapClickListener(new MapboxMap.OnMapClickListener() {
-//                    LatLng source;
-//
-//                    @Override
-//                    public boolean onMapClick(@NonNull LatLng point) {
-//
-//
-//                        if (c == 0) {
-//                            //origin = Point.fromLngLat(point.getLongitude(), point.getLatitude());
-//                            source = point;
-//                            MarkerOptions markerOptions = new MarkerOptions();
-//                            markerOptions.position(point);
-//                            markerOptions.title("Source");
-//                            mapboxMap.addMarker(markerOptions);
-//                            reverseGeocodeFunc(point, c);
-//
-//
-//                        }
-//                        if (c == 1) {
-//                            //destination = Point.fromLngLat(point.getLongitude(), point.getLatitude());
-//                            getRoute(mapboxMap, origin, destination);
-//                            MarkerOptions markerOptions2 = new MarkerOptions();
-//                            markerOptions2.position(point);
-//                            markerOptions2.title("destination");
-//                            mapboxMap.addMarker(markerOptions2);
-//                            reverseGeocodeFunc(point, c);
-//                            getRoute(mapboxMap, origin, destination);
-//                            // double d = point.distanceTo(source);
-//
-//
-//                        }
-//
-//
-//
-//                      /*  startActivityForResult(
-//                                new PlacePicker.IntentBuilder()
-//                                        .accessToken("pk.eyJ1IjoiemFoaWQxNiIsImEiOiJja2UxZ3lpaGE0NHFuMnJtcXc5djcxeGVtIn0.V5lnAKqektnfC1pARBQYUQ")
-//                                        .placeOptions(PlacePickerOptions.builder()
-//                                                .statingCameraPosition(new CameraPosition.Builder()
-//                                                        .target(point).zoom(16).build())
-//                                                .build())
-//                                        .build(this), REQUEST_CODE);
-//                        */
-//                        if (c > 1) {
-//                            c = 0;
-//                            recreate();
-//                            // mapboxMap.clear();
-//                            //   Toast.makeText(MainActivity.this,d+" metres", Toast.LENGTH_LONG).show();
-//
-//                        }
-//
-//                        c++;
-//                        return true;
-//
-//
-//                    }
-//
-//                });
 
             }
         });
@@ -261,67 +228,6 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
 
     }
 
-//    private void reverseGeocodeFunc(LatLng point, int c) {
-//        MapboxGeocoding reverseGeocode = MapboxGeocoding.builder()
-//                .accessToken(getResources().getString(R.string.mapbox_access_token))
-//                .query(Point.fromLngLat(point.getLongitude(), point.getLatitude()))
-//                .geocodingTypes(GeocodingCriteria.TYPE_POI)
-//                .build();
-//        reverseGeocode.enqueueCall(new Callback<GeocodingResponse>() {
-//            @Override
-//            public void onResponse(Call<GeocodingResponse> call, Response<GeocodingResponse> response) {
-//
-//                List<CarmenFeature> results = response.body().features();
-//
-//                if (results.size() > 0) {
-//                    // CarmenFeature feature =results.get(0);
-//                    CarmenFeature feature;
-//                    // Log the first results Point.
-//                    Point firstResultPoint = results.get(0).center();
-//                    //   for (int i = 0; i < results.size(); i++) {
-//                    //  feature = results.get(i);
-//                    feature = results.get(0);
-//                    if (c == 0) {
-//                        startLocation += feature.placeName();
-//                        startLocation = startLocation.replace(", Dhaka, Bangladesh", ".");
-//                        TextView tv = findViewById(R.id.s);
-//                        tv.setText(startLocation);
-//
-//                    }
-//                    if (c == 1) {
-//                        endLocation += feature.placeName();
-//                        endLocation = endLocation.replace(", Dhaka, Bangladesh", ".");
-//                        TextView tv2 = findViewById(R.id.d);
-//                        tv2.setText(endLocation);
-//                    }
-//
-//                    // endLocation = endLocation.replace(",Dhaka,Bangladesh", " ");
-//                    // Toast.makeText(MapsActivity.this, endLocation, Toast.LENGTH_LONG).show();
-//
-//
-//                    // startLocation=feature.placeName()+"";
-//
-//                    //   Toast.makeText(MainActivity.this, "" + results.get(i), Toast.LENGTH_LONG).show();
-//                    Toast.makeText(MapViewActivity.this, "" + feature.placeName(), Toast.LENGTH_LONG).show();
-//
-//                    //  }
-//                    Log.d("MyActivity", "onResponse: " + firstResultPoint.toString());
-//
-//                } else {
-//
-//                    // No result for your request were found.
-//                    Toast.makeText(MapViewActivity.this, "Not found", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<GeocodingResponse> call, Throwable throwable) {
-//                throwable.printStackTrace();
-//            }
-//        });
-//
-//
-//    }
 
     private void initLayers(@NonNull Style loadedMapStyle) {
         LineLayer routeLayer = new LineLayer(ROUTE_LAYER_ID, ROUTE_SOURCE_ID);
@@ -338,7 +244,6 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
 // Add the red marker icon image to the map
         loadedMapStyle.addImage(RED_PIN_ICON_ID, BitmapUtils.getBitmapFromDrawable(
                 getResources().getDrawable(R.drawable.marker)));
-
 
 // Add the red marker icon SymbolLayer to the map
         loadedMapStyle.addLayer(new SymbolLayer(ICON_LAYER_ID, ICON_SOURCE_ID).withProperties(
@@ -382,24 +287,10 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
 
 // Get the directions route
         final DirectionsRoute currentRoute = response.body().routes().get(0);
-        // Toast.makeText(MainActivity.this,currentRoute.distance()+" metres ",Toast.LENGTH_SHORT).show();
         distance = currentRoute.distance() / 1000;
         st = String.format("%.2f K.M", distance);
         TextView dv = findViewById(R.id.distanceView);
         dv.setText(st);
-        //String f=startLocation+endLocation+st;
-        //TextView tv=findViewById(R.id.s);
-        // TextView tv2 = findViewById(R.id.d);
-        // startLocation=startLocation.replace("Bangladesh",".");
-        //  endLocation=endLocation.replace("Bangladesh",".");
-
-        // tv.setText(startLocation);
-        // tv2.setText(endLocation);
-
-
-        // tv.setText(distance+" K.M");
-        //Toast.makeText(MainActivity.this,st,Toast.LENGTH_LONG).show();
-
 
         if (mapboxMap != null) {
             mapboxMap.getStyle(new Style.OnStyleLoaded() {
@@ -489,19 +380,19 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
 //    }
 
     private void addUserLocations() {
-        home = CarmenFeature.builder().text("Mapbox SF Office")
-                .geometry(Point.fromLngLat(-122.3964485, 37.7912561))
-                .placeName("50 Beale St, San Francisco, CA")
-                .id("mapbox-sf")
-                .properties(new JsonObject())
-                .build();
-
-        work = CarmenFeature.builder().text("Mapbox DC Office")
-                .placeName("740 15th Street NW, Washington DC")
-                .geometry(Point.fromLngLat(-77.0338348, 38.899750))
-                .id("mapbox-dc")
-                .properties(new JsonObject())
-                .build();
+//        home = CarmenFeature.builder().text("Mapbox SF Office")
+//                .geometry(Point.fromLngLat(-122.3964485, 37.7912561))
+//                .placeName("50 Beale St, San Francisco, CA")
+//                .id("mapbox-sf")
+//                .properties(new JsonObject())
+//                .build();
+//
+//        work = CarmenFeature.builder().text("Mapbox DC Office")
+//                .placeName("740 15th Street NW, Washington DC")
+//                .geometry(Point.fromLngLat(-77.0338348, 38.899750))
+//                .id("mapbox-dc")
+//                .properties(new JsonObject())
+//                .build();
     }
 
     private void setUpSource(@NonNull Style loadedMapStyle) {

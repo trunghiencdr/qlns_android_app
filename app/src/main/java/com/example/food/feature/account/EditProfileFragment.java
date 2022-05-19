@@ -1,6 +1,7 @@
 package com.example.food.feature.account;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -31,6 +32,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
+import dmax.dialog.SpotsDialog;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -41,7 +43,7 @@ public class EditProfileFragment extends Fragment {
 
     private FragmentEditProfileScreenBinding binding;
     private String CODE = "choose_image_avt";
-    private ProgressDialog mProgressDialog;
+    private AlertDialog alertDialog;
     private UserViewModel userViewModel;
 
     @Nullable
@@ -63,8 +65,9 @@ public class EditProfileFragment extends Fragment {
     }
 
     private void initProgressBar() {
-        mProgressDialog = new ProgressDialog(requireContext());
-        mProgressDialog.setMessage("Please wait...");
+        alertDialog= new SpotsDialog.Builder().setContext(requireContext()).setTheme(R.style.CustomProgressBarDialog).build();
+
+
     }
 
     private void setEvents() {
@@ -90,7 +93,7 @@ public class EditProfileFragment extends Fragment {
     }
 
     private void updateUser() {
-        mProgressDialog.show();
+        alertDialog.show();
         setUpParameters();
 
     }
@@ -107,11 +110,11 @@ public class EditProfileFragment extends Fragment {
                         if(userResponse.code()==200){
                             System.out.println("Upload file success");
                         }else{
-                            Toast.makeText(requireContext(),
-                                    AppUtils.getErrorMessage(userResponse.errorBody().string()),
-                                    Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(requireContext(),
+//                                    AppUtils.getErrorMessage(userResponse.errorBody().string()),
+//                                    Toast.LENGTH_SHORT).show();
                         }
-                        mProgressDialog.dismiss();
+                        alertDialog.dismiss();
                     }, throwable -> {
                         Toast.makeText(requireContext(),
                                 throwable.getLocalizedMessage(),
@@ -127,15 +130,15 @@ public class EditProfileFragment extends Fragment {
                         if(userResponse.code()==200){
                             System.out.println("Upload file success");
                         }else{
-                            Toast.makeText(requireContext(),
-                                    AppUtils.getErrorMessage(userResponse.errorBody().string()),
-                                    Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(requireContext(),
+//                                    AppUtils.getErrorMessage(userResponse.errorBody().string()),
+//                                    Toast.LENGTH_SHORT).show();
                         }
-                        mProgressDialog.dismiss();
+                        alertDialog.dismiss();
                     }, throwable -> {
-                        Toast.makeText(requireContext(),
-                                throwable.getLocalizedMessage(),
-                                Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(requireContext(),
+//                                throwable.getLocalizedMessage(),
+//                                Toast.LENGTH_SHORT).show();
                     });
         }
 

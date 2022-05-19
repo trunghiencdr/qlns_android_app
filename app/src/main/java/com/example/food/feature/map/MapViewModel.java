@@ -12,8 +12,10 @@ import com.example.food.Api.Api;
 import com.example.food.network.RetroInstance;
 import com.example.food.util.AppUtils;
 
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Response;
 
 public class MapViewModel extends AndroidViewModel {
 
@@ -68,6 +70,16 @@ public class MapViewModel extends AndroidViewModel {
     }
 
     @SuppressLint("CheckResult")
+    public Single<Response<ResponsePlace>> callGetPlaceFromGeocode2(String at, String lang, String apikey){
+        return Api.getRetrofit(
+                "https://revgeocode.search.hereapi.com").create(MapRepository.class)
+                .getPlaceFromGeocode(at, lang, apikey)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                ;
+    }
+
+    @SuppressLint("CheckResult")
     public void callGetGeoCodeFromPlace(String q,  String apikey){
         Api.getRetrofit(
                 "https://geocode.search.hereapi.com").create(MapRepository.class)
@@ -82,5 +94,15 @@ public class MapViewModel extends AndroidViewModel {
                         message.setValue(AppUtils.getErrorMessage(responsePlaceResponse.errorBody().string()));
                     }
                 }, throwable -> message.setValue(AppUtils.getErrorMessage(throwable.getMessage())));
+    }
+
+    @SuppressLint("CheckResult")
+    public  Single<Response<ResponsePlace>>  callGetGeoCodeFromPlace2(String q,  String apikey){
+        return Api.getRetrofit(
+                "https://geocode.search.hereapi.com").create(MapRepository.class)
+                .getGeoCode(q, apikey)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                ;
     }
 }

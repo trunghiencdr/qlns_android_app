@@ -1,6 +1,8 @@
 package com.example.food.feature.category;
 
-public class CategoryDTO {
+import java.io.Serializable;
+
+public class CategoryDTO implements Serializable {
     private int id;
     private String name;
     private String link;

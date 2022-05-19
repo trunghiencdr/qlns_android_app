@@ -1,6 +1,7 @@
 package com.example.food.feature.adminhome;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -64,6 +65,8 @@ import java.io.OutputStreamWriter;
 import java.util.Date;
 import java.util.List;
 
+import dmax.dialog.SpotsDialog;
+
 
 public class AdminOrderFragment extends Fragment implements AdminOrderAdapter.ClickItem, OrderDetailsFragment.ClickButton {
 
@@ -80,6 +83,7 @@ public class AdminOrderFragment extends Fragment implements AdminOrderAdapter.Cl
     BottomAppBar bottomAppBar;
     FloatingActionButton fab;
     Toolbar toolbar;
+    AlertDialog alertDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -103,7 +107,8 @@ public class AdminOrderFragment extends Fragment implements AdminOrderAdapter.Cl
     private void setData() {
         startDate = AppUtils.formatDate(new Date(), datePattern);
         endDate = AppUtils.formatDate(new Date(), datePattern);
-        orderState = "chua duyet";
+        orderState = AppUtils.orderState[0];
+        alertDialog.show();
         orderViewModel.callOrdersByStateAndCreateAtBetween(
                 orderState,
                 startDate,
@@ -117,12 +122,13 @@ public class AdminOrderFragment extends Fragment implements AdminOrderAdapter.Cl
             @Override
             public void onChanged(List<Order> orders) {
                 orderAdapter.submitList(orders);
+                alertDialog.dismiss();
             }
         });
         orderViewModel.getMessage().observe(requireActivity(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                Toast.makeText(requireContext(), s, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(requireContext(), s, Toast.LENGTH_SHORT).show();
             }
         });
         orderViewModel.getOrder().observe(requireActivity(),
@@ -131,7 +137,7 @@ public class AdminOrderFragment extends Fragment implements AdminOrderAdapter.Cl
 
     private void sendMessageToCloud(Order order) {
         Message message =  new Message("Đơn hàng " + order.getId(),
-                "Đơn hàng của bạn đã đucợ chấp nhận",
+                "Đơn hàng của bạn đã được chấp nhận",
                 order.getId(),
                 order.getUser().getId());
         String toUser = order.getUser().getTokenFireBase();
@@ -160,6 +166,7 @@ public class AdminOrderFragment extends Fragment implements AdminOrderAdapter.Cl
 
                 }
 //                Log.d("AAA","start date:" + startDate + "-endDate:" + endDate);
+                alertDialog.show();
                 orderViewModel.callOrdersByStateAndCreateAtBetween(
                         orderState,
                         startDate,
@@ -182,6 +189,7 @@ public class AdminOrderFragment extends Fragment implements AdminOrderAdapter.Cl
                         break;
 
                 }
+                alertDialog.show();
                 orderViewModel.callOrdersByStateAndCreateAtBetween(
                         orderState,
                         startDate,
@@ -204,12 +212,12 @@ public class AdminOrderFragment extends Fragment implements AdminOrderAdapter.Cl
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if(dy < 0){
-                    bottomAppBar.setVisibility(View.VISIBLE);
-                    fab.setVisibility(View.VISIBLE);
-                }else{
+                if(dy > 0){
                     bottomAppBar.setVisibility(View.GONE);
                     fab.setVisibility(View.GONE);
+                }else{
+                    bottomAppBar.setVisibility(View.VISIBLE);
+                    fab.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -217,6 +225,8 @@ public class AdminOrderFragment extends Fragment implements AdminOrderAdapter.Cl
     }
 
     private void setControls() {
+
+        alertDialog = new SpotsDialog.Builder().setContext(requireContext()).setTheme(R.style.CustomProgressBarDialog).build();
 
         bottomAppBar = requireActivity().findViewById(R.id.bottom_bar);
         fab = requireActivity().findViewById(R.id.fab_cart);
@@ -227,7 +237,7 @@ public class AdminOrderFragment extends Fragment implements AdminOrderAdapter.Cl
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()){
                     case R.id.menu_item_pdf_admin:
-                        Toast.makeText(requireContext(), "Click pdf", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(requireContext(), "Click pdf", Toast.LENGTH_SHORT).show();
                         createPDF();
                         break;
                 }
@@ -273,7 +283,7 @@ public class AdminOrderFragment extends Fragment implements AdminOrderAdapter.Cl
 
     @Override
     public void clickButtonAccept(int idOrder, String state) {
-        Toast.makeText(requireContext(), "Click accept button order", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(requireContext(), "Click accept button order", Toast.LENGTH_SHORT).show();
         orderViewModel.callUpdateStateOrder(idOrder, state);
         // send message to user
     }
@@ -518,7 +528,7 @@ public class AdminOrderFragment extends Fragment implements AdminOrderAdapter.Cl
         myPdfDocument.close();
         myOutWriter.close();
         fOut.close();
-        Toast.makeText(requireContext(), "File Saved on " + path, Toast.LENGTH_LONG).show();
+//        Toast.makeText(requireContext(), "File Saved on " + path, Toast.LENGTH_LONG).show();
         openPdfViewer(myFile);
 
     }

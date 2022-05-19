@@ -28,4 +28,7 @@ public interface ProductRepository {
                                                               @Query("endDate") String endDate,
                                                               @Query("limit") int limit,
                                                               @Query("offset") int offset);
+
+    @GET("v1/Products")
+    Observable<Response<List<Product>>> getProducts();
 }

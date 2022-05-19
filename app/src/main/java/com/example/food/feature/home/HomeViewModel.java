@@ -48,6 +48,11 @@ public class HomeViewModel extends AndroidViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+    public Observable<Response<List<Product>>> getProducts(){
+        return productRepository.getProducts()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 
     public Observable<Response<CategoryResponse>> getCategoryById(int id){
         return categoryRepository.getCategoryById(id)

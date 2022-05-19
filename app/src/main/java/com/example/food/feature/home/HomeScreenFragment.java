@@ -2,6 +2,8 @@ package com.example.food.feature.home;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,11 +11,14 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +38,7 @@ import com.bumptech.glide.Glide;
 import com.example.food.Activity.CartListActivity;
 import com.example.food.Activity.OrderedListActivity;
 import com.example.food.Domain.Discount;
+import com.example.food.Domain.Product;
 import com.example.food.R;
 import com.example.food.databinding.FragmentHomeSceenBinding;
 import com.example.food.feature.category.CategoryAdapter;
@@ -51,8 +57,10 @@ import com.smarteist.autoimageslider.SliderView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import dmax.dialog.SpotsDialog;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -71,10 +79,15 @@ public class HomeScreenFragment extends Fragment implements DiscountAdapter.Clic
     private UserViewModel userViewModel;
     private MapViewModel mapViewModel;
     String location = "10.84898,106.78736";
-    int countUpdateAddress=0;
-
+    int countUpdateAddress=1;
+    List<Product> products;
+    List<Product> productsTop10;
     private List<Discount> discounts;
+    int heightScroll=0;
+    int countClickSearch=0;
 
+    ProgressDialog progressDialog;
+    private AlertDialog progressBarDialog;
     private TextView btnSeeAllCategoriesHomeScreen;
     private FloatingActionButton cartBtn;
 
@@ -91,6 +104,8 @@ public class HomeScreenFragment extends Fragment implements DiscountAdapter.Clic
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        requireActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
 
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
@@ -98,6 +113,7 @@ public class HomeScreenFragment extends Fragment implements DiscountAdapter.Clic
 
 
         setControls();
+        progressBarDialog.show();
         loadDiscount();
         loadCategories();
         loadProducts();
@@ -111,7 +127,6 @@ public class HomeScreenFragment extends Fragment implements DiscountAdapter.Clic
                         response -> {
                             if (response.code() == 200) {
                                 discounts = response.body();
-
                                 discountAdapter.setDiscounts(discounts);
                                 int duration = discounts.size() * 200;
                                 slideDiscount.setSliderAnimationDuration(duration);
@@ -132,22 +147,40 @@ public class HomeScreenFragment extends Fragment implements DiscountAdapter.Clic
                 response -> {
                     if (response.code() == 200) {
                         System.out.println("size of products:" + response.body().size());
+                        productsTop10 = new ArrayList<>(response.body());
                         productAdapter.submitList(response.body());
+                        heightScroll= binding.scrollView3.getHeight()+500;
+                        progressBarDialog.dismiss();
                     }
                 }
                 , throwable -> {
                     System.out.println("throw get products:" + throwable.getMessage());
                 }
         );
+
+        homeViewModel.getProducts().subscribe(listResponse -> {
+            if(listResponse.code()==200){
+                products = new ArrayList<>(listResponse.body());
+            }else{
+                Log.d("Home", "get products" );
+            }
+        }, throwable -> Log.d("Home", throwable.getMessage()));
     }
 
     private void setEvents() {
 
-        binding.textViewLocation.setOnClickListener(view -> {
-            mapViewModel.callGetPlaceFromGeocode(this.location, "vi-VN", getString(R.string.apikey_here_dot_com));
+        binding.supportBtn.setOnClickListener(view ->{
+            startActivity(new Intent(requireActivity(), MapViewActivity.class ));
         });
+//        binding.textViewLocation.setOnClickListener(view -> {
+//            startActivity(new Intent(requireActivity(), MapViewActivity.class));
+//        });
 
         binding.imageUserHomeScreen.setOnClickListener(view -> {
+            Navigation.findNavController(view).navigate(R.id.action_homeScreenFragment_to_profileScreenFragment);
+        });
+
+        binding.settingBtn.setOnClickListener(view -> {
             Navigation.findNavController(view).navigate(R.id.action_homeScreenFragment_to_profileScreenFragment);
         });
 
@@ -159,19 +192,60 @@ public class HomeScreenFragment extends Fragment implements DiscountAdapter.Clic
             startActivity(new Intent(getContext(), OrderedListActivity.class));
         });
 
+        binding.editTextSearchHomeScreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        binding.editTextSearchHomeScreen.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+
+                binding.scrollView3.scrollTo(0, heightScroll);
+                if (charSequence!=null && charSequence.length() != 0) {
+                    if (products.size() != 0) {
+                        productAdapter.submitList(products.stream()
+                                .filter(product -> product.getName().contains(charSequence))
+                                .collect(Collectors.toList()));
+                    }
+                }else{
+                    if(countClickSearch!=0)
+                  productAdapter.submitList(productsTop10);
+                    countClickSearch++;
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+
+            }
+        });
+
     }
 
     private void setControls() {
+        progressDialog = new ProgressDialog(requireContext());
+        progressDialog.setMessage("Đang tải");
+        progressBarDialog= new SpotsDialog.Builder().setContext(requireContext()).setTheme(R.style.CustomProgressBarDialog).build();
+        products = new ArrayList<>();
         user = AppUtils.getAccount(requireContext().getSharedPreferences(AppUtils.ACCOUNT, 0));
         rvCate = binding.recyclerViewCategoriesHomeScreen;
         rvPopular = binding.recyclerViewPopularHomeScreen;
         rvDiscount = binding.recyclerViewDiscountHomeScreen;
         txtName = binding.txtNameUserHomeScreen;
         imgAvt = binding.imageUserHomeScreen;
-
         slideDiscount = binding.slideDiscountHomeScreen;
-
-        mapViewModel.callGetPlaceFromGeocode(this.location, "vi-VN", getString(R.string.apikey_here_dot_com));
+        countClickSearch=0;
+        countUpdateAddress=1;
+//        mapViewModel.callGetPlaceFromGeocode(this.location, "vi-VN", getString(R.string.apikey_here_dot_com));
         getMyLocation();
 
 
@@ -195,8 +269,8 @@ public class HomeScreenFragment extends Fragment implements DiscountAdapter.Clic
                 new Observer<Boolean>() {
                     @Override
                     public void onChanged(Boolean aBoolean) {
-                        if(aBoolean)
-                        startActivity(new Intent(requireActivity(), MapViewActivity.class));
+
+
                     }
                 });
 
@@ -214,7 +288,7 @@ public class HomeScreenFragment extends Fragment implements DiscountAdapter.Clic
         adapterCate = new CategoryAdapter(homeViewModel, new CategoryAdapter.CategoryDiff());
         rvCate.addItemDecoration(
                 new ItemMargin(10, 0, 30, 10));
-        rvCate.setLayoutManager(new GridLayoutManager(requireContext(), 2, LinearLayoutManager.HORIZONTAL, false));
+        rvCate.setLayoutManager(new GridLayoutManager(requireContext(), 1, LinearLayoutManager.HORIZONTAL, false));
         rvCate.setAdapter(adapterCate);
 
 
@@ -237,7 +311,7 @@ public class HomeScreenFragment extends Fragment implements DiscountAdapter.Clic
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(),
                 Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(requireContext(), "Location not accept", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(requireContext(), "Location not accept", Toast.LENGTH_SHORT).show();
             return;
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
@@ -245,9 +319,8 @@ public class HomeScreenFragment extends Fragment implements DiscountAdapter.Clic
 
     @Override
     public void onLocationChanged(Location location) {
-
-        if(countUpdateAddress%200==0){
-
+        if(countUpdateAddress==1){
+            mapViewModel.callGetPlaceFromGeocode(location.getLatitude()+","+location.getLongitude(), "vi-VN", getString(R.string.apikey_here_dot_com));
         }
         countUpdateAddress++;
 
@@ -335,4 +408,5 @@ public class HomeScreenFragment extends Fragment implements DiscountAdapter.Clic
         this.setArguments(bundle);
         Navigation.findNavController(requireView()).navigate(R.id.action_homeScreenFragment_to_discountDetailsFragment,bundle);
     }
+
 }

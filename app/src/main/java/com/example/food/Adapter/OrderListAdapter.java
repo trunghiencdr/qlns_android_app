@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.food.Domain.Order;
@@ -18,9 +19,29 @@ import java.util.ArrayList;
 
 public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.ViewHolder>{
     ArrayList<Order> orders;
-
-    public OrderListAdapter(ArrayList<Order> orders) {
+    ClickOrderedListener mClickListener;
+    public OrderListAdapter(ArrayList<Order> orders, ClickOrderedListener mClickListener) {
         this.orders = orders;
+        this.mClickListener = mClickListener;
+    }
+
+    public void setData(ArrayList<Order> response) {
+        orders = response;
+        notifyDataSetChanged();
+    }
+
+    public void changeItem(Order order){
+        for(int i=0;i<orders.size(); i++){
+            if(order.getId()== orders.get(i).getId())
+            {
+                orders.get(i).setState(order.getState());
+                notifyDataSetChanged();
+            }
+        }
+    }
+
+    public interface ClickOrderedListener{
+        void onItemClicked(Order order);
     }
 
     @NonNull
@@ -43,7 +64,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.View
         if(orders.get(position).getState()!=null){
             holder.tv_state.setText(orders.get(position).getState());
         }
-
+        holder.constraintLayout.setOnClickListener(view -> mClickListener.onItemClicked(orders.get(position)));
     }
 
     @Override
@@ -53,8 +74,10 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv_order_id,tv_date,tv_discount,tv_state;
+        ConstraintLayout constraintLayout;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            constraintLayout = itemView.findViewById(R.id.contraint_layout_item_ordered);
             tv_order_id = itemView.findViewById(R.id.tv_order_id);
             tv_date = itemView.findViewById(R.id.tv_date);
             tv_discount = itemView.findViewById(R.id.tv_discount);
