@@ -64,12 +64,13 @@ public class OrderedListActivity extends AppCompatActivity implements OrderListA
         @Override
         public void didFetch(ArrayList<Order> response, String message) {
             if(response!=null){
+                alertDialog.dismiss();
                 //response.get(0).getId();
                 if(response.size()==0) binding.textViewEmptyList.setVisibility(View.VISIBLE);
                 else{
                     binding.textViewEmptyList.setVisibility(View.GONE);
                     adapter.setData(response);
-                    alertDialog.dismiss();
+
                 }
 
 

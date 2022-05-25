@@ -1,54 +1,81 @@
 package com.example.food.Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.WindowManager;
-import android.widget.GridView;
-import android.widget.Toast;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-import com.example.food.Adapter.CustomProductGridAdapter;
-import com.example.food.Api.Api;
-import com.example.food.Domain.Product;
-import com.example.food.Listener.ProductResponseListener;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.food.Domain.Category;
 import com.example.food.R;
+import com.example.food.databinding.FragmentProductListByCategoryBinding;
+import com.example.food.feature.category.CategoryDTO;
+import com.example.food.feature.home.HomeViewModel;
+import com.example.food.feature.product.ProductAdapter;
+import com.example.food.feature.product.ProductScreenFragmentDirections;
+import com.example.food.util.AppUtils;
+import com.example.food.util.ItemMargin;
 
-import java.util.ArrayList;
+import dmax.dialog.SpotsDialog;
 
 public class ProductListActivity extends AppCompatActivity {
-    GridView gridView;
-    Api api;
+
+    private FragmentProductListByCategoryBinding binding;
+    private RecyclerView rvProduct;
+    private ProductAdapter productAdapter;
+    private HomeViewModel homeViewModel;
+    AlertDialog alertDialog;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product_list);
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        setControl();
-        int categoryId= getIntent().getIntExtra("categoryID",0);
-        api = new Api(ProductListActivity.this);
-        if(categoryId!=0){
-            api.getListProductByCategoryId(productResponseListener,categoryId);
-        }else {
-            api.getProducts(productResponseListener);
+        binding = FragmentProductListByCategoryBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        alertDialog = new SpotsDialog.Builder().setContext(this).setTheme(R.style.CustomProgressBarDialog).build();
+
+        rvProduct = binding.recyclerViewProductsByCategory;
+        rvProduct.addItemDecoration(new ItemMargin(0,0, 0, 10));
+        rvProduct.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+
+
+        productAdapter = new ProductAdapter(homeViewModel,new ProductAdapter.ProductDiff(), R.layout.item_product_horizental);
+
+
+        rvProduct.setAdapter(productAdapter);
+
+        if(getIntent() != null) {
+            // The getPrivacyPolicyLink() method will be created automatically.
+            CategoryDTO categoryDTO = (CategoryDTO) getIntent().getSerializableExtra("category");
+            if(categoryDTO==null){
+                return;
+            }
+            binding.textViewNameOfCategory.setText(categoryDTO.getName());
+            alertDialog.show();
+            homeViewModel.getProductsByCategoryId(categoryDTO.getId())
+                    .subscribe(categoryResponseResponse -> {
+                        if(categoryResponseResponse.code()==200){
+                            System.out.println("get product by category thanh cong");
+                            productAdapter.submitList(categoryResponseResponse.body());
+                            alertDialog.dismiss();
+                        }
+                    }, throwable -> {
+                        System.out.println("throw get category:" + throwable.getMessage());
+                    });
         }
+        binding.btnBackProductList.setOnClickListener(view -> finish());
     }
-
-    private void setControl() {
-        gridView = findViewById(R.id.gridViewProduct);
-    }
-
-    private final ProductResponseListener productResponseListener = new ProductResponseListener(){
-        @Override
-        public void didFetch(ArrayList<Product> response, String message) {
-
-            gridView.setAdapter(new CustomProductGridAdapter(ProductListActivity.this, response));
-        }
-
-        @Override
-        public void didError(String message) {
-            Toast.makeText(ProductListActivity.this,"Call api error"+message.toString(),Toast.LENGTH_SHORT).show();
-            Log.d("zzz",message.toString());
-        }
-    } ;
 }

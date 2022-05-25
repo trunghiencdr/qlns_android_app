@@ -86,14 +86,26 @@ public class IntroActivity extends AppCompatActivity {
                             .subscribe(userDTO -> {
                                 if(userDTO.code()==200){
                                     AppUtils.PASS_LOGIN=1;
+                                    AppUtils.saveAccount2(IntroActivity.this, userDTO.body().getUser());
+                                    userViewModel.callUpdateTokenFireBaseUser(user.getId(), AppUtils.getTokenFireBase(IntroActivity.this));
+                                    if (user.getRoles().size() >= 0) {
+                                        if (user.getRoles().stream().filter(role -> role.getName().equals(AppUtils.ROLES[1])).findFirst().isPresent()) {
+                                            startActivity(new Intent(IntroActivity.this, AdminActivity.class));
+                                        } else {
+                                            startActivity(new Intent(IntroActivity.this, HomeActivity.class));
+
+                                        }
+                                    }
                                 }else {
                                     AppUtils.PASS_LOGIN=0;
+                                    startActivity(new Intent(IntroActivity.this, SigninActivity.class));
                                 }
-                                startActivity(new Intent(IntroActivity.this, HomeActivity.class));
-                                finish();
-                            }, throwable -> Toast.makeText(IntroActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show());
+                                        finish();
+//
+                            },
+                                    throwable -> Toast.makeText(IntroActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show());
                 }else {
-                    startActivity(new Intent(IntroActivity.this, HomeActivity.class));
+                    startActivity(new Intent(IntroActivity.this, SigninActivity.class));
                     finish();
                 }
 

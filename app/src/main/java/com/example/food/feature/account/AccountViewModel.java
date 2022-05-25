@@ -2,6 +2,7 @@ package com.example.food.feature.account;
 
 import androidx.lifecycle.ViewModel;
 
+import com.example.food.Domain.Response.ResponseObject;
 import com.example.food.dto.UserRequestForUpdate;
 import com.example.food.model.User;
 import com.example.food.network.RetroInstance;
@@ -20,7 +21,7 @@ public class AccountViewModel extends ViewModel {
         userRepository = RetroInstance.getRetrofitClient().create(UserRepository.class);
     }
 
-    public Observable<Response<User>> updateInforUser(int id, RequestBody userRequestForUpdate, MultipartBody.Part file){
+    public Observable<Response<ResponseObject<User>>> updateInforUser(int id, RequestBody userRequestForUpdate, MultipartBody.Part file){
         return userRepository.updateUser(id, userRequestForUpdate, file);
     }
 }

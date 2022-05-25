@@ -65,8 +65,6 @@ public class SigninFragment extends Fragment {
         if(user!=null) {
             if (AppUtils.PASS_LOGIN == 1) {// if has account
                 userViewModel.callUpdateTokenFireBaseUser(user.getId(), AppUtils.getTokenFireBase(requireActivity()));
-
-
                 if (user.getRoles().size() >= 0) {
                     if (user.getRoles().stream().filter(role -> role.getName().equals(AppUtils.ROLES[1])).findFirst().isPresent()) {
                         startActivity(new Intent(requireActivity(), AdminActivity.class));

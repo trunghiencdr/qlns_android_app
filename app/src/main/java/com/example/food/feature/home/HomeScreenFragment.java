@@ -285,7 +285,7 @@ public class HomeScreenFragment extends Fragment implements DiscountAdapter.Clic
         cartBtn = binding.cartBtn;
 
 
-        adapterCate = new CategoryAdapter(homeViewModel, new CategoryAdapter.CategoryDiff());
+        adapterCate = new CategoryAdapter(homeViewModel, new CategoryAdapter.CategoryDiff(), requireContext());
         rvCate.addItemDecoration(
                 new ItemMargin(10, 0, 30, 10));
         rvCate.setLayoutManager(new GridLayoutManager(requireContext(), 1, LinearLayoutManager.HORIZONTAL, false));

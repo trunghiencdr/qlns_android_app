@@ -30,14 +30,14 @@ public interface UserRepository {
 
     @Multipart
     @PUT("v1/Users/update/{id}")
-    Observable<Response<User>> updateUser(
+    Observable<Response<ResponseObject<User>>> updateUser(
             @Path("id") int id,
             @Part("user") RequestBody userRequestForUpdate,
             @Part MultipartBody.Part file
             );
     @Multipart
     @PUT("v1/Users/updateNotImage/{id}")
-    Observable<Response<User>> updateUserNotImage(
+    Observable<Response<ResponseObject<User>>> updateUserNotImage(
             @Path("id") int id,
             @Part("user") RequestBody userRequestForUpdate
     );

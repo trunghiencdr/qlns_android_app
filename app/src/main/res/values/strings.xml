@@ -43,4 +43,6 @@
     <string name="cycling_profile">%1$sm\nby bike</string>
     <string name="project_id2">Push notification</string>
 
+    <integer name="time_duration_max">200</integer>
+
 </resources>

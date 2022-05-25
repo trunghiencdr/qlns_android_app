@@ -63,14 +63,14 @@ public class UserViewModel extends AndroidViewModel {
 
     }
 
-    public Observable<Response<User>> apiUpdateUser(int id,RequestBody userRequestForUpdate, MultipartBody.Part file){
+    public Observable<Response<ResponseObject<User>>> apiUpdateUser(int id,RequestBody userRequestForUpdate, MultipartBody.Part file){
         return userRepository.updateUser(id,userRequestForUpdate, file)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());
 
     }
 
-    public Observable<Response<User>> apiUpdateUserNotImage(int id,RequestBody userRequestForUpdate){
+    public Observable<Response<ResponseObject<User>>> apiUpdateUserNotImage(int id,RequestBody userRequestForUpdate){
         return userRepository.updateUserNotImage(id,userRequestForUpdate)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());

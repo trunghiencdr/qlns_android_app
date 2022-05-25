@@ -17,7 +17,9 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
+import com.example.food.Activity.EditProfileActivity;
 import com.example.food.Activity.HomeActivity;
+import com.example.food.Activity.SigninActivity;
 import com.example.food.R;
 import com.example.food.databinding.FragmentProfileScreenBinding;
 import com.example.food.feature.account.ProfileScreenFragmentDirections;
@@ -54,21 +56,17 @@ public class ProfileScreenFragmentAdmin extends Fragment {
 
 
         setControls();
-        loadUser();
         setEvents();
-        onChangeUser();
+//        loadInfoUser(AppUtils.getAccount2(requireContext()));
 
     }
 
-    private void onChangeUser() {
-
-    }
 
     private void setEvents() {
 
 
         binding.btnEditProfileScreen.setOnClickListener(view -> {
-            startActivity(new Intent(requireActivity(), EditProfileFragmentAdmin.class));
+            startActivity(new Intent(requireActivity(), EditProfileActivity.class));
         });
 
         binding.btnChangePasswordProfileScreen.setOnClickListener(view -> {
@@ -78,14 +76,21 @@ public class ProfileScreenFragmentAdmin extends Fragment {
 
         binding.btnLogOutProfileScreen.setOnClickListener(view -> {
             AppUtils.deleteAccount2(requireContext());
-            Intent i = new Intent(requireActivity(), HomeActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            Intent i = new Intent(requireActivity(), SigninActivity.class);
            startActivity(i);
+           requireActivity().finish();
         });
 
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadInfoUser(AppUtils.getAccount2(requireContext()));
+
+
+    }
 
     private void setControls() {
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
@@ -93,7 +98,7 @@ public class ProfileScreenFragmentAdmin extends Fragment {
         txtUsername = binding.txtUserNameProfileScreen;
         imgAvt = binding.imgAvtProfileScreen;
         binding.btnBackProfile.setVisibility(View.GONE);
-        binding.btnEditProfileScreen.setVisibility(View.GONE);
+//        binding.btnEditProfileScreen.setVisibility(View.GONE);
     }
 
     private void loadUser() {
@@ -139,11 +144,9 @@ public class ProfileScreenFragmentAdmin extends Fragment {
         }
 
         if(linkImageAvt!=null && !linkImageAvt.equals("")){
-//            Glide.with(this).load(linkImageAvt).into(imgAvt);
-            imgAvt.setImageResource(R.drawable.ic_user);
+            Glide.with(requireContext()).load(linkImageAvt).into(imgAvt);
         }else{
             imgAvt.setImageResource(R.drawable.ic_user);
-
         }
 
     }

@@ -1,6 +1,7 @@
 package com.example.food.feature.category;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -22,6 +23,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.food.Activity.ProductListActivity;
 import com.example.food.Domain.Category;
 import com.example.food.Domain.Image;
 import com.example.food.R;
@@ -41,10 +43,13 @@ public class CategoryAdapter extends ListAdapter<CategoryDTO, CategoryAdapter.Ca
     private Resources resources;
     private String[]colorsBackground;
     private TypedArray categoryBackground;
+    private Context context;
 
-    public CategoryAdapter(HomeViewModel homeViewModel, @NonNull DiffUtil.ItemCallback<CategoryDTO> diffCallback) {
+    public CategoryAdapter(HomeViewModel homeViewModel, @NonNull DiffUtil.ItemCallback<CategoryDTO> diffCallback,
+                           Context context) {
         super(diffCallback);
         this.homeViewModel = homeViewModel;
+        this.context = context;
     }
 
 
@@ -110,19 +115,9 @@ public class CategoryAdapter extends ListAdapter<CategoryDTO, CategoryAdapter.Ca
         @Override
         public void onClick(View view) {
             if(view.getId()==R.id.mainLayoutCat){
-                // Create the Bundle to pass, you can put String, Integer, or serializable object
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("category", Category); // Serializable Object
-                Navigation.findNavController(view).navigate(R.id.productScreenFragment, bundle);
-//                Bundle bundle = new Bundle();
-//                bundle.putInt("categoryId", Category.getId());
-//                bundle.putString("categoryName", Category.getName());
-//              HomeScreenFragmentDirections.ActionHomeScreenFragmentToProductScreenFragment action = HomeScreenFragmentDirections.actionHomeScreenFragmentToProductScreenFragment().setCategoryId(Category.getId());
-//
-//                Navigation.findNavController(view).navigate(action);
-////                NavDirections action = HomeScreenFragmentDirections.actionHomeScreenFragmentToProductScreenFragment();
-//
-////                Navigation.findNavController(view).navigate(R.id.mainLayoutCat, bundle);
+                Intent intent = new Intent(context, ProductListActivity.class);
+                intent.putExtra("category", getItem(getAdapterPosition()));
+                context.startActivity(intent);
             }
 
         }
