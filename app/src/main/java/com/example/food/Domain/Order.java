@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 
 import com.example.food.Domain.Response.OrderDetail;
-import com.example.food.model.User;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -124,9 +123,9 @@ public class Order implements Serializable {
         else{
             total=0;
             orderDetails.stream()
-                    .forEach(orderDetail -> {
-                        total +=orderDetail.getPrice()*orderDetail.getQuantity()*(1-orderDetail.getDiscount());
-                    });
+                .forEach(orderDetail -> {
+                total +=orderDetail.getPrice()*orderDetail.getQuantity()*(1-orderDetail.getDiscount());
+            });
             return total;
         }
     }

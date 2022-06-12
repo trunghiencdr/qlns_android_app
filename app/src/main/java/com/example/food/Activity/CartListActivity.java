@@ -1,42 +1,54 @@
 package com.example.food.Activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.food.Adapter.CardListAdapter;
 import com.example.food.Api.Api;
+import com.example.food.Domain.AddressShop;
 import com.example.food.Domain.Cart;
 import com.example.food.Domain.Product;
 import com.example.food.Domain.Response.DiscountResponse;
 import com.example.food.Domain.Response.OrderDetailResponse;
 import com.example.food.Domain.Response.OrderResponse;
-import com.example.food.Listener.CartResponseListener;
-import com.example.food.Listener.DeleteCartResponseListener;
-import com.example.food.Listener.DiscountResponseListener;
-import com.example.food.Listener.InsertOrderDetailResponseListener;
-import com.example.food.Listener.InsertOrderResponseListener;
+import com.example.food.feature.map.MapViewModel;
+import com.example.food.network.Listener.CartResponseListener;
+import com.example.food.network.Listener.DeleteCartResponseListener;
+import com.example.food.network.Listener.DiscountResponseListener;
+import com.example.food.network.Listener.InsertOrderDetailResponseListener;
+import com.example.food.network.Listener.InsertOrderResponseListener;
 import com.example.food.R;
 import com.example.food.dto.CartForOrderDetail;
 import com.example.food.dto.DiscountDTO;
 import com.example.food.dto.OrdersDTO;
-import com.example.food.model.User;
-import com.example.food.repository.CartRepository;
+import com.example.food.Domain.User;
+import com.example.food.network.repository.CartRepository;
 import com.example.food.util.AppUtils;
+import com.example.food.viewmodel.AddressShopViewModel;
 import com.google.android.material.textfield.TextInputEditText;
+import com.mapbox.geojson.Point;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -47,54 +59,108 @@ import dmax.dialog.SpotsDialog;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class CartListActivity extends AppCompatActivity implements CardListAdapter.ChangNumberItemsListener {
+public class CartListActivity extends AppCompatActivity implements CardListAdapter.ChangNumberItemsListener,LocationListener {
     RecyclerView recycleViewCart;
     private CardListAdapter adapterCart;
     Api api;
     TextView ItemTotalFeeTxt, DeliveryFeeTxt,
             txtTotalOrder, btnCheckOut,
             txtValueDiscount, txtSaleOfCart,
-    txtTotalItemTemp, txtDeliveryItemTemp;
+            txtTotalItemTemp, txtDeliveryItemTemp,
+            txtDeliveryInfo;
     TextView btn_add_discount;
     ArrayList<Cart> carts = new ArrayList<>();
     TextInputEditText edit_discount;
     DiscountDTO discountDTO = new DiscountDTO();
     ImageView btnBack;
     AlertDialog alertDialog;
+    MapViewModel mapViewModel;
+    AddressShopViewModel addressShopViewModel;
+    double lon1=0.0, lat1=0.0, lon2=0.0, lat2=0.0;
+    int feeDeliveryPerKm = 1000;
+
+    int LOCATION_REFRESH_TIME = 15000; // 15 seconds to update
+    int LOCATION_REFRESH_DISTANCE = 200; // 500 meters to update
+
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart_list);
+        user = AppUtils.getAccount(getSharedPreferences(AppUtils.ACCOUNT, Context.MODE_PRIVATE));
         setControl();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recycleViewCart.setLayoutManager(linearLayoutManager);
         api = new Api(CartListActivity.this);
-        User user = AppUtils.getAccount(getSharedPreferences(AppUtils.ACCOUNT, Context.MODE_PRIVATE));
-        api.getCartsByUserId(cartResponseListener,Integer.parseInt(user.getId()+""));
-
+        getMyLocation();
+        loadData();
         setEvent();
 
 
     }
 
+    @SuppressLint("CheckResult")
+    private void loadData() {
+        api.getCartsByUserId(cartResponseListener, Integer.parseInt(user.getId() + ""));
+        addressShopViewModel.getAddressShopBySTT(1)
+                .subscribe(responseObjectResponse -> {
+                    if(responseObjectResponse.code()==200){
+                        AddressShop addressShop = responseObjectResponse.body().getData();
+                        lon1 = addressShop.getLongitude();
+                        lat1 = addressShop.getLatitude();
+                        if(lat2!=0 && lon2!=0){
+                            Log.d("HIEN", "LOCATION:" + lon1 + "," + lat1 + "-" + lon2 + "," + lat2);
+
+                            mapViewModel.callGetDistanceFromTwoPlace(lon1, lat1, lon2, lat2,getString(R.string.mapbox_access_token));
+                        }
+
+                    }
+                });
+    }
+
+    private void getMyLocation() {
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            Toast.makeText(this, "Location not accept", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, this);
+    }
+
     private void setEvent() {
+        mapViewModel.distance.observe(this, new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+
+                Log.d("HIEN", "DISTANCE:" + aDouble);
+                float feeDelivery = (int)(aDouble/1000) * feeDeliveryPerKm;
+                txtDeliveryInfo.setText("Phí vận chuyển: " + feeDelivery/1000 + " km");
+                DeliveryFeeTxt.setText(AppUtils.formatCurrency(feeDelivery));
+                txtDeliveryItemTemp.setText(feeDelivery + "");
+                txtTotalOrder.setText(AppUtils.formatCurrency(
+                        feeDelivery + Float.parseFloat(txtTotalItemTemp.getText().toString())));
+            }
+        });
         adapterCart = new CardListAdapter(new ArrayList<>(), CartListActivity.this, this);
         recycleViewCart.setAdapter(adapterCart);
         btnCheckOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Date myDate = new Date();
                 String date = new SimpleDateFormat("yyyy-MM-dd").format(myDate);
                 Log.d("date", date);
                 System.out.println(date + "date");
-                User user = AppUtils.getAccount(getSharedPreferences(AppUtils.ACCOUNT, Context.MODE_PRIVATE));
+                user = AppUtils.getAccount(getSharedPreferences(AppUtils.ACCOUNT, Context.MODE_PRIVATE));
 //                Order order = new Order(0,user,null,null,"Chua duyet");
-                OrdersDTO ordersDTO = new OrdersDTO(user.getId(), date, discountDTO.getId(), AppUtils.orderState[0]);// chưa duyệt
-                System.out.println(ordersDTO.toString());
-                alertDialog.show();
-                api.insertOrder(insertOrderResponseListener,ordersDTO);
+                if(user!=null) {
+                    OrdersDTO ordersDTO = new OrdersDTO(user.getId(), date, discountDTO.getId(), AppUtils.orderState[0]);// chưa duyệt
+                    System.out.println(ordersDTO.toString());
+                    alertDialog.show();
+                    api.insertOrder2(insertOrderResponseListener, ordersDTO);
+                }
 
 
             }
@@ -103,15 +169,17 @@ public class CartListActivity extends AppCompatActivity implements CardListAdapt
         btn_add_discount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String idDiscount =edit_discount.getText().toString().trim();
-                api.getDiscountById(discountResponseListener,idDiscount);
+                String idDiscount = edit_discount.getText().toString().trim();
+                api.getDiscountById(discountResponseListener, idDiscount);
             }
         });
         btnBack.setOnClickListener(view -> onBackPressed());
     }
 
     private void setControl() {
-        alertDialog= new SpotsDialog.Builder().setContext(this).setTheme(R.style.CustomProgressBarDialog).build();
+        mapViewModel = new ViewModelProvider(this).get(MapViewModel.class);
+        addressShopViewModel = new ViewModelProvider(this).get(AddressShopViewModel.class);
+        alertDialog = new SpotsDialog.Builder().setContext(this).setTheme(R.style.CustomProgressBarDialog).build();
 
         txtTotalItemTemp = findViewById(R.id.text_view_total_item_temp);
         txtDeliveryItemTemp = findViewById(R.id.text_view_delivery_item_temp);
@@ -125,120 +193,87 @@ public class CartListActivity extends AppCompatActivity implements CardListAdapt
         txtValueDiscount = findViewById(R.id.txtValueDiscount);
         txtTotalOrder = findViewById(R.id.text_view_total_order_carts);
         txtSaleOfCart = findViewById(R.id.text_view_sale_off_cart);
+        txtDeliveryInfo = findViewById(R.id.txtDeliveryInfo);
 
     }
-    private final DeleteCartResponseListener deleteCartResponseListener=new DeleteCartResponseListener() {
+
+    private final DeleteCartResponseListener deleteCartResponseListener = new DeleteCartResponseListener() {
         @Override
         public void didFetch(String response, String message) {
 //            Toast.makeText(CartListActivity.this, "Call api delete cart success"+message.toString(),Toast.LENGTH_SHORT).show();
 
-            Log.d("success",message.toString());
+            Log.d("success", message.toString());
         }
 
         @Override
         public void didError(String message) {
 //            Toast.makeText(CartListActivity.this,"Call api delete cart error"+message.toString(),Toast.LENGTH_SHORT).show();
 
-            Log.d("zzz",message.toString());
+            Log.d("zzz", message.toString());
         }
     };
-    private final InsertOrderResponseListener insertOrderResponseListener=new InsertOrderResponseListener() {
+    private final InsertOrderResponseListener insertOrderResponseListener = new InsertOrderResponseListener() {
         @SuppressLint("CheckResult")
         @Override
         public void didFetch(OrderResponse response, String message) {
 //            Toast.makeText(CartListActivity.this, "Call api insert order success" + message.toString(), Toast.LENGTH_SHORT).show();
             Log.d("success", message.toString());
-
-            User user = AppUtils.getAccount2(CartListActivity.this);
-            if (user != null)
-                Api.getRetrofit(AppUtils.BASE_URL)
-                        .create(CartRepository.class)
-                        .getCartsByUserId(user.getId())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(listResponse -> {
-                                    if (listResponse.code() == 200) {
-                                        //insert to order detail
-                                        List<CartForOrderDetail> cartDTOs = listResponse.body();
-                                        for (int i = 0; i < cartDTOs.size(); i++) {
-                                            CartForOrderDetail cartTemp = cartDTOs.get(i);
-                                            cartTemp.setOrderId(response.getData().getId());
-                                            Api.getRetrofit(AppUtils.BASE_URL)
-                                                    .create(CartRepository.class)
-                                                    .insertOrderDetails(cartDTOs.get(i))
-                                                    .subscribeOn(Schedulers.io())
-                                                    .observeOn(AndroidSchedulers.mainThread())
-                                                    .subscribe(responseObjectResponse -> {
-
-                                                            },
-                                                            throwable -> Toast.makeText(CartListActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show());
-                                            if (i == carts.size() - 1) {
-                                                api.deleteCartByUserId(deleteCartResponseListener,Integer.parseInt(user.getId()+""));
-                                               alertDialog.dismiss();
-                                               AppUtils.showSuccessDialog(CartListActivity.this,
-                                                       "Đặt hàng thành công");
-//                                                Toast.makeText(CartListActivity.this, "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
-//                                                finish();
-                                            }
-
-                                        }
-
-                                    } else {
-                                        Log.d("API1", listResponse.errorBody().string());
-                                        Toast.makeText(CartListActivity.this,
-                                                "Đặt hàng thất bại", Toast.LENGTH_SHORT).show();
-                                    }
-                                },
-                                throwable -> {
-//                            Toast.makeText(CartListActivity.this,
-//                                            throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                                    Log.d("API1", throwable.getMessage());
-                                });
-
-
+            if(response.getStatus().equalsIgnoreCase("OK")) {
+                alertDialog.dismiss();
+                api.deleteCartByUserId(deleteCartResponseListener, Integer.parseInt(user.getId() + ""));
+                alertDialog.dismiss();
+                AppUtils.showSuccessDialog(CartListActivity.this,
+                        "Đặt hàng thành công");
+            }else{
+                alertDialog.dismiss();
+                AppUtils.showSuccessDialog(CartListActivity.this,
+                        "Đặt hàng thất bại");
+                Toast.makeText(CartListActivity.this, "Đặt hàng thất bại", Toast.LENGTH_SHORT).show();
+            }
         }
 
         @Override
         public void didError(String message) {
 //            Toast.makeText(CartListActivity.this,"Call api insert order error"+message.toString(),Toast.LENGTH_SHORT).show();
-            Log.d("zzz",message.toString());
+            Log.d("API", message.toString());
         }
     };
-    private final InsertOrderDetailResponseListener insertOrderDetailResponseListener=new InsertOrderDetailResponseListener() {
+    private final InsertOrderDetailResponseListener insertOrderDetailResponseListener = new InsertOrderDetailResponseListener() {
         @Override
         public void didFetch(OrderDetailResponse response, String message) {
 //            Toast.makeText(CartListActivity.this, "Call api insert order detail success"+message.toString(),Toast.LENGTH_SHORT).show();
 
         }
+
         @Override
         public void didError(String message) {
 //            Toast.makeText(CartListActivity.this,"Call api insert order detail error"+message.toString(),Toast.LENGTH_SHORT).show();
-            Log.d("zzz",message.toString());
+            Log.d("zzz", message.toString());
         }
     };
 
-    private final DiscountResponseListener discountResponseListener=new DiscountResponseListener() {
+    private final DiscountResponseListener discountResponseListener = new DiscountResponseListener() {
 
         @Override
         public void didFetch(DiscountResponse response, String message) {
 //            Toast.makeText(CartListActivity.this, "Call api discount success"+message.toString(),Toast.LENGTH_SHORT).show();
-            discountDTO=response.getData();
-            Date today =new Date();
-            if(edit_discount.getText().toString().trim()=="") {
+            discountDTO = response.getData();
+            Date today = new Date();
+            if (edit_discount.getText().toString().trim() == "") {
                 txtValueDiscount.setText("0");
 
                 return;
             }
-            if(discountDTO.getStartDate().before(today)&&discountDTO.getEndDate().after(today)) {
+            if (discountDTO.getStartDate().before(today) && discountDTO.getEndDate().after(today)) {
                 txtValueDiscount.setVisibility(View.VISIBLE);
                 txtSaleOfCart.setText("Giảm giá:  ");
-                txtValueDiscount.setText((int)(discountDTO.getPercent() * 100) + "");
+                txtValueDiscount.setText((int) (discountDTO.getPercent() * 100) + "");
                 Float totalItem = Float.parseFloat(txtTotalItemTemp.getText().toString());
                 txtTotalOrder.setText(totalItem * (1 - discountDTO.getPercent()) + "");
                 return;
             }
             txtValueDiscount.setText("0");
-                return;
+            return;
 
 
         }
@@ -246,7 +281,7 @@ public class CartListActivity extends AppCompatActivity implements CardListAdapt
         @Override
         public void didError(String message) {
 //            Toast.makeText(CartListActivity.this,"Call api discount error"+message.toString(),Toast.LENGTH_SHORT).show();
-            if(edit_discount.getText().toString().trim()==""){
+            if (edit_discount.getText().toString().trim() == "") {
                 txtValueDiscount.setText("0");
                 return;
             }
@@ -267,17 +302,18 @@ public class CartListActivity extends AppCompatActivity implements CardListAdapt
                 int sl = 0;
                 for (int i = 0; i < response.size(); i++) {
                     Product productTemp = response.get(i).getProductDomain();
-                    float priceTotalProduct = productTemp.getPrice()*(1-productTemp.getDiscount())*response.get(i).getQuantity();
+                    float priceTotalProduct = productTemp.getPrice() * (1 - productTemp.getDiscount()) * response.get(i).getQuantity();
                     itemTotalFee += priceTotalProduct;
                     sl += response.get(i).getQuantity();
                     carts.add(response.get(i));
                 }
                 ItemTotalFeeTxt.setText(AppUtils.formatCurrency(itemTotalFee));
-                txtTotalItemTemp.setText(itemTotalFee+"");
-                if(response.size()!=0)
-                DeliveryFeeTxt.setText(AppUtils.formatCurrency(30000f));
-                txtDeliveryItemTemp.setText("30000");
-                float all = itemTotalFee + 30000;
+                txtTotalItemTemp.setText(itemTotalFee + "");
+//                if (response.size() != 0)
+//                    DeliveryFeeTxt.setText(AppUtils.formatCurrency(30000f));
+//                txtDeliveryItemTemp.setText("30000");
+                deliveryFee = Integer.parseInt(txtDeliveryItemTemp.getText().toString());
+                float all = itemTotalFee + deliveryFee;
                 txtTotalOrder.setText(AppUtils.formatCurrency(all));
             }
         }
@@ -300,11 +336,37 @@ public class CartListActivity extends AppCompatActivity implements CardListAdapt
         float discount = Float.parseFloat(txtValueDiscount.getText().toString());
         float delivery = Float.parseFloat(txtDeliveryItemTemp.getText().toString());
         float allFree = totalItem * (1 - discount / 100) + delivery;
-        txtTotalItemTemp.setText(totalItem+"");
+        txtTotalItemTemp.setText(totalItem + "");
         ItemTotalFeeTxt.setText(AppUtils.formatCurrency(totalItem));
 
         txtTotalOrder.setText(AppUtils.formatCurrency(allFree));
 
+
+    }
+
+
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        lat2 = location.getLatitude();
+        lon2 = location.getLongitude();
+        if(lat1!=0 && lon1!=0) {
+            Log.d("HIEN", "LOCATION:" + lon1 + "," + lat1 + "-" + lon2 + "," + lat2);
+            mapViewModel.callGetDistanceFromTwoPlace(lon1, lat1, lon2, lat2, getString(R.string.mapbox_access_token));
+        }
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(@NonNull String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(@NonNull String provider) {
 
     }
 }

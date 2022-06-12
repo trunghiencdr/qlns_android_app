@@ -39,6 +39,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/previous_2" />
                 <TextView
+                    android:layout_marginTop="15dp"
                     android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

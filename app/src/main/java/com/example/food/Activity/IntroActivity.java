@@ -3,9 +3,6 @@ package com.example.food.Activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -19,8 +16,7 @@ import android.widget.Toast;
 
 import com.example.food.R;
 import com.example.food.feature.adminhome.AdminActivity;
-import com.example.food.feature.signin.SigninFragmentDirections;
-import com.example.food.model.User;
+import com.example.food.Domain.User;
 import com.example.food.util.AppUtils;
 import com.example.food.viewmodel.UserViewModel;
 import com.google.android.gms.common.ConnectionResult;

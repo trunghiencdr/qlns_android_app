@@ -13,21 +13,18 @@ import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 
-import com.example.food.Activity.MainActivity;
 import com.example.food.Activity.ShowDetailActivity;
 import com.example.food.Api.Api;
 import com.example.food.Domain.Cart;
 import com.example.food.Domain.Product;
 import com.example.food.Domain.Response.CartResponse;
-import com.example.food.Listener.InsertCartResponseListener;
-import com.example.food.Listener.ProductResponseListener;
+import com.example.food.network.Listener.InsertCartResponseListener;
 import com.example.food.R;
 import com.example.food.dto.CartDTO;
-import com.example.food.model.User;
+import com.example.food.Domain.User;
 import com.example.food.util.AppUtils;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CustomProductGridAdapter extends BaseAdapter implements Serializable {

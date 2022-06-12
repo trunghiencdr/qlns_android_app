@@ -1,19 +1,15 @@
 package com.example.food.feature.product;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
@@ -25,15 +21,13 @@ import com.example.food.Api.Api;
 import com.example.food.Domain.Cart;
 import com.example.food.Domain.Product;
 import com.example.food.Domain.Response.CartResponse;
-import com.example.food.Listener.InsertCartResponseListener;
+import com.example.food.network.Listener.InsertCartResponseListener;
 import com.example.food.R;
 import com.example.food.dto.CartDTO;
 import com.example.food.feature.home.HomeViewModel;
-import com.example.food.model.User;
+import com.example.food.Domain.User;
 import com.example.food.util.AppUtils;
 import com.squareup.picasso.Picasso;
-
-import java.sql.SQLException;
 
 import dmax.dialog.SpotsDialog;
 

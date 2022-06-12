@@ -20,7 +20,7 @@ import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 
 import com.example.food.R;
-import com.example.food.model.User;
+import com.example.food.Domain.User;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -42,9 +42,9 @@ import java.util.concurrent.Callable;
 public class AppUtils {
 
 
-    public static String BASE_URL = "http://192.168.1.6:8080/";
+//    public static String BASE_URL = "http://192.168.1.6:8080/";
 //    public static String BASE_URL = "http://192.168.143.130:8080/";
-//        public static String BASE_URL="http://10.0.2.2:8080/";
+        public static String BASE_URL="http://10.0.2.2:8080/";
     public static String[] ROLES = {"ROLE_USER", "ROLE_ADMIN"};
     public static int PASS_LOGIN = 0;
     public static String[] orderState = {"Chưa duyệt", "Đang giao", "Đã giao", "Đã hủy"};

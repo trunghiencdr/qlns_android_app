@@ -19,7 +19,7 @@ import androidx.core.app.NotificationCompat;
 import com.example.food.Activity.HomeActivity;
 import com.example.food.Activity.IntroActivity;
 import com.example.food.R;
-import com.example.food.model.User;
+import com.example.food.Domain.User;
 import com.example.food.util.AppUtils;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;

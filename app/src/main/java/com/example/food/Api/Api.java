@@ -14,20 +14,19 @@ import com.example.food.Domain.Response.OrderDetailResponse;
 import com.example.food.Domain.Response.OrderResponse;
 import com.example.food.Domain.Response.ProductResponse;
 import com.example.food.Domain.Response.UpdatePasswordResponse;
-import com.example.food.Listener.CartResponseListener;
-import com.example.food.Listener.CategoryResponseListener;
-import com.example.food.Listener.DeleteCartResponseListener;
-import com.example.food.Listener.DiscountResponseListener;
-import com.example.food.Listener.InsertCartResponseListener;
-import com.example.food.Listener.InsertOrderDetailResponseListener;
-import com.example.food.Listener.InsertOrderResponseListener;
-import com.example.food.Listener.OTPResponseListener;
-import com.example.food.Listener.OneProductResponseListener;
-import com.example.food.Listener.OrdersResponseListener;
-import com.example.food.Listener.ProductResponseListener;
-import com.example.food.Listener.UpdatePasswordResponseListener;
+import com.example.food.network.Listener.CartResponseListener;
+import com.example.food.network.Listener.CategoryResponseListener;
+import com.example.food.network.Listener.DeleteCartResponseListener;
+import com.example.food.network.Listener.DiscountResponseListener;
+import com.example.food.network.Listener.InsertCartResponseListener;
+import com.example.food.network.Listener.InsertOrderDetailResponseListener;
+import com.example.food.network.Listener.InsertOrderResponseListener;
+import com.example.food.network.Listener.OTPResponseListener;
+import com.example.food.network.Listener.OneProductResponseListener;
+import com.example.food.network.Listener.OrdersResponseListener;
+import com.example.food.network.Listener.ProductResponseListener;
+import com.example.food.network.Listener.UpdatePasswordResponseListener;
 import com.example.food.dto.CartDTO;
-import com.example.food.dto.DiscountDTO;
 import com.example.food.dto.OrderDetailDTO;
 import com.example.food.dto.OrdersDTO;
 import com.example.food.util.AppUtils;
@@ -293,6 +292,26 @@ public class Api {
         });
     }
 
+    public void insertOrder2(InsertOrderResponseListener listener, OrdersDTO ordersDTO){
+        CallInsertOrder callInsertOrder=retrofit.create(CallInsertOrder.class);
+        Call<OrderResponse> call =callInsertOrder.insertOrder2(ordersDTO);
+        call.enqueue(new Callback<OrderResponse>() {
+            @Override
+            public void onResponse(Call<OrderResponse> call, Response<OrderResponse> response) {
+                if (!response.isSuccessful()) {
+                    listener.didError(response.message());
+                    return;
+                }
+                listener.didFetch(response.body(), response.message());
+            }
+
+            @Override
+            public void onFailure(Call<OrderResponse> call, Throwable t) {
+                listener.didError(t.getMessage());
+            }
+        });
+    }
+
     public void insertOrderDetails(InsertOrderDetailResponseListener listener, OrderDetailDTO orderDetailDTO){
         CallInsertOrderDetail callInsertOrderDetail=retrofit.create(CallInsertOrderDetail.class);
         Call<OrderDetailResponse> call =callInsertOrderDetail.insertOrderDetails(orderDetailDTO);
@@ -438,6 +457,9 @@ public class Api {
     private interface CallInsertOrder {
         @POST("api/v1/Orders/insert")
         Call<OrderResponse> insertOrder(@Body OrdersDTO ordersDTO);
+
+        @POST("api/v1/Orders/insert/v2")
+        Call<OrderResponse> insertOrder2(@Body OrdersDTO ordersDTO);
     }
 
     private interface CallInsertOrderDetail {

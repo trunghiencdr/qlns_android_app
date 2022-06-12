@@ -1,17 +1,13 @@
 package com.example.food.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.example.food.Api.Api;
 import com.example.food.Domain.Category;
-import com.example.food.Listener.CategoryResponseListener;
+import com.example.food.network.Listener.CategoryResponseListener;
 import com.example.food.R;
-import com.example.food.feature.category.CategoryAdapter;
-import com.example.food.feature.home.HomeViewModel;
 
 import android.os.Bundle;
 import android.util.Log;

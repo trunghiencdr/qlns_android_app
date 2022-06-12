@@ -11,8 +11,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -24,7 +22,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,7 +37,7 @@ import com.example.food.feature.home.HomeViewModel;
 import com.example.food.feature.map.MapViewActivity;
 import com.example.food.feature.map.MapViewModel;
 import com.example.food.feature.product.ProductAdapter;
-import com.example.food.model.User;
+import com.example.food.Domain.User;
 import com.example.food.util.AppUtils;
 import com.example.food.util.ItemMargin;
 
@@ -313,16 +310,12 @@ public class HomeActivity extends AppCompatActivity implements DiscountAdapter.C
 //            Toast.makeText(this, "Location not accept", Toast.LENGTH_SHORT).show();
             return;
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 15000, 500, this);
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        if(countUpdateAddress==1){
-            mapViewModel.callGetPlaceFromGeocode(location.getLatitude()+","+location.getLongitude(), "vi-VN", getString(R.string.apikey_here_dot_com));
-        }
-        countUpdateAddress++;
-
+        mapViewModel.callGetPlaceFromGeocode(location.getLatitude()+","+location.getLongitude(), "vi-VN", getString(R.string.apikey_here_dot_com));
     }
 
 

@@ -15,7 +15,7 @@ import com.example.food.R;
 import com.example.food.databinding.FragmentSigninBinding;
 import com.example.food.feature.adminhome.AdminActivity;
 import com.example.food.feature.signin.SigninFragment;
-import com.example.food.model.User;
+import com.example.food.Domain.User;
 import com.example.food.util.AppUtils;
 import com.example.food.viewmodel.UserViewModel;
 
@@ -53,7 +53,13 @@ public class SigninActivity extends AppCompatActivity {
             singinProcess(binding.editTextUsernameSignIn.getText().toString(),
                     binding.editTextPasswordSignIn.getText().toString());
         });
-        binding.btnSignUp.setOnClickListener(view -> startActivity(new Intent(this, SignupActivity.class)));
+        binding.btnSignUp.setOnClickListener(view -> navigateToEnterPhoneNumber());
+    }
+
+    private void navigateToEnterPhoneNumber() {
+        Intent intent = new Intent(this, ForgotPasswordActivity.class);
+        intent.putExtra("title", "Đăng ký số điện thoại");
+        startActivity(intent);
     }
 
     private void initData() {

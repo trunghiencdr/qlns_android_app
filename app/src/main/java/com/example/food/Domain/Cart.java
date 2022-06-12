@@ -1,7 +1,5 @@
 package com.example.food.Domain;
 
-import com.example.food.model.User;
-
 import java.io.Serializable;
 
 public class Cart implements Serializable {

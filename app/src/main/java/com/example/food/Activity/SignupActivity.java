@@ -3,28 +3,17 @@ package com.example.food.Activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
 
-import com.example.food.R;
 import com.example.food.databinding.FragmentSignupBinding;
 import com.example.food.dto.UserDTO;
-import com.example.food.model.User;
+import com.example.food.Domain.User;
 import com.example.food.util.AppUtils;
 import com.example.food.viewmodel.UserViewModel;
-import com.google.android.material.textfield.TextInputEditText;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -52,8 +41,9 @@ public class SignupActivity extends AppCompatActivity {
         binding.btnConfirmSignUp.setOnClickListener(view -> {
             signupProcess();
         });
-
-
+        String phoneNumber = getIntent().getStringExtra("phoneNumber");
+        binding.editTextUsernameSignUp.setText(phoneNumber);
+        binding.editTextUsernameSignUp.setEnabled(false);
     }
 
     @SuppressLint("CheckResult")
@@ -115,13 +105,12 @@ public class SignupActivity extends AppCompatActivity {
         if(password.equals(confirmPass)) {
             userViewModel.makeApiCallSignUp(username, name, password).subscribe(
                     userDTO -> {
-                        userDTOtemp = userDTO;
-                        if (userDTO.getStatus().equalsIgnoreCase("Ok")) {
-                            user = userDTO.getUser();
+                        userDTOtemp = userDTO.body();
+                        if (userDTO.isSuccessful() && userDTOtemp.getStatus().equalsIgnoreCase("Ok")) {
+                            user = userDTOtemp.getUser();
                             AppUtils.saveAccount2(this, user);
                             AppUtils.savePassword(this, password);
-                            Toast.makeText(this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
-
+//                            Toast.makeText(this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
                             userViewModel.callUpdateTokenFireBaseUser(user.getId(), AppUtils.getTokenFireBase(this));
                             navigateToHome();
                         }else{

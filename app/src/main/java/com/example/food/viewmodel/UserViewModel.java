@@ -10,9 +10,9 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.food.Domain.Response.ResponseObject;
 import com.example.food.Domain.request.RequestChangePassword;
 import com.example.food.dto.UserDTO;
-import com.example.food.feature.account.UserRepository;
-import com.example.food.model.RequestSignup;
-import com.example.food.model.User;
+import com.example.food.network.repository.UserRepository;
+import com.example.food.Domain.RequestSignup;
+import com.example.food.Domain.User;
 import com.example.food.network.RetroInstance;
 import com.example.food.util.AppUtils;
 
@@ -56,7 +56,7 @@ public class UserViewModel extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread());
 
     }
-    public Observable<UserDTO> makeApiCallSignUp(String username, String name, String password){
+    public Observable<Response<UserDTO>> makeApiCallSignUp(String username, String name, String password){
         return userRepository.signup(new RequestSignup(username, name, password))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -89,7 +89,9 @@ public class UserViewModel extends AndroidViewModel {
     public MutableLiveData<String> getOTP() {
         return otp;
     }
-
+    public void setExistUser(boolean existUser) {
+        this.existUser.setValue(existUser);
+    }
     @SuppressLint("CheckResult")
     public void getUser(int id){
        userRepository.getUserById(id)

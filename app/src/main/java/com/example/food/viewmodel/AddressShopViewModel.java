@@ -8,7 +8,8 @@ import androidx.lifecycle.AndroidViewModel;
 import com.example.food.Domain.AddressShop;
 import com.example.food.Domain.Response.ResponseObject;
 import com.example.food.network.RetroInstance;
-import com.example.food.repository.AddressShopRepository;
+import com.example.food.network.repository.AddressShopRepository;
+import com.example.food.network.repository.MapBoxRepository;
 
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;

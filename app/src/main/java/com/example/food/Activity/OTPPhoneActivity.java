@@ -28,6 +28,7 @@ import java.util.TimerTask;
 public class OTPPhoneActivity extends AppCompatActivity {
     FragmentOtpPhoneBinding binding;
     UserViewModel userViewModel;
+    String next;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,10 +86,19 @@ public class OTPPhoneActivity extends AppCompatActivity {
     }
 
     private void setEvents() {
+        next=getIntent().getStringExtra("next");
+        if(next!=null){
+            next="signup";
+        }
         binding.btnConfirm.setOnClickListener(view -> {
             String otp = binding.editTextOTP.getText().toString();
             if(userViewModel.checkOTP(otp)){
-                Intent intent = new Intent(this, ResetPasswordActivity.class);
+                Intent intent;
+                if(next!=null){
+                    intent = new Intent(this, ResetPasswordActivity.class);
+                }else{
+                    intent = new Intent(this, SignupActivity.class);
+                }
                 intent.putExtra("phoneNumber", binding.txtPhoneNumber.getText().toString());
                 startActivity(intent);
             }

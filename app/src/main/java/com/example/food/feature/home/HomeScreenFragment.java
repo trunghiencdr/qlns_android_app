@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 
 import android.view.WindowManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,7 +45,7 @@ import com.example.food.feature.discount.DiscountAdapter;
 import com.example.food.feature.map.MapViewActivity;
 import com.example.food.feature.map.MapViewModel;
 import com.example.food.feature.product.ProductAdapter;
-import com.example.food.model.User;
+import com.example.food.Domain.User;
 import com.example.food.util.AppUtils;
 import com.example.food.util.ItemMargin;
 

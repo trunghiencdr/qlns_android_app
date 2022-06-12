@@ -1,13 +1,8 @@
 package com.example.food.dto;
 
-import android.service.autofill.UserData;
-
-import com.example.food.model.User;
-import com.example.food.util.ResponseMessage;
+import com.example.food.Domain.User;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import java.util.List;
 
 public class UserDTO{
 

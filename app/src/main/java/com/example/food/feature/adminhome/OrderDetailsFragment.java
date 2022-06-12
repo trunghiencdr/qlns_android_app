@@ -2,7 +2,6 @@ package com.example.food.feature.adminhome;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -14,8 +13,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.food.Domain.Order;
 import com.example.food.R;
-import com.example.food.databinding.FragmentAdminOrderBinding;
-import com.example.food.model.User;
 import com.example.food.util.AppUtils;
 import com.example.food.viewmodel.OrderViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -29,10 +26,22 @@ public class OrderDetailsFragment extends BottomSheetDialogFragment {
     private Button btnCancel, btnAccept;
     private OrderViewModel orderViewModel;
     private View view;
+    private String titleAccept = "Chấp nhận";
+    private String titleCancel = "Đóng";
+    private boolean visibleAccept = true;
 
 
     public interface ClickButton{
         void clickButtonAccept(int idOrder, String state);
+    }
+
+    public void setVisibleAccept(boolean visibleAccept) {
+        this.visibleAccept = visibleAccept;
+    }
+
+    public void setTitleButton(String titleCancel, String titleAccept) {
+        this.titleCancel = titleCancel;
+        this.titleAccept = titleAccept;
     }
 
     public static OrderDetailsFragment newInstance(Order order, ClickButton clickButton){
@@ -65,7 +74,7 @@ public class OrderDetailsFragment extends BottomSheetDialogFragment {
         setDataOrder();
         btnCancel.setOnClickListener(view1 -> bottomSheetDialog.dismiss());
         btnAccept.setOnClickListener(view1 -> {
-            mClickButton.clickButtonAccept(mOrder.getId(), AppUtils.orderState[2]);
+            mClickButton.clickButtonAccept(mOrder.getId(), AppUtils.orderState[1]);
             bottomSheetDialog.dismiss();
         });// dda giao
         return bottomSheetDialog;
@@ -84,12 +93,16 @@ public class OrderDetailsFragment extends BottomSheetDialogFragment {
         txtOrderId = view.findViewById(R.id.text_view_order_details_id);
         btnCancel = view.findViewById(R.id.button_cancel_order_details);
         btnAccept = view.findViewById(R.id.button_accept_order_details);
+
+        btnCancel.setText(titleCancel);
+        btnAccept.setText(titleAccept);
     }
 
     private void setDataOrder(){
         if(mOrder==null) return;
         if(!mOrder.getState().equals(AppUtils.orderState[0])){
-            btnAccept.setVisibility(View.INVISIBLE);
+            if(visibleAccept) btnAccept.setVisibility(View.VISIBLE);
+            else btnAccept.setVisibility(View.INVISIBLE);
         }else{
             btnAccept.setVisibility(View.VISIBLE);
         }

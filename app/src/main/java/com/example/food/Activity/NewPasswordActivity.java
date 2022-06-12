@@ -4,10 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.food.Api.Api;
 import com.example.food.Domain.Response.UpdatePasswordResponse;
-import com.example.food.Listener.UpdatePasswordResponseListener;
+import com.example.food.network.Listener.UpdatePasswordResponseListener;
 import com.example.food.R;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;

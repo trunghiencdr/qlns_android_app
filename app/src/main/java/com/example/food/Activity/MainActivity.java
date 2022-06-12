@@ -17,10 +17,10 @@ import com.example.food.Adapter.PopularAdapter;
 import com.example.food.Api.Api;
 import com.example.food.Domain.Category;
 import com.example.food.Domain.Product;
-import com.example.food.Listener.CategoryResponseListener;
-import com.example.food.Listener.ProductResponseListener;
+import com.example.food.network.Listener.CategoryResponseListener;
+import com.example.food.network.Listener.ProductResponseListener;
 import com.example.food.R;
-import com.example.food.model.User;
+import com.example.food.Domain.User;
 import com.example.food.util.AppUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 

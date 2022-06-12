@@ -3,20 +3,16 @@ package com.example.food.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.food.Adapter.OrderListAdapter;
 import com.example.food.Api.Api;
 import com.example.food.Domain.Order;
-import com.example.food.Listener.OrdersResponseListener;
+import com.example.food.network.Listener.OrdersResponseListener;
 import com.example.food.R;
 import com.example.food.databinding.ActivityOrderedListBinding;
 import com.example.food.feature.adminhome.OrderDetailsFragment;
-import com.example.food.feature.discountdetails.DiscountDetailsFragmentDirections;
-import com.example.food.model.User;
+import com.example.food.Domain.User;
 import com.example.food.util.AppUtils;
 import com.example.food.viewmodel.OrderViewModel;
 
@@ -28,7 +24,6 @@ import android.view.View;
 import java.util.ArrayList;
 
 import dmax.dialog.SpotsDialog;
-import io.reactivex.internal.operators.observable.ObservableReduceSeedSingle;
 
 public class OrderedListActivity extends AppCompatActivity implements OrderListAdapter.ClickOrderedListener, OrderDetailsFragment.ClickButton {
     Api api;
@@ -87,7 +82,14 @@ public class OrderedListActivity extends AppCompatActivity implements OrderListA
     public void onItemClicked(Order order) {
         // SHOW DETAIL FRAGMENT
         OrderDetailsFragment orderDetailsFragment = OrderDetailsFragment.newInstance(order, this);
-        orderDetailsFragment.setCancelable(false);
+//        orderDetailsFragment.setCancelable(false);
+        if(order.getState().equalsIgnoreCase(AppUtils.orderState[0])){
+            orderDetailsFragment.setTitleButton("Đóng", "Hủy đơn hàng");
+        }else{
+            orderDetailsFragment.setTitleButton("Đóng", "Đánh giá");
+        }
+
+        orderDetailsFragment.setVisibleAccept(true);
         orderDetailsFragment.show(getSupportFragmentManager(), orderDetailsFragment.getTag());
     }
 

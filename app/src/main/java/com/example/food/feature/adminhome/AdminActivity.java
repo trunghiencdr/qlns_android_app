@@ -6,18 +6,15 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager2.widget.ViewPager2;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-import androidx.fragment.app.FragmentTransaction;
 
-import com.example.food.Activity.HomeActivity;
+import com.example.food.Adapter.ViewPagerAdapter;
 import com.example.food.R;
-import com.example.food.util.AppUtils;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;

@@ -18,13 +18,13 @@ import com.example.food.Api.Api;
 import com.example.food.Domain.Cart;
 import com.example.food.Domain.Product;
 import com.example.food.Domain.Response.CartResponse;
-import com.example.food.Listener.CartResponseListener;
-import com.example.food.Listener.DeleteCartResponseListener;
-import com.example.food.Listener.InsertCartResponseListener;
+import com.example.food.network.Listener.CartResponseListener;
+import com.example.food.network.Listener.DeleteCartResponseListener;
+import com.example.food.network.Listener.InsertCartResponseListener;
 import com.example.food.R;
 import com.example.food.dto.CartDTO;
-import com.example.food.model.User;
-import com.example.food.repository.CartRepository;
+import com.example.food.Domain.User;
+import com.example.food.network.repository.CartRepository;
 import com.example.food.util.AppUtils;
 import com.squareup.picasso.Picasso;
 

@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,13 +14,11 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
-import com.example.food.R;
 import com.example.food.databinding.FragmentSignupBinding;
 import com.example.food.dto.UserDTO;
-import com.example.food.model.User;
+import com.example.food.Domain.User;
 import com.example.food.util.AppUtils;
 import com.example.food.viewmodel.UserViewModel;
-import com.google.android.material.textfield.TextInputEditText;
 
 public class SignupFragment extends Fragment {
 
@@ -113,18 +109,18 @@ public class SignupFragment extends Fragment {
         if(password.equals(confirmPass)) {
             userViewModel.makeApiCallSignUp(username, name, password).subscribe(
                     userDTO -> {
-                        userDTOtemp = userDTO;
-                        if (userDTO.getStatus().equalsIgnoreCase("Ok")) {
-                            user = userDTO.getUser();
-                            AppUtils.saveAccount2(requireActivity(), user);
-                            AppUtils.savePassword(requireContext(), password);
-                            Toast.makeText(requireContext(), "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
-
-                            userViewModel.callUpdateTokenFireBaseUser(user.getId(), AppUtils.getTokenFireBase(requireContext()));
-                            navigateToHome();
-                        }else{
-                            Toast.makeText(requireContext(), "Số điện thoại đã đăng ký rồi", Toast.LENGTH_SHORT).show();
-                        }
+//                        userDTOtemp = userDTO;
+//                        if (userDTO.getStatus().equalsIgnoreCase("Ok")) {
+//                            user = userDTO.getUser();
+//                            AppUtils.saveAccount2(requireActivity(), user);
+//                            AppUtils.savePassword(requireContext(), password);
+//                            Toast.makeText(requireContext(), "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
+//
+//                            userViewModel.callUpdateTokenFireBaseUser(user.getId(), AppUtils.getTokenFireBase(requireContext()));
+//                            navigateToHome();
+//                        }else{
+//                            Toast.makeText(requireContext(), "Số điện thoại đã đăng ký rồi", Toast.LENGTH_SHORT).show();
+//                        }
                     }
                     , throwable -> {
                         Toast.makeText(requireContext(), throwable.getLocalizedMessage(), Toast.LENGTH_SHORT).show();

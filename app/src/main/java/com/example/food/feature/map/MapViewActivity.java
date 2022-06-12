@@ -32,11 +32,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.food.Domain.AddressShop;
 import com.example.food.R;
-import com.example.food.model.User;
+import com.example.food.Domain.User;
 import com.example.food.util.AppUtils;
 import com.example.food.viewmodel.AddressShopViewModel;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
@@ -72,7 +70,6 @@ import com.mapbox.mapboxsdk.utils.BitmapUtils;
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher;
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions;
 import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -436,18 +433,7 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
                 }
             }
         }
-        /*if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
-// Retrieve the information from the selected location's CarmenFeature
-            CarmenFeature carmenFeature = PlacePicker.getPlace(data);
 
-// Set the TextView text to the entire CarmenFeature. The CarmenFeature
-// also be parsed through to grab and display certain information such as
-// its placeName, text, or coordinates.
-            if (carmenFeature != null) {
-                Toast.makeText(MapsActivity.this, String.format(address
-                        , carmenFeature.toJson()), Toast.LENGTH_SHORT).show();
-            }
-        }*/
     }
 
     private void enableLocationComponent(@NonNull Style loadedMapStyle) {

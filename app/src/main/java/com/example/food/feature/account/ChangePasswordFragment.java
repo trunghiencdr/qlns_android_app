@@ -16,7 +16,7 @@ import androidx.navigation.Navigation;
 
 import com.example.food.Domain.request.RequestChangePassword;
 import com.example.food.databinding.FragmentChangePasswordScreenBinding;
-import com.example.food.model.User;
+import com.example.food.Domain.User;
 import com.example.food.util.AppUtils;
 import com.example.food.viewmodel.UserViewModel;
 

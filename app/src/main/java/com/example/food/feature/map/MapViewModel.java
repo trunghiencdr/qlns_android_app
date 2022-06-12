@@ -9,6 +9,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.food.Api.Api;
+import com.example.food.R;
 import com.example.food.network.RetroInstance;
 import com.example.food.util.AppUtils;
 
@@ -24,6 +25,7 @@ public class MapViewModel extends AndroidViewModel {
     MutableLiveData<Float> lng;
     MutableLiveData<String> message;
     MutableLiveData<Boolean> clickLocation;
+    public MutableLiveData<Double> distance;
     int count = 0;
 
 
@@ -34,6 +36,7 @@ public class MapViewModel extends AndroidViewModel {
         lng = new MutableLiveData<>();
         message = new MutableLiveData<>();
         clickLocation = new MutableLiveData<>();
+        distance = new MutableLiveData<>();
 
     }
 
@@ -67,6 +70,25 @@ public class MapViewModel extends AndroidViewModel {
 //                message.setValue();
             }
         }, throwable -> message.setValue(AppUtils.getErrorMessage(throwable.getMessage())));
+    }
+
+    @SuppressLint("CheckResult")
+    public void callGetDistanceFromTwoPlace(double lon1, double lat1, double lon2, double lat2, String apiKey){
+        Api.getRetrofit(
+                        "https://api.mapbox.com/").create(MapRepository.class)
+                .getDistance(lon1, lat1, lon2, lat2, apiKey)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response ->{
+                    if(response.code()==200){
+                        if(response.body().routes.size()>0){
+                            distance.postValue(response.body().routes.get(0).distance);
+                        }
+                    }else {
+                        distance.postValue(0.0);
+                        Log.d("HIEN", response.errorBody().string());
+                    }
+                }, throwable -> message.setValue(AppUtils.getErrorMessage(throwable.getMessage())));
     }
 
     @SuppressLint("CheckResult")

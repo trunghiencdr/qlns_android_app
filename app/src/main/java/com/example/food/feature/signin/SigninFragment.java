@@ -3,14 +3,12 @@ package com.example.food.feature.signin;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -18,20 +16,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
-import com.example.food.Activity.HomeActivity;
-import com.example.food.Activity.IntroActivity;
 import com.example.food.Activity.OTPActivity;
 import com.example.food.Api.Api;
 import com.example.food.Domain.Response.OTPResponse;
-import com.example.food.Listener.OTPResponseListener;
+import com.example.food.network.Listener.OTPResponseListener;
 import com.example.food.databinding.FragmentSigninBinding;
 import com.example.food.feature.adminhome.AdminActivity;
-import com.example.food.model.User;
+import com.example.food.Domain.User;
 import com.example.food.util.AppUtils;
 import com.example.food.viewmodel.UserViewModel;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 public class SigninFragment extends Fragment {
 

@@ -2,9 +2,7 @@ package com.example.food.feature.category;
 
 
 import com.example.food.Domain.Category;
-import com.example.food.util.ResponseMessage;
-
-import java.util.List;
+import com.example.food.Domain.Response.ResponseMessage;
 
 public class CategoryResponse extends ResponseMessage {
     private Category data;

@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission. ACCESS_COARSE_LOCATION" />
 
     <application
+        android:hardwareAccelerated="true"
         android:name=".firebase.MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/icon_app"

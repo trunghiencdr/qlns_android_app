@@ -7,24 +7,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
 import com.example.food.Activity.EditProfileActivity;
-import com.example.food.Activity.HomeActivity;
 import com.example.food.Activity.SigninActivity;
 import com.example.food.R;
 import com.example.food.databinding.FragmentProfileScreenBinding;
-import com.example.food.feature.account.ProfileScreenFragmentDirections;
-import com.example.food.feature.signin.SigninFragment;
-import com.example.food.model.User;
+import com.example.food.Domain.User;
 import com.example.food.util.AppUtils;
 import com.example.food.viewmodel.UserViewModel;
 

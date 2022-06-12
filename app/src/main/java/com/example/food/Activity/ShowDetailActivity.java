@@ -2,7 +2,6 @@ package com.example.food.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,23 +18,19 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.example.food.Adapter.CustomProductGridAdapter;
 import com.example.food.Adapter.ExpandableTextViewAdapter;
 import com.example.food.Api.Api;
 import com.example.food.Domain.Cart;
 import com.example.food.Domain.Product;
 import com.example.food.Domain.Response.CartResponse;
 import com.example.food.Domain.Response.ProductResponse;
-import com.example.food.Listener.InsertCartResponseListener;
-import com.example.food.Listener.OneProductResponseListener;
-import com.example.food.Listener.ProductResponseListener;
+import com.example.food.network.Listener.InsertCartResponseListener;
+import com.example.food.network.Listener.OneProductResponseListener;
 import com.example.food.R;
 import com.example.food.dto.CartDTO;
-import com.example.food.feature.category.CategoryAdapter;
 import com.example.food.feature.home.HomeViewModel;
 import com.example.food.feature.product.ProductAdapter;
-import com.example.food.model.User;
+import com.example.food.Domain.User;
 import com.example.food.util.AppUtils;
 import com.example.food.util.ItemMargin;
 import com.squareup.picasso.Picasso;
