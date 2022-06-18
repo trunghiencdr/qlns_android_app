@@ -21,6 +21,7 @@ import androidx.core.app.ActivityCompat;
 
 import com.example.food.R;
 import com.example.food.Domain.User;
+import com.example.food.feature.adminhome.OrderDetailsFragment;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -377,4 +378,14 @@ public class AppUtils {
     }
 
 
+    public static boolean isAdmin(Context context) {
+        User user = getAccount2(context);
+        if(user!=null){
+            if(user.getRoles().stream().filter(it -> it.getName().equalsIgnoreCase("ROLE_ADMIN")).count()>=1){
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

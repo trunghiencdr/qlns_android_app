@@ -179,7 +179,7 @@ public class AdminOrderFragment extends Fragment implements AdminOrderAdapter.Cl
                         orderState = AppUtils.orderState[1];// Đang giao
                         break;
                     case R.id.chip_shiped_state_order:
-                        orderState = AppUtils.orderState[2];// Đang giao
+                        orderState = AppUtils.orderState[2];// Đã giao
                         break;
 
                 }
@@ -278,8 +278,16 @@ public class AdminOrderFragment extends Fragment implements AdminOrderAdapter.Cl
     @Override
     public void clickButtonAccept(int idOrder, String state) {
 //        Toast.makeText(requireContext(), "Click accept button order", Toast.LENGTH_SHORT).show();
-        orderViewModel.callUpdateStateOrder(idOrder, state);
+        if(state.equals(AppUtils.orderState[0])){// chưa duyệt
+            orderViewModel.callUpdateStateOrder(idOrder, AppUtils.orderState[1]); // đang giao
+        }
+
         // send message to user
+    }
+
+    @Override
+    public void clickButtonAccept2(int idOrder, String state,int userId,  int rating, String comment) {
+
     }
 
     public void createPDF(){

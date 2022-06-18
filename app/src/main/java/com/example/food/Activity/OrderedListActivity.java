@@ -16,9 +16,11 @@ import com.example.food.Domain.User;
 import com.example.food.util.AppUtils;
 import com.example.food.viewmodel.OrderViewModel;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -82,27 +84,47 @@ public class OrderedListActivity extends AppCompatActivity implements OrderListA
     public void onItemClicked(Order order) {
         // SHOW DETAIL FRAGMENT
         OrderDetailsFragment orderDetailsFragment = OrderDetailsFragment.newInstance(order, this);
-//        orderDetailsFragment.setCancelable(false);
-        if(order.getState().equalsIgnoreCase(AppUtils.orderState[0])){
-            orderDetailsFragment.setTitleButton("Đóng", "Hủy đơn hàng");
-        }else{
-            orderDetailsFragment.setTitleButton("Đóng", "Đánh giá");
-        }
-
-        orderDetailsFragment.setVisibleAccept(true);
         orderDetailsFragment.show(getSupportFragmentManager(), orderDetailsFragment.getTag());
     }
 
     @Override
     public void clickButtonAccept(int idOrder, String state) {
         // change huy order
-        orderViewModel.callUpdateStateOrder2(idOrder, "Đã hủy")
-        .subscribe(responseObjectResponse -> {
-            if(responseObjectResponse.code()==200){
-                adapter.changeItem(responseObjectResponse.body().getData());
-            }else{
 
-            }
-        });
+     
+    }
+
+    @SuppressLint("CheckResult")
+    @Override
+    public void clickButtonAccept2(int idOrder, String state,int userId, int rating, String comment) {
+        if(state.equals(AppUtils.orderState[0])){// chưa duyệt => hủy
+            callUpdateState(idOrder, AppUtils.orderState[3]);
+        }else if(state.equals(AppUtils.orderState[1])){ // đang giao => đã nhận hàng => đã giao
+            callUpdateState(idOrder, AppUtils.orderState[2]);
+        }else if(state.equals(AppUtils.orderState[2])){ // đã giao => bình luận => add comment to db
+            orderViewModel.callInsertCommentForOrder(idOrder,userId, rating,  comment)
+                    .subscribe(success -> {
+                        if(success.isSuccessful() && success.body().getStatus().equalsIgnoreCase("Ok")){
+                            adapter.changeItem(success.body().getData());
+                            Log.d("HIEN", "insert comment for order success");
+                        }else {
+                            Log.d("HIEN", "insert comment for order failed" + success.body().getMessage());
+                        }
+                    }, error ->  Log.d("HIEN", "insert comment for order failed" +error.getLocalizedMessage()));
+        }
+    }
+
+
+
+    @SuppressLint("CheckResult")
+    private void callUpdateState(int orderId, String state){
+        orderViewModel.callUpdateStateOrder2(orderId, state)
+                .subscribe(responseObjectResponse -> {
+                    if(responseObjectResponse.code()==200){
+                        adapter.changeItem(responseObjectResponse.body().getData());
+                    }else{
+                        Log.d("HIEN", "call update state order failed " + responseObjectResponse.errorBody().string());
+                    }
+                });
     }
 }

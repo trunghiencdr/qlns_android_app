@@ -77,35 +77,34 @@
                     app:singleSelection="true">
 
                     <com.google.android.material.chip.Chip
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
                         android:id="@+id/chip_unapproved_state_order"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Chưa duyệt"></com.google.android.material.chip.Chip>
+                        android:text="Chưa duyệt"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold"></com.google.android.material.chip.Chip>
 
                     <com.google.android.material.chip.Chip
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:visibility="gone"
                         android:id="@+id/chip_approved_state_order"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Đang giao"></com.google.android.material.chip.Chip>
+                        android:text="Đang giao"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold"></com.google.android.material.chip.Chip>
 
                     <com.google.android.material.chip.Chip
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
                         android:id="@+id/chip_shiped_state_order"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Đã giao"></com.google.android.material.chip.Chip>
+                        android:text="Đã giao"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold"></com.google.android.material.chip.Chip>
 
 
                 </com.google.android.material.chip.ChipGroup>

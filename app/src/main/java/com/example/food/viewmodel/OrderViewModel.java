@@ -8,9 +8,11 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.food.Domain.Comment;
 import com.example.food.Domain.Order;
 import com.example.food.Domain.Response.ResponseObject;
 import com.example.food.network.RetroInstance;
+import com.example.food.network.repository.CommentRepository;
 import com.example.food.network.repository.OrderRepository;
 import com.example.food.util.AppUtils;
 
@@ -26,6 +28,7 @@ public class OrderViewModel extends AndroidViewModel {
 
     MutableLiveData<List<Order>> data;
     OrderRepository repository;
+    CommentRepository commentRepository;
     Application application;
     MutableLiveData<Order> order;
     MutableLiveData<String> message;
@@ -36,6 +39,7 @@ public class OrderViewModel extends AndroidViewModel {
         order = new MutableLiveData<>();
         message = new MutableLiveData<>();
         repository = RetroInstance.getRetrofitClient(application).create(OrderRepository.class);
+        commentRepository = RetroInstance.getRetrofitClient(application).create(CommentRepository.class);
     }
 
     public MutableLiveData<List<Order>> getData() {
@@ -140,4 +144,15 @@ public class OrderViewModel extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    public Single<Response<ResponseObject<Comment>>> callGetCommentOfOrder(int orderId) {
+        return commentRepository.getCommentsOfOrder(orderId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Single<Response<ResponseObject<Order>>> callInsertCommentForOrder(int idOrder, int userId, int rating, String comment) {
+        return repository.insertCommentOfOrder(idOrder, userId, rating, comment)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 }

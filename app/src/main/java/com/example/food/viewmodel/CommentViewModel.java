@@ -1,19 +1,24 @@
 package com.example.food.viewmodel;
 
 import android.annotation.SuppressLint;
+import android.app.Application;
 
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.food.Domain.Comment;
+import com.example.food.network.RetroInstance;
 import com.example.food.network.repository.CommentRepository;
 
 import java.util.List;
 
-import io.reactivex.Scheduler;
+import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Response;
 
-public class CommentViewModel extends ViewModel {
+public class CommentViewModel extends AndroidViewModel {
 
     private CommentRepository commentRepository;
     private MutableLiveData<List<Comment>> comments;
@@ -21,8 +26,9 @@ public class CommentViewModel extends ViewModel {
     private MutableLiveData<Comment> commentOfOrder;
 
 
-    public CommentViewModel(CommentRepository commentRepository) {
-        this.commentRepository = commentRepository;
+    public CommentViewModel(Application application) {
+        super(application);
+        this.commentRepository = RetroInstance.getRetrofitClient().create(CommentRepository.class);
         comments = new MutableLiveData<>();
         commentOfOrder = new MutableLiveData<>();
         saveCommentSuccess = new MutableLiveData<>();
@@ -33,16 +39,10 @@ public class CommentViewModel extends ViewModel {
     }
 
     @SuppressLint("CheckResult")
-    public void callGetCommentOfProudct(int productId) {
-        commentRepository.getCommentsOfProduct(productId)
+    public Single<Response<List<Comment>>> callGetCommentOfProudct(int productId) {
+        return commentRepository.getCommentsOfProduct(productId)
                 .subscribeOn(Schedulers.io())
-                .subscribe(response -> {
-                    if (response.isSuccessful()) {
-                        comments.postValue(response.body());
-                    } else {
-                        comments.postValue(null);
-                    }
-                });
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     @SuppressLint("CheckResult")
@@ -51,7 +51,7 @@ public class CommentViewModel extends ViewModel {
                 .subscribeOn(Schedulers.io())
                 .subscribe(response -> {
                     if (response.isSuccessful()) {
-                        commentOfOrder.postValue(response.body());
+                        commentOfOrder.postValue(response.body().getData());
                     } else {
                         commentOfOrder.postValue(null);
                     }

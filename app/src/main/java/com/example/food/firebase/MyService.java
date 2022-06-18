@@ -218,7 +218,6 @@ public class MyService extends Service {
                         User user = AppUtils.getAccount2(MyService.this);
                         if (user != null && user.getId() == Integer.parseInt(userId))
                             sendNotification2(strTitle, strBody);
-                        sendNotification2(strTitle, strBody);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

@@ -88,13 +88,15 @@ public class OTPPhoneActivity extends AppCompatActivity {
     private void setEvents() {
         next=getIntent().getStringExtra("next");
         if(next!=null){
-            next="signup";
+            next="signin";
+        }else {
+            next = "forgotpass";
         }
         binding.btnConfirm.setOnClickListener(view -> {
             String otp = binding.editTextOTP.getText().toString();
             if(userViewModel.checkOTP(otp)){
                 Intent intent;
-                if(next!=null){
+                if(next.equals("forgotpass")){
                     intent = new Intent(this, ResetPasswordActivity.class);
                 }else{
                     intent = new Intent(this, SignupActivity.class);

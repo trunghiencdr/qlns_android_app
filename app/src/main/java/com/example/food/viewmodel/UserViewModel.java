@@ -105,7 +105,7 @@ public class UserViewModel extends AndroidViewModel {
                     public void onSuccess(Response<UserDTO> userDTOResponse) {
                         if(userDTOResponse.code()==200){
                             Log.d("call api", "call user success");
-                            user.setValue(userDTOResponse.body().getUser());
+                            user.setValue(userDTOResponse.body().getData());
                         }else {
                             try {
                                 Log.d("error api", userDTOResponse.errorBody().string());

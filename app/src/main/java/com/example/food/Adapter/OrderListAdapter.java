@@ -35,6 +35,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.View
             if(order.getId()== orders.get(i).getId())
             {
                 orders.get(i).setState(order.getState());
+                orders.get(i).setCommented(order.isCommented());
                 notifyDataSetChanged();
             }
         }

@@ -14,13 +14,13 @@ import retrofit2.http.Path;
 
 public interface CommentRepository {
 
-    @GET("productId/{productId}")
+    @GET("v1/Comment/productId/{productId}")
     Single<Response<List<Comment>>> getCommentsOfProduct(@Path("productId") int productId);
 
-    @POST("save")
+    @POST("v1/Comment/save")
     Single<Response<ResponseObject<Comment>>> saveComment(@Body Comment comment);
 
-    @GET("orderId/{orderId}")
-    Single<Response<Comment>> getCommentsOfOrder(@Path("orderId") int orderId);
+    @GET("v1/Comment/orderId/{orderId}")
+    Single<Response<ResponseObject<Comment>>> getCommentsOfOrder(@Path("orderId") int orderId);
 
 }

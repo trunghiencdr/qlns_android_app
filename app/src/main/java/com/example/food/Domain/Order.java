@@ -18,6 +18,7 @@ public class Order implements Serializable {
     private String state;
     private List<OrderDetail> orderDetails;
     private float total=0;
+    private boolean commented;
 
     public Order() {
     }
@@ -39,6 +40,17 @@ public class Order implements Serializable {
         this.state = state;
         this.orderDetails = orderDetails;
         this.total = total;
+    }
+
+    public Order(int id, User user, Date createAt, Discount discount, String state, List<OrderDetail> orderDetails, float total, boolean commented) {
+        this.id = id;
+        this.user = user;
+        this.createAt = createAt;
+        this.discount = discount;
+        this.state = state;
+        this.orderDetails = orderDetails;
+        this.total = total;
+        this.commented = commented;
     }
 
     public List<OrderDetail> getOrderDetails() {
@@ -143,5 +155,21 @@ public class Order implements Serializable {
             return string.toString();
         }
 
+    }
+
+    public void setOrderDetails(List<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
+    }
+
+    public void setTotal(float total) {
+        this.total = total;
+    }
+
+    public boolean isCommented() {
+        return commented;
+    }
+
+    public void setCommented(boolean commented) {
+        this.commented = commented;
     }
 }

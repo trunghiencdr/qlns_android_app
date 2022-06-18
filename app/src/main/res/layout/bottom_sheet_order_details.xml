@@ -131,7 +131,7 @@
             app:startIconDrawable="@drawable/ic_edit">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edit_text_OTP"
+                android:id="@+id/edit_text_comment_of_order"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_regular"
@@ -153,6 +153,7 @@
         app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/constraint_layout_comment_of_order_details" />
 
     <Button

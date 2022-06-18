@@ -18,9 +18,11 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.food.Adapter.CommentAdapter;
 import com.example.food.Adapter.ExpandableTextViewAdapter;
 import com.example.food.Api.Api;
 import com.example.food.Domain.Cart;
+import com.example.food.Domain.Comment;
 import com.example.food.Domain.Product;
 import com.example.food.Domain.Response.CartResponse;
 import com.example.food.Domain.Response.ProductResponse;
@@ -31,8 +33,11 @@ import com.example.food.dto.CartDTO;
 import com.example.food.feature.home.HomeViewModel;
 import com.example.food.feature.product.ProductAdapter;
 import com.example.food.Domain.User;
+import com.example.food.network.RetroInstance;
+import com.example.food.network.repository.UserRepository;
 import com.example.food.util.AppUtils;
 import com.example.food.util.ItemMargin;
+import com.example.food.viewmodel.CommentViewModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -45,10 +50,14 @@ public class ShowDetailActivity extends AppCompatActivity {
     private Product product;
     private int numberOrder =1;
     private RecyclerView recyclerViewProductRelated;
+    private RecyclerView recyclerViewCommentOfProduct;
     private HomeViewModel homeViewModel;
     private ProductAdapter productAdapter;
+    private CommentAdapter commentAdapter;
+    private CommentViewModel commentViewModel;
     private Api api;
     private ExpandableListView descriptionExpandListView;
+    private UserRepository userRepository;
 
     ExpandableTextViewAdapter adapter;
     List<String> listDataHeader;
@@ -58,14 +67,29 @@ public class ShowDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_detail);
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        commentViewModel = new ViewModelProvider(this).get(CommentViewModel.class);
+
         api = new Api(ShowDetailActivity.this);
         initView();
         getBundle();
         setUpTabHost();
         setEvent();
 
+
     }
 
+    @SuppressLint("CheckResult")
+    private void callCommentOfProduct(int productId) {
+
+        commentViewModel.callGetCommentOfProudct(productId)
+                .subscribe(response -> {
+                    if (response.isSuccessful()) {
+                        commentAdapter.submitList(response.body());
+                    } else {
+                        commentAdapter.submitList(null);
+                    }
+                });
+    }
 
 
     private void setEvent() {
@@ -145,6 +169,7 @@ public class ShowDetailActivity extends AppCompatActivity {
             adapter=new ExpandableTextViewAdapter(ShowDetailActivity.this,listDataHeader, listDataChild);
             descriptionExpandListView.setAdapter(adapter);
             loadProducts(product.getCategory().getId());
+
 //            Toast.makeText(ShowDetailActivity.this, "Call api one product success"+message.toString(),Toast.LENGTH_SHORT).show();
             Log.d("success",message.toString());
         }
@@ -198,6 +223,17 @@ public class ShowDetailActivity extends AppCompatActivity {
         // setting the name of the tab 1 as "Tab Two"
         spec.setIndicator("Đánh giá");
         tabhost.addTab(spec);
+
+        tabhost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String s) {
+                if(s.equals("Tab One")){
+                    loadProducts(product.getCategory().getId());
+                }else {
+                    callCommentOfProduct(Integer.parseInt(product.getProductId()+""));
+                }
+            }
+        });
     }
 
     private void getBundle() {
@@ -251,6 +287,7 @@ public class ShowDetailActivity extends AppCompatActivity {
         backBtn=findViewById(R.id.backBtn);
         foodPicBtn=findViewById(R.id.foodPic);
         recyclerViewProductRelated=findViewById(R.id.recyclerViewProductRelated);
+        recyclerViewCommentOfProduct=findViewById(R.id.recycler_view_comment_of_product);
         descriptionExpandListView=findViewById(R.id.descriptionExpandListView);
 
         productAdapter = new ProductAdapter(homeViewModel, new ProductAdapter.ProductDiff(), R.layout.item_product_vertical);
@@ -258,6 +295,18 @@ public class ShowDetailActivity extends AppCompatActivity {
                 new ItemMargin(10, 0, 30, 10));
         recyclerViewProductRelated.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerViewProductRelated.setAdapter(productAdapter);
+
+        // set up recycler view comment
+
+        userRepository = RetroInstance.getRetrofitClient(this).create(UserRepository.class);
+        commentAdapter = new CommentAdapter(Comment.itemCallback, userRepository);
+        recyclerViewCommentOfProduct.setHasFixedSize(true);
+        recyclerViewCommentOfProduct.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerViewCommentOfProduct.addItemDecoration(
+                new ItemMargin(0, 0, 0, 5));
+        recyclerViewCommentOfProduct.setAdapter(commentAdapter);
+
+
 
 
 

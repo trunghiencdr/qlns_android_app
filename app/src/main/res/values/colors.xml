@@ -14,6 +14,7 @@
     <color name="color_primary_variant_lighter">#62f6bb</color>
     <color name="color_primary_variant_darker">#00905e</color>
     <color name="icon_background">#20FFFFFF</color>
+    <color name="bg_comment">#D2DCDB</color>
 
     <color name="textview_button_background">#62f6bb</color>
     <color name="textview_button_textcolor">#00905e</color>
