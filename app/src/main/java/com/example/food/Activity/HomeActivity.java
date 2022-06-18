@@ -42,6 +42,14 @@ import com.example.food.util.AppUtils;
 import com.example.food.util.ItemMargin;
 
 import com.example.food.viewmodel.UserViewModel;
+import com.pusher.client.Pusher;
+import com.pusher.client.PusherOptions;
+import com.pusher.client.channel.Channel;
+import com.pusher.client.channel.PusherEvent;
+import com.pusher.client.channel.SubscriptionEventListener;
+import com.pusher.client.connection.ConnectionEventListener;
+import com.pusher.client.connection.ConnectionState;
+import com.pusher.client.connection.ConnectionStateChange;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -70,19 +78,17 @@ public class HomeActivity extends AppCompatActivity implements DiscountAdapter.C
     private UserViewModel userViewModel;
     private MapViewModel mapViewModel;
     String location = "10.84898,106.78736";
-    int countUpdateAddress=1;
+    int countUpdateAddress = 1;
     List<Product> products;
     List<Product> productsTop10;
     private List<Discount> discounts;
-    int heightScroll=0;
-    int countClickSearch=0;
+    int heightScroll = 0;
+    int countClickSearch = 0;
 
     ProgressDialog progressDialog;
     private AlertDialog progressBarDialog;
     private TextView btnSeeAllCategoriesHomeScreen;
     private FloatingActionButton cartBtn;
-
-
 
 
     @Override
@@ -100,7 +106,42 @@ public class HomeActivity extends AppCompatActivity implements DiscountAdapter.C
         loadDiscount();
         loadCategories();
         loadProducts();
-        
+        setUpPusher();
+
+
+    }
+
+    private void setUpPusher() {
+        PusherOptions options = new PusherOptions();
+        options.setCluster("ap1");
+
+        Pusher pusher = new Pusher("1988f25a6056e9b32057", options);
+
+        pusher.connect(new ConnectionEventListener() {
+            @Override
+            public void onConnectionStateChange(ConnectionStateChange change) {
+                Log.i("Pusher", "State changed from " + change.getPreviousState() +
+                        " to " + change.getCurrentState());
+            }
+
+            @Override
+            public void onError(String message, String code, Exception e) {
+                Log.i("Pusher", "There was a problem connecting! " +
+                        "\ncode: " + code +
+                        "\nmessage: " + message +
+                        "\nException: " + e
+                );
+            }
+        }, ConnectionState.ALL);
+
+        Channel channel = pusher.subscribe("my-channel");
+
+        channel.bind("my-event", new SubscriptionEventListener() {
+            @Override
+            public void onEvent(PusherEvent event) {
+                Log.i("Pusher", "Received event with data: " + event.toString());
+            }
+        });
 
     }
 
@@ -109,12 +150,6 @@ public class HomeActivity extends AppCompatActivity implements DiscountAdapter.C
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         mapViewModel = new ViewModelProvider(this).get(MapViewModel.class);
     }
-
-
-
-
-
-
 
 
     @SuppressLint("CheckResult")
@@ -146,7 +181,7 @@ public class HomeActivity extends AppCompatActivity implements DiscountAdapter.C
                         System.out.println("size of products:" + response.body().size());
                         productsTop10 = new ArrayList<>(response.body());
                         productAdapter.submitList(response.body());
-                        heightScroll= binding.scrollView3.getHeight()+500;
+                        heightScroll = binding.scrollView3.getHeight() + 500;
                         progressBarDialog.dismiss();
                     }
                 }
@@ -156,18 +191,18 @@ public class HomeActivity extends AppCompatActivity implements DiscountAdapter.C
         );
 
         homeViewModel.getProducts().subscribe(listResponse -> {
-            if(listResponse.code()==200){
+            if (listResponse.code() == 200) {
                 products = new ArrayList<>(listResponse.body());
-            }else{
-                Log.d("Home", "get products" );
+            } else {
+                Log.d("Home", "get products");
             }
         }, throwable -> Log.d("Home", throwable.getMessage()));
     }
 
     private void setEvents() {
 
-        binding.supportBtn.setOnClickListener(view ->{
-            startActivity(new Intent(this, MapViewActivity.class ));
+        binding.supportBtn.setOnClickListener(view -> {
+            startActivity(new Intent(this, MapViewActivity.class));
         });
 
 
@@ -204,14 +239,14 @@ public class HomeActivity extends AppCompatActivity implements DiscountAdapter.C
 
 
                 binding.scrollView3.scrollTo(0, heightScroll);
-                if (charSequence!=null && charSequence.length() != 0) {
+                if (charSequence != null && charSequence.length() != 0) {
                     if (products.size() != 0) {
                         productAdapter.submitList(products.stream()
                                 .filter(product -> product.getName().contains(charSequence))
                                 .collect(Collectors.toList()));
                     }
-                }else{
-                    if(countClickSearch!=0)
+                } else {
+                    if (countClickSearch != 0)
                         productAdapter.submitList(productsTop10);
                     countClickSearch++;
                 }
@@ -229,7 +264,7 @@ public class HomeActivity extends AppCompatActivity implements DiscountAdapter.C
     private void setControls() {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Đang tải");
-        progressBarDialog= new SpotsDialog.Builder().setContext(this).setTheme(R.style.CustomProgressBarDialog).build();
+        progressBarDialog = new SpotsDialog.Builder().setContext(this).setTheme(R.style.CustomProgressBarDialog).build();
         products = new ArrayList<>();
         user = AppUtils.getAccount(getSharedPreferences(AppUtils.ACCOUNT, 0));
         rvCate = binding.recyclerViewCategoriesHomeScreen;
@@ -238,8 +273,8 @@ public class HomeActivity extends AppCompatActivity implements DiscountAdapter.C
         txtName = binding.txtNameUserHomeScreen;
         imgAvt = binding.imageUserHomeScreen;
         slideDiscount = binding.slideDiscountHomeScreen;
-        countClickSearch=0;
-        countUpdateAddress=1;
+        countClickSearch = 0;
+        countUpdateAddress = 1;
 //        mapViewModel.callGetPlaceFromGeocode(this.location, "vi-VN", getString(R.string.apikey_here_dot_com));
         getMyLocation();
 
@@ -257,7 +292,7 @@ public class HomeActivity extends AppCompatActivity implements DiscountAdapter.C
         mapViewModel.getTitlePlace().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                binding.textViewLocation.setText(s.split(",")[0]+"");
+                binding.textViewLocation.setText(s.split(",")[0] + "");
             }
         });
 
@@ -315,38 +350,34 @@ public class HomeActivity extends AppCompatActivity implements DiscountAdapter.C
 
     @Override
     public void onLocationChanged(Location location) {
-        mapViewModel.callGetPlaceFromGeocode(location.getLatitude()+","+location.getLongitude(), "vi-VN", getString(R.string.apikey_here_dot_com));
+        mapViewModel.callGetPlaceFromGeocode(location.getLatitude() + "," + location.getLongitude(), "vi-VN", getString(R.string.apikey_here_dot_com));
     }
-
-
-
 
 
     @Override
     public void onProviderDisabled(String provider) {
-        Log.d("Latitude","disable");
+        Log.d("Latitude", "disable");
     }
 
     @Override
     public void onProviderEnabled(String provider) {
-        Log.d("Latitude","enable");
+        Log.d("Latitude", "enable");
     }
-
 
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-        Log.d("Latitude","status");
+        Log.d("Latitude", "status");
     }
 
 
     private void loadInfoUser(User user) {
-        if(!user.getUsername().equals("") && user.getUsername()!=null){
+        if (!user.getUsername().equals("") && user.getUsername() != null) {
             txtName.setText("Hi " + user.getUsername());
         }
 
 
-        if(user.getImageUser()!=null){
+        if (user.getImageUser() != null) {
 //            Picasso.get()
 //                    .load(user.getImageUser().getLink())
 //                    .into(imgAvt);
@@ -357,7 +388,7 @@ public class HomeActivity extends AppCompatActivity implements DiscountAdapter.C
 //                    .error(R.drawable.user_icon);
 
             Glide.with(this).load(user.getImageUser().getLink()).into(imgAvt);
-        }else{
+        } else {
             Glide.with(this).load(R.drawable.user_icon).into(imgAvt);
 
         }
@@ -368,8 +399,8 @@ public class HomeActivity extends AppCompatActivity implements DiscountAdapter.C
 
         homeViewModel.getCategories().subscribe(
                 response -> {
-                    if(response.code()==200){
-                        System.out.println("size of categories:" +response.body().size());
+                    if (response.code() == 200) {
+                        System.out.println("size of categories:" + response.body().size());
 
                         adapterCate.submitList(response.body());
                     }

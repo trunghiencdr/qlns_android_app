@@ -42,7 +42,7 @@ import java.util.concurrent.Callable;
 public class AppUtils {
 
 
-//    public static String BASE_URL = "http://192.168.1.6:8080/";
+//    public static String BASE_URL = "http://192.168.1.10:8080/";
 //    public static String BASE_URL = "http://192.168.143.130:8080/";
         public static String BASE_URL="http://10.0.2.2:8080/";
     public static String[] ROLES = {"ROLE_USER", "ROLE_ADMIN"};
@@ -63,6 +63,7 @@ public class AppUtils {
 
     public static final String ACCOUNT = "account";
     public static final String PASSWORD = "password";
+        public static final String NUMBER_OF_TIME_LAUNCH_APP = "launchApp";
 
     public static void saveAccount(SharedPreferences share, User user) {
         SharedPreferences.Editor editor = share.edit();
@@ -140,6 +141,30 @@ public class AppUtils {
         editor.remove(PASSWORD);
         editor.commit();
     }
+    public static int getNumberOfTimeLaunchApp(Context context) {
+        int launchApp = context.getSharedPreferences(ACCOUNT, 0).getInt(NUMBER_OF_TIME_LAUNCH_APP, -1);
+        return launchApp;
+    }
+
+    public static void saveNumberOfTimeLaunchApp(Context context, int numberOfTimeLaunchApp) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(ACCOUNT, 0).edit();
+        editor.putInt(NUMBER_OF_TIME_LAUNCH_APP, numberOfTimeLaunchApp);
+        editor.commit();
+    }
+
+
+    public static void deleteNumberOfTimeLaunchApp(Context context) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(ACCOUNT, 0).edit();
+        editor.remove(NUMBER_OF_TIME_LAUNCH_APP);
+        editor.commit();
+    }
+
+    public static boolean isFirstTimeLaunchApp(Context context){
+        int time = getNumberOfTimeLaunchApp(context);
+        if(time == 1) return true;
+        return false;
+    }
+
 
     public static String formatDate(Date date, String pattern) {
         return new SimpleDateFormat(pattern).format(date);

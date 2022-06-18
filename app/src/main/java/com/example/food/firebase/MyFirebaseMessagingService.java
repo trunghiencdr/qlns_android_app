@@ -26,10 +26,11 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Map;
 
-public class  MyFirebaseMessagingService extends FirebaseMessagingService {
+public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     public static final String TAG = MyFirebaseMessagingService.class.getName();
     private User user;
+
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
@@ -39,7 +40,7 @@ public class  MyFirebaseMessagingService extends FirebaseMessagingService {
 //        String strBody = notification.getBody();
 
         //data message
-        Map<String, String>  stringMap = remoteMessage.getData();
+        Map<String, String> stringMap = remoteMessage.getData();
 
         String strTitle = stringMap.get("title");
         String strBody = stringMap.get("description");
@@ -47,8 +48,8 @@ public class  MyFirebaseMessagingService extends FirebaseMessagingService {
         String userId = stringMap.get("userId");
 
         user = AppUtils.getAccount2(this);
-        if(user!=null && user.getId()==Integer.parseInt(userId))
-        sendNotification2(strTitle, strBody);
+        if (user != null && user.getId() == Integer.parseInt(userId))
+            sendNotification2(strTitle, strBody);
     }
 
     @Override
@@ -59,7 +60,7 @@ public class  MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void sendRegistrationToServer(String s) {
-        AppUtils.saveTokenFireBase(this,s);
+        AppUtils.saveTokenFireBase(this, s);
 
     }
 
@@ -79,7 +80,7 @@ public class  MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Notification notification = notificationBuilder.build();
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if(notificationManager!=null){
+        if (notificationManager != null) {
             notificationManager.notify(1, notification);
         }
 
@@ -91,7 +92,7 @@ public class  MyFirebaseMessagingService extends FirebaseMessagingService {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
-        String channelId =  MyApplication.CHANNEL_ID;
+        String channelId = MyApplication.CHANNEL_ID;
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         NotificationCompat.Builder notificationBuilder =

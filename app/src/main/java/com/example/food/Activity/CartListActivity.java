@@ -3,15 +3,24 @@ package com.example.food.Activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +58,14 @@ import com.example.food.util.AppUtils;
 import com.example.food.viewmodel.AddressShopViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 import com.mapbox.geojson.Point;
+import com.pusher.client.Pusher;
+import com.pusher.client.PusherOptions;
+import com.pusher.client.channel.Channel;
+import com.pusher.client.channel.PusherEvent;
+import com.pusher.client.channel.SubscriptionEventListener;
+import com.pusher.client.connection.ConnectionEventListener;
+import com.pusher.client.connection.ConnectionState;
+import com.pusher.client.connection.ConnectionStateChange;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -67,7 +84,7 @@ public class CartListActivity extends AppCompatActivity implements CardListAdapt
             txtTotalOrder, btnCheckOut,
             txtValueDiscount, txtSaleOfCart,
             txtTotalItemTemp, txtDeliveryItemTemp,
-            txtDeliveryInfo;
+            txtDeliveryInfo, txtPayment;
     TextView btn_add_discount;
     ArrayList<Cart> carts = new ArrayList<>();
     TextInputEditText edit_discount;
@@ -78,6 +95,7 @@ public class CartListActivity extends AppCompatActivity implements CardListAdapt
     AddressShopViewModel addressShopViewModel;
     double lon1=0.0, lat1=0.0, lon2=0.0, lat2=0.0;
     int feeDeliveryPerKm = 1000;
+    int paymentType = 0;
 
     int LOCATION_REFRESH_TIME = 15000; // 15 seconds to update
     int LOCATION_REFRESH_DISTANCE = 200; // 500 meters to update
@@ -96,7 +114,42 @@ public class CartListActivity extends AppCompatActivity implements CardListAdapt
         getMyLocation();
         loadData();
         setEvent();
+        setUpPusher();
 
+
+    }
+
+    private void setUpPusher() {
+        PusherOptions options = new PusherOptions();
+        options.setCluster("ap1");
+
+        Pusher pusher = new Pusher("1988f25a6056e9b32057", options);
+
+        pusher.connect(new ConnectionEventListener() {
+            @Override
+            public void onConnectionStateChange(ConnectionStateChange change) {
+                Log.i("Pusher", "State changed from " + change.getPreviousState() +
+                        " to " + change.getCurrentState());
+            }
+
+            @Override
+            public void onError(String message, String code, Exception e) {
+                Log.i("Pusher", "There was a problem connecting! " +
+                        "\ncode: " + code +
+                        "\nmessage: " + message +
+                        "\nException: " + e
+                );
+            }
+        }, ConnectionState.ALL);
+
+        Channel channel = pusher.subscribe("my-channel");
+
+        channel.bind("my-event", new SubscriptionEventListener() {
+            @Override
+            public void onEvent(PusherEvent event) {
+                Log.i("Pusher", "Received event with data: " + event.toString());
+            }
+        });
 
     }
 
@@ -158,9 +211,18 @@ public class CartListActivity extends AppCompatActivity implements CardListAdapt
                 if(user!=null) {
                     OrdersDTO ordersDTO = new OrdersDTO(user.getId(), date, discountDTO.getId(), AppUtils.orderState[0]);// chưa duyệt
                     System.out.println(ordersDTO.toString());
-                    alertDialog.show();
-                    api.insertOrder2(insertOrderResponseListener, ordersDTO);
+//
+                    if(paymentType==0){
+                        alertDialog.show();
+                        api.insertOrder2(insertOrderResponseListener, ordersDTO);
+                    }else{
+                        // navigate to vnpay
+                        startActivity(new Intent(CartListActivity.this, VnPayActivity.class));
+                    }
+
                 }
+
+
 
 
             }
@@ -174,6 +236,66 @@ public class CartListActivity extends AppCompatActivity implements CardListAdapt
             }
         });
         btnBack.setOnClickListener(view -> onBackPressed());
+
+        txtPayment.setOnClickListener(view -> clickPayment(view));
+    }
+
+    private void clickPayment(View view) {
+        showDialogPayment(view);
+    }
+
+    private void showDialogPayment(View view) {
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //set dialog to bottom of screen
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_white_color);
+        // set view for dialog to show
+
+        dialog.setContentView(R.layout.dialog_payment_type);
+        dialog.getWindow()
+                .setLayout(
+                        ViewGroup.LayoutParams.FILL_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                );
+
+
+
+
+
+        // set view
+        TextView btnCloseDialog = dialog.findViewById(R.id.text_view_close_dialog);
+        RadioButton rdbCash = dialog.findViewById(R.id.rdb_cash);
+        RadioButton rdbVnPay = dialog.findViewById(R.id.rdb_vn_pay);
+
+        // set event
+        if(paymentType==0){
+            rdbCash.setChecked(true);
+        }else{
+            rdbVnPay.setChecked(true);
+        }
+        rdbCash.setOnClickListener(view1 -> {
+            txtPayment.setText("Tiền mặt");
+            paymentType = 0;
+        });
+
+        rdbVnPay.setOnClickListener(view1 -> {
+            txtPayment.setText("VNPay");
+            paymentType = 1;
+        });
+        btnCloseDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+
+        dialog.show();
     }
 
     private void setControl() {
@@ -194,6 +316,7 @@ public class CartListActivity extends AppCompatActivity implements CardListAdapt
         txtTotalOrder = findViewById(R.id.text_view_total_order_carts);
         txtSaleOfCart = findViewById(R.id.text_view_sale_off_cart);
         txtDeliveryInfo = findViewById(R.id.txtDeliveryInfo);
+        txtPayment = findViewById(R.id.text_view_payment);
 
     }
 
@@ -261,17 +384,23 @@ public class CartListActivity extends AppCompatActivity implements CardListAdapt
             Date today = new Date();
             if (edit_discount.getText().toString().trim() == "") {
                 txtValueDiscount.setText("0");
-
                 return;
             }
             if (discountDTO.getStartDate().before(today) && discountDTO.getEndDate().after(today)) {
                 txtValueDiscount.setVisibility(View.VISIBLE);
-                txtSaleOfCart.setText("Giảm giá:  ");
+                txtSaleOfCart.setText("Giảm giá -  ");
                 txtValueDiscount.setText((int) (discountDTO.getPercent() * 100) + "");
                 Float totalItem = Float.parseFloat(txtTotalItemTemp.getText().toString());
                 txtTotalOrder.setText(totalItem * (1 - discountDTO.getPercent()) + "");
                 return;
+            }else{
+                txtSaleOfCart.setText("Mã giảm giá quá hạn -");
             }
+
+            if(discountDTO.getQuantity()<0){
+                txtSaleOfCart.setText("Hết lượt sử dụng -");
+            }
+
             txtValueDiscount.setText("0");
             return;
 

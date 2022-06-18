@@ -30,6 +30,7 @@ public class RetroInstance {
 
     private static Retrofit retrofit;
     private static final long CACHE_SIZE = 10 * 1024 * 1024;
+    private static final String Authorization = "";
     private static final int READ_TIMEOUT = 5000;
     private static final int WRITE_TIMEOUT = 5000;
     private static final int CONNECT_TIMEOUT = 5000;
@@ -50,11 +51,13 @@ public class RetroInstance {
                         request = request
                                 .newBuilder()
                                 .header(CACHE_CONTROL, TIME_CACHE_ONLINE)
+                                .addHeader("Authorization", Authorization )
                                 .build();
                     } else {
                         request = request
                                 .newBuilder()
                                 .header(CACHE_CONTROL, TIME_CACHE_OFFLINE)
+                                .addHeader("Authorization", Authorization)
                                 .build();
                     }
                     HttpUrl httpUrl = request.url()
