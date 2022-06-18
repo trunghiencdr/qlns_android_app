@@ -7,10 +7,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.LocaleList;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -56,6 +58,7 @@ import com.smarteist.autoimageslider.SliderView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -97,6 +100,8 @@ public class HomeActivity extends AppCompatActivity implements DiscountAdapter.C
         binding = FragmentHomeSceenBinding.inflate(getLayoutInflater());
 //        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(binding.getRoot());
+
+
 
         initData();
         setControls();

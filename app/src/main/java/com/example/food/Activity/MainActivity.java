@@ -5,7 +5,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.LocaleList;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -25,6 +27,7 @@ import com.example.food.util.AppUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 private RecyclerView.Adapter adapter,adapter2;
@@ -37,12 +40,12 @@ LinearLayout btnSetting, btnSupport;
 TextView textViewSeeAllCategory,textViewSeeAllProduct;
 Api api;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
 
 
 

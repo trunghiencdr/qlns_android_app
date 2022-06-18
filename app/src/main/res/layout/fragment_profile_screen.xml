@@ -45,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:gravity="center"
-                    android:text="Thông tin cá nhân"
+                    android:text="@string/profile"
                     android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="20sp"
@@ -110,7 +110,7 @@
                         android:layout_gravity="center"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
-                        android:text="Cập nhật"
+                        android:text="@string/update"
                         android:textSize="16dp">
 
                     </TextView>
@@ -158,12 +158,11 @@
                             android:backgroundTint="@color/white"
                             android:drawableLeft="@drawable/padlock"
                             android:drawableRight="@drawable/next"
-                            android:text="Đổi mật khẩu"
+                            android:text="@string/changpassword"
                             android:textAlignment="viewStart"
                             android:textColor="@color/black">
 
                         </Button>
-
                         <Button
                             android:id="@+id/btn_log_out_profile_screen"
                             android:layout_width="match_parent"
@@ -171,7 +170,7 @@
                             android:backgroundTint="@color/white"
                             android:drawableLeft="@drawable/logout"
                             android:drawableRight="@drawable/next"
-                            android:text="Đăng xuất"
+                            android:text="@string/logout"
                             android:textAlignment="viewStart"
                             android:textColor="@color/black">
 

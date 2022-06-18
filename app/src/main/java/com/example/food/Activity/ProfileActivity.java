@@ -1,10 +1,13 @@
 package com.example.food.Activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -15,6 +18,8 @@ import com.example.food.databinding.FragmentProfileScreenBinding;
 import com.example.food.Domain.User;
 import com.example.food.util.AppUtils;
 import com.example.food.viewmodel.UserViewModel;
+
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.reactivex.disposables.CompositeDisposable;
@@ -28,6 +33,9 @@ public class ProfileActivity extends AppCompatActivity {
     private CompositeDisposable disposable;
     private TextView txtName, txtUsername;
     private CircleImageView imgAvt;
+    String LOCALE_VIETNAM = "vi";
+    String LOCALE_ENGLISH = "en";
+    Locale mLocale;
 
 
     @Override
@@ -35,6 +43,12 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = FragmentProfileScreenBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        mLocale=getResources().getConfiguration().locale;
+        Locale.setDefault(mLocale);
+        Configuration config = new Configuration();
+        config.locale = mLocale;
+        this.getResources().updateConfiguration(config,
+                this.getResources().getDisplayMetrics());
         setControls();
         setEvents();
     }
@@ -52,7 +66,6 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(new Intent(this, ChangePasswordActivity.class));
 
         });
-
         binding.btnLogOutProfileScreen.setOnClickListener(view -> {
             AppUtils.deleteAccount2(this);
             AppUtils.deletePassword(this);
