@@ -208,6 +208,7 @@
                                 android:id="@+id/recyclerViewProductRelated"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                tools:listitem="@layout/product_grid_item_layout"
                                 />
                             <TextView
                                 android:layout_width="match_parent"
@@ -223,7 +224,7 @@
                                 android:id="@+id/recycler_view_comment_of_product"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-
+                                tools:listitem="@layout/product_grid_item_layout"
                                 />
                             <TextView
                                 android:layout_width="match_parent"

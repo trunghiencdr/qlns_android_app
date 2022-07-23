@@ -45,8 +45,8 @@ public class AppUtils {
 
 //    public static String BASE_URL = "http://192.168.1.10:8080/";
 //    public static String BASE_URL = "http://192.168.143.130:8080/";
-//        public static String BASE_URL="http://192.168.1.13:8080/";
-        public static String BASE_URL="http://10.0.2.2:8080/";
+        public static String BASE_URL="http://192.168.1.3:8080/";
+      //  public static String BASE_URL="http://172.25.176.1:8080/";
     public static String[] ROLES = {"ROLE_USER", "ROLE_ADMIN"};
     public static int PASS_LOGIN = 0;
     public static String[] orderState = {"Chưa duyệt", "Đang giao", "Đã giao", "Đã hủy"};
